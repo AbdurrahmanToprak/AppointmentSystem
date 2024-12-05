@@ -2,10 +2,10 @@
 using AppointmentSystem.Server.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace AppointmentSystem.Server.Controllers
+namespace AppointmentSystem.Server.Controllers.Admin
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/admin/contact")]
     public class ContactController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -49,7 +49,7 @@ namespace AppointmentSystem.Server.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteContact(int id)
         {
-            var existContact = _context.Contacts.FirstOrDefault(x=>x.ContactId == id);
+            var existContact = _context.Contacts.FirstOrDefault(x => x.ContactId == id);
             if (existContact == null)
                 return NotFound(new { message = "İletişim bilgisi bulunamadı." });
             _context.Contacts.Remove(existContact);

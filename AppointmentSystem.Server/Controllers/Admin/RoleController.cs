@@ -2,10 +2,10 @@
 using AppointmentSystem.Server.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace AppointmentSystem.Server.Controllers
+namespace AppointmentSystem.Server.Controllers.Admin
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/admin/role")]
     public class RoleController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -28,16 +28,16 @@ namespace AppointmentSystem.Server.Controllers
         {
             if (role == null)
             {
-                return BadRequest(new {message = "Geçersiz veri."});
+                return BadRequest(new { message = "Geçersiz veri." });
             }
             _context.Roles.Add(role);
             _context.SaveChanges();
-            return Ok(new {message = "Rol Başarıyla Eklendi."});
+            return Ok(new { message = "Rol Başarıyla Eklendi." });
         }
         [HttpPut("{id}")]
         public IActionResult EditRole(int id, Role role)
         {
-            var existRole = _context.Roles.FirstOrDefault(x=>x.RoleId == id);
+            var existRole = _context.Roles.FirstOrDefault(x => x.RoleId == id);
             if (existRole == null)
             {
                 return NotFound(new { message = "Veri Bulunamadı." });
