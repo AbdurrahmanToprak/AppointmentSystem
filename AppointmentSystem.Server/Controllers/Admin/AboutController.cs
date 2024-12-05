@@ -1,6 +1,7 @@
 ﻿using AppointmentSystem.Server.Data;
 using AppointmentSystem.Server.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace AppointmentSystem.Server.Controllers.Admin
 {
@@ -15,42 +16,42 @@ namespace AppointmentSystem.Server.Controllers.Admin
             _context = context;
         }
         [HttpGet]
-        public IActionResult GetAbout()
+        public async Task<IActionResult> GetAbout()
         {
-            var about = _context.Abouts.FirstOrDefault();
+            var about = await _context.Abouts.FirstOrDefaultAsync();
             if (about == null)
                 return NotFound(new { message = "Veri bulunamadı." });
             return Ok(about);
         }
         [HttpPost]
-        public IActionResult CreateAbout(About about)
+        public async Task<IActionResult> CreateAbout(About about)
         {
             if (about == null)
                 return BadRequest(new { message = "Geçersiz Veri." });
-            _context.Abouts.Add(about);
-            _context.SaveChanges();
+            await _context.Abouts.AddAsync(about);
+            await _context.SaveChangesAsync();
             return Ok(new { message = "Hakkımızda bilgisi başarıyla oluşturuldu", about });
         }
         [HttpPut("{id}")]
-        public IActionResult UpdateAbout(int id, About about)
+        public async Task<IActionResult> UpdateAbout(int id, About about)
         {
-            var existAbout = _context.Abouts.FirstOrDefault(x => x.AboutId == id);
+            var existAbout = await _context.Abouts.FirstOrDefaultAsync(x => x.AboutId == id);
             if (existAbout == null)
                 return NotFound(new { message = "Hakkımızda bilgisi bulunamadı." });
             existAbout.Title = about.Title;
             existAbout.Content = about.Content;
             existAbout.ImageUrl = about.ImageUrl;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return Ok(new { message = "Hakkımızda bilgisi başarıyla güncellendi.", existAbout });
         }
         [HttpDelete("{id}")]
-        public IActionResult DeleteAbout(int id)
+        public async Task<IActionResult> DeleteAbout(int id)
         {
-            var existAbout = _context.Abouts.FirstOrDefault(x => x.AboutId == id);
+            var existAbout = await _context.Abouts.FirstOrDefaultAsync(x => x.AboutId == id);
             if (existAbout == null)
                 return NotFound(new { message = "Hakkımızda bilgisi bulunamadı." });
             _context.Abouts.Remove(existAbout);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return Ok(new { message = "Başarıyla silindi." });
         }
     }

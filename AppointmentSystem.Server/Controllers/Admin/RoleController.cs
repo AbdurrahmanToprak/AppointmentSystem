@@ -1,6 +1,7 @@
 ﻿using AppointmentSystem.Server.Data;
 using AppointmentSystem.Server.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace AppointmentSystem.Server.Controllers.Admin
 {
@@ -14,9 +15,9 @@ namespace AppointmentSystem.Server.Controllers.Admin
             _context = context;
         }
         [HttpGet]
-        public IActionResult GetRoles()
+        public async Task<IActionResult> GetRoles()
         {
-            var roles = _context.Roles.ToList();
+            var roles = await _context.Roles.ToListAsync();
             if (roles.Any())
             {
                 return Ok(roles);
@@ -24,38 +25,38 @@ namespace AppointmentSystem.Server.Controllers.Admin
             return Ok(new { message = "Veri Yok." });
         }
         [HttpPost]
-        public IActionResult CreateRole(Role role)
+        public async Task<IActionResult> CreateRole(Role role)
         {
             if (role == null)
             {
                 return BadRequest(new { message = "Geçersiz veri." });
             }
-            _context.Roles.Add(role);
-            _context.SaveChanges();
+            await _context.Roles.AddAsync(role);
+            await _context.SaveChangesAsync();
             return Ok(new { message = "Rol Başarıyla Eklendi." });
         }
         [HttpPut("{id}")]
-        public IActionResult EditRole(int id, Role role)
+        public async Task<IActionResult> EditRole(int id, Role role)
         {
-            var existRole = _context.Roles.FirstOrDefault(x => x.RoleId == id);
+            var existRole = await _context.Roles.FirstOrDefaultAsync(x => x.RoleId == id);
             if (existRole == null)
             {
                 return NotFound(new { message = "Veri Bulunamadı." });
             }
             existRole.RoleName = role.RoleName;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return Ok(new { message = "Rol Başarıyla Güncellendi.", existRole });
         }
         [HttpDelete("{id}")]
-        public IActionResult DeleteRole(int id)
+        public async Task<IActionResult> DeleteRole(int id)
         {
-            var existRole = _context.Roles.FirstOrDefault(x => x.RoleId == id);
+            var existRole = await _context.Roles.FirstOrDefaultAsync(x => x.RoleId == id);
             if (existRole == null)
             {
                 return NotFound(new { message = "Veri Bulunamadı." });
             }
-            _context.Remove(existRole);
-            _context.SaveChanges();
+            _context.Roles.Remove(existRole);
+            await _context.SaveChangesAsync();
             return Ok(new { message = "Rol Başarıyla Silindi." });
         }
     }

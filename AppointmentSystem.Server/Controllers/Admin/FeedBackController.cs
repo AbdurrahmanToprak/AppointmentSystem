@@ -1,6 +1,7 @@
 ﻿using AppointmentSystem.Server.Data;
 using AppointmentSystem.Server.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace AppointmentSystem.Server.Controllers.Admin
 {
@@ -15,9 +16,9 @@ namespace AppointmentSystem.Server.Controllers.Admin
             _context = context;
         }
         [HttpGet]
-        public IActionResult GetFeedBacks()
+        public async Task<IActionResult> GetFeedBacks()
         {
-            var feedbacks = _context.FeedBacks.ToList();
+            var feedbacks = await _context.FeedBacks.ToListAsync();
             if (feedbacks.Any())
             {
                 return Ok(feedbacks);
@@ -25,27 +26,27 @@ namespace AppointmentSystem.Server.Controllers.Admin
             return NotFound(new {message = "Veri bulunamadı."});
         }
         [HttpPut("{id}")]
-        public IActionResult UpdateStatusFeedBack(int id,FeedBack feedBack)
+        public async Task<IActionResult> UpdateStatusFeedBack(int id,FeedBack feedBack)
         {
-            var existFeedback = _context.FeedBacks.FirstOrDefault(x=>x.FeedBackId == id);
+            var existFeedback = await _context.FeedBacks.FirstOrDefaultAsync(x=>x.FeedBackId == id);
             if (existFeedback == null)
             {
                 return BadRequest(new {message = "Geçersiz veri."});
             }
             existFeedback.Status = feedBack.Status;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return Ok(new { message = "Yorum durumu başarıyla güncellendi." });
         }
         [HttpDelete("{id}")]
-        public IActionResult DeleteFeedBack(int id)
+        public async Task<IActionResult> DeleteFeedBack(int id)
         {
-            var existFeedback = _context.FeedBacks.FirstOrDefault(x => x.FeedBackId == id);
+            var existFeedback = await _context.FeedBacks.FirstOrDefaultAsync(x => x.FeedBackId == id);
             if (existFeedback == null)
             {
                 return BadRequest(new { message = "Geçersiz veri." });
             }
-            _context.Remove(existFeedback);
-            _context.SaveChanges();
+            _context.FeedBacks.Remove(existFeedback);
+            await _context.SaveChangesAsync();
             return Ok(new { message = "Yorum başarıyla silindi." });
         }
     }
