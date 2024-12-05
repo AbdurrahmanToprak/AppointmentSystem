@@ -4,6 +4,7 @@ using AppointmentSystem.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AppointmentSystem.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241204212820_InitialCreateTwo")]
+    partial class InitialCreateTwo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -184,23 +187,6 @@ namespace AppointmentSystem.Server.Migrations
                     b.HasKey("RoleId");
 
                     b.ToTable("Roles");
-
-                    b.HasData(
-                        new
-                        {
-                            RoleId = 1,
-                            RoleName = "Admin"
-                        },
-                        new
-                        {
-                            RoleId = 2,
-                            RoleName = "Doctor"
-                        },
-                        new
-                        {
-                            RoleId = 3,
-                            RoleName = "User"
-                        });
                 });
 
             modelBuilder.Entity("AppointmentSystem.Server.Models.User", b =>
@@ -234,88 +220,6 @@ namespace AppointmentSystem.Server.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("Users");
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = 1,
-                            Email = "Ahmet@gmail.com",
-                            ImageUrl = "",
-                            Name = "Dr. Ahmet",
-                            Password = "Ahmet.12",
-                            RoleId = 2,
-                            Surname = "Yılmaz"
-                        },
-                        new
-                        {
-                            UserId = 2,
-                            Email = "Mehmet@gmail.com",
-                            ImageUrl = "",
-                            Name = "Dr. Mehmet",
-                            Password = "Mehmet.12",
-                            RoleId = 2,
-                            Surname = "Dinçer"
-                        },
-                        new
-                        {
-                            UserId = 3,
-                            Email = "Ali@gmail.com",
-                            ImageUrl = "",
-                            Name = "Dr. Ali",
-                            Password = "Ali.12",
-                            RoleId = 2,
-                            Surname = "Akın"
-                        },
-                        new
-                        {
-                            UserId = 4,
-                            Email = "Abdurrahman@gmail.com",
-                            ImageUrl = "",
-                            Name = "Dr. Abdurrahman",
-                            Password = "Abdurrahman.12",
-                            RoleId = 2,
-                            Surname = "Orman"
-                        },
-                        new
-                        {
-                            UserId = 5,
-                            Email = "Enes@gmail.com",
-                            ImageUrl = "",
-                            Name = "Dr. Enes",
-                            Password = "Enes.12",
-                            RoleId = 2,
-                            Surname = "Altın"
-                        },
-                        new
-                        {
-                            UserId = 6,
-                            Email = "Yusuf@gmail.com",
-                            ImageUrl = "",
-                            Name = "Yusuf",
-                            Password = "Yusuf.12",
-                            RoleId = 3,
-                            Surname = "Bozkurt"
-                        },
-                        new
-                        {
-                            UserId = 7,
-                            Email = "Tahir@gmail.com",
-                            ImageUrl = "",
-                            Name = "Tahir",
-                            Password = "Ahmet.12",
-                            RoleId = 3,
-                            Surname = "Orman"
-                        },
-                        new
-                        {
-                            UserId = 8,
-                            Email = "Admin@gmail.com",
-                            ImageUrl = "",
-                            Name = "Admin",
-                            Password = "Admin.12",
-                            RoleId = 1,
-                            Surname = "Admin"
-                        });
                 });
 
             modelBuilder.Entity("AppointmentSystem.Server.Models.Appointment", b =>

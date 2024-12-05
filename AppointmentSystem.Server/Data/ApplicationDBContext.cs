@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using AppointmentSystem.Server.Models;
+using AppointmentSystem.Server.Config;
 
 namespace AppointmentSystem.Server.Data
 {
@@ -38,6 +39,9 @@ namespace AppointmentSystem.Server.Data
                 .HasOne<Role>(u => u.Role)
                 .WithMany()
                 .HasForeignKey(u => u.RoleId);
-        }
+
+            modelBuilder.ApplyConfiguration(new RoleConfig());
+			modelBuilder.ApplyConfiguration(new UserConfig());
+		}
     }
 }
