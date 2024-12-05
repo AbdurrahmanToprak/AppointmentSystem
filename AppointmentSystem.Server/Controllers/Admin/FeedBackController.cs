@@ -7,7 +7,7 @@ namespace AppointmentSystem.Server.Controllers.Admin
 {
     [ApiController]
     [Route("api/admin/feedback")]
-    public class FeedBackController : Controller
+    public class FeedBackController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 

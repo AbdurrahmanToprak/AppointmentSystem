@@ -7,7 +7,7 @@ namespace AppointmentSystem.Server.Controllers.Admin
 {
     [ApiController]
     [Route("api/admin/role")]
-    public class RoleController : Controller
+    public class RoleController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
         public RoleController(ApplicationDbContext context)
