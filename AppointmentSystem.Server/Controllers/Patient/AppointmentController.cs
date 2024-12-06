@@ -31,7 +31,9 @@ namespace AppointmentSystem.Server.Controllers.Patient
             var userId = int.Parse(userIdClaim.Value);
          
             var myAppointments = await _context.Appointments
-                .Where(a => a.PatientId == userId) 
+                .Where(a => a.PatientId == userId)
+                .Include(a => a.Doctor) 
+                .Include(a => a.Patient)
                 .OrderBy(a => a.DateTime) 
                 .ToListAsync();
             if (myAppointments == null)
@@ -86,7 +88,7 @@ namespace AppointmentSystem.Server.Controllers.Patient
             newAppointment.Doctor = doctor;
             newAppointment.Patient = patient;
 
-            _context.Appointments.Add(newAppointment);
+            await _context.Appointments.AddAsync(newAppointment);
             await _context.SaveChangesAsync();
 
             return Ok(new { message = "Randevu başarıyla oluşturuldu." });

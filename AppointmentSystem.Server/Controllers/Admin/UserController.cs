@@ -21,6 +21,7 @@ namespace AppointmentSystem.Server.Controllers.Admin
         {
             var admins = await _context.Users
                 .Where(x => x.RoleId == 1) 
+                .Include(x=>x.Role)
                 .ToListAsync();
 
             if (admins.Any())
@@ -92,6 +93,7 @@ namespace AppointmentSystem.Server.Controllers.Admin
         {
             var doctors = await _context.Users
                 .Where(x => x.RoleId == 2)
+                .Include(x => x.Role)
                 .ToListAsync();
 
             if (doctors.Any())
@@ -129,6 +131,7 @@ namespace AppointmentSystem.Server.Controllers.Admin
         {
             var patients = await _context.Users
                 .Where(x => x.RoleId == 3)
+                .Include(x => x.Role)
                 .ToListAsync();
 
             if (patients.Any())
