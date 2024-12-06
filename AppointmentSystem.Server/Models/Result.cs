@@ -6,5 +6,6 @@
         public string? Message { get; set; }
         public int DoctorId { get; set; }
         public int PatientId { get; set; }
+        public DateTime CreatedDate { get; set; } = DateTime.Now;
     }
 }
