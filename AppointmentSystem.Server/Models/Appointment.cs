@@ -13,7 +13,7 @@ namespace AppointmentSystem.Server.Models
         public int DoctorId { get; set; }
         public int PatientId { get; set; }
 
-        public User Doctor { get; set; } 
-        public User Patient { get; set; }
+        public User? Doctor { get; set; } 
+        public User? Patient { get; set; }
     }
 }
