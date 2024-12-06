@@ -7,5 +7,7 @@
         public int Point {  get; set; }
         public int PatientId { get; set; }
         public bool Status { get; set; }
+        public DateTime CreatedDate { get; set; } = DateTime.Now;
+
     }
 }
