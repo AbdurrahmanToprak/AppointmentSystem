@@ -1,5 +1,6 @@
 ﻿using AppointmentSystem.Server.Data;
 using AppointmentSystem.Server.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,6 +8,7 @@ namespace AppointmentSystem.Server.Controllers.Admin
 {
     [ApiController]
     [Route("api/admin/about")]
+    [Authorize(Roles = "1")]
     public class AboutController : ControllerBase
     {
         private readonly ApplicationDbContext _context;

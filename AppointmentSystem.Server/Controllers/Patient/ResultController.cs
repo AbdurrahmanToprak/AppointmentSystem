@@ -10,6 +10,7 @@ namespace AppointmentSystem.Server.Controllers.Patient
 {
     [Route("api/patient/result")]
     [ApiController]
+    [Authorize(Roles = "1")]
     public class ResultController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -18,7 +19,6 @@ namespace AppointmentSystem.Server.Controllers.Patient
         {
             _context = context;
         }
-        [Authorize]
         [HttpGet("myresults")]
         public async Task<IActionResult> GetMyResults()
         {
@@ -40,7 +40,6 @@ namespace AppointmentSystem.Server.Controllers.Patient
             return Ok(myResults);
         }
 
-        [Authorize]
         [HttpGet("myresult/{id}")]
         public async Task<IActionResult> GetMyResult(int id)
         {

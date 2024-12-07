@@ -10,6 +10,7 @@ namespace AppointmentSystem.Server.Controllers.Patient
 {
     [Route("api/patient/feedback")]
     [ApiController]
+    [Authorize(Roles = "3")]
     public class FeedBackController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -18,7 +19,6 @@ namespace AppointmentSystem.Server.Controllers.Patient
         {
             _context = context;
         }
-        [Authorize]
         [HttpGet("myfeedbacks")]
         public async Task<IActionResult> GetMyFeedBacks()
         {
@@ -39,7 +39,6 @@ namespace AppointmentSystem.Server.Controllers.Patient
 
             return Ok(myFeedBacks);
         }
-        [Authorize]
         [HttpGet("myfeedback/{id}")]
         public async Task<IActionResult> GetMyFeedBack(int id)
         {
@@ -60,7 +59,7 @@ namespace AppointmentSystem.Server.Controllers.Patient
             }
             return Ok(feedback);
         }
-        [Authorize]
+
         [HttpPost("create")]
         public async Task<IActionResult> CreateFeedBack([FromBody] FeedBack newFeedBack)
         {
@@ -80,7 +79,7 @@ namespace AppointmentSystem.Server.Controllers.Patient
 
             return Ok(new { message = "Yorum başarıyla oluşturuldu." });
         }
-        [Authorize]
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteFeedBack(int id)
         {
