@@ -56,7 +56,7 @@ namespace AppointmentSystem.Server.Controllers
 				{
 					new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
 					new Claim(ClaimTypes.Email, user.Email ?? "Unkown Email"),
-					new Claim(ClaimTypes.Role, user.Role?.RoleName ?? "User"),
+					new Claim(ClaimTypes.Role, user.RoleId.ToString() ?? "3"),
 				}),
 				Expires = DateTime.UtcNow.AddMinutes(20),
 				Issuer = _configuration["Jwt:Issuer"],
