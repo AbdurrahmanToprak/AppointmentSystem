@@ -45,7 +45,7 @@ namespace AppointmentSystem.Server.Controllers.Admin
 
             newAdmin.RoleId = 1;
 
-            _context.Users.Add(newAdmin);
+            await  _context.Users.AddAsync(newAdmin);
             await _context.SaveChangesAsync();
             return Ok(new { message = "Admin başarıyla eklendi.", newAdmin });
         }
@@ -60,6 +60,7 @@ namespace AppointmentSystem.Server.Controllers.Admin
             }
 
             existAdmin.Name = updatedAdmin.Name;
+            existAdmin.Surname = updatedAdmin.Surname;
             existAdmin.Email = updatedAdmin.Email;
             existAdmin.Password = updatedAdmin.Password;
 
