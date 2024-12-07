@@ -19,7 +19,7 @@ const PsychologistLayout = () => {
                             <Link to="/psychologist/randevular">Randevular</Link>
                         </li>
                         <li>
-                            <Link to="/psychologist/sonuclar">Hastalarin Sonuçlari</Link>
+                            <Link to="/psychologist/sonuclar">Hastalarin Sonuclari</Link>
                         </li>
                         <li>
                             <Link to="/psychologist/feedbacks">Feedbacks</Link>

@@ -62,3 +62,122 @@
     padding: 20px;
     overflow-y: auto;
 }
+/* Genel Stil */
+body, html {
+    font-family: "Poppins", sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background-color: #f4f4f9;
+}
+
+/* Psychologist Layout */
+.psychologist-layout {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.psychologist-header {
+    background-color: #2b1055;
+    padding: 20px;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+    .psychologist-header h1 {
+        margin: 0;
+    }
+
+.header-right {
+    display: flex;
+    align-items: center;
+}
+
+.profile-link {
+    color: white;
+    text-decoration: none;
+    margin-left: 20px;
+    background-color: #7597de;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.psychologist-container {
+    display: flex;
+    flex: 1;
+}
+
+.psychologist-sidebar {
+    width: 200px;
+    background-color: #2b1055;
+    padding: 20px;
+    color: white;
+    height: 100%;
+    position: fixed;
+}
+
+    .psychologist-sidebar ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    .psychologist-sidebar li {
+        margin: 20px 0;
+    }
+
+        .psychologist-sidebar li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            transition: color 0.3s;
+        }
+
+            .psychologist-sidebar li a:hover {
+                color: #7597de;
+            }
+
+.psychologist-main {
+    margin-left: 220px;
+    padding: 20px;
+    flex: 1;
+    background-color: #fff;
+    border-radius: 10px;
+}
+
+/* Tablo Stili */
+.table-container {
+    margin-top: 20px;
+}
+
+h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+}
+
+    .data-table th, .data-table td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .data-table th {
+        background-color: #2b1055;
+        color: white;
+    }
+
+    .data-table tr:hover {
+        background-color: #f4f4f9;
+    }
+

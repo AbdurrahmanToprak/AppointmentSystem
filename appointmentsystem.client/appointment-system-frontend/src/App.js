@@ -8,6 +8,9 @@ import UserLayout from "./components/UserLayout";
 import AppointmentsUser from "./components/AppointmentsUser";
 import ResultsUser from "./components/ResultsUser";
 import HomePage from "./components/HomePage"; // Ana sayfa bileþeni eklendi
+import Randevular from "./components/Randevular";
+import Sonuclar from "./components/Sonuclar";
+import Feedbacks from "./components/Feedbacks";
 
 const App = () => {
     return (
@@ -34,9 +37,9 @@ const App = () => {
 
                 {/* Psikolog Paneli */}
                 <Route path="/psychologist" element={<PsychologistLayout />}>
-                    <Route path="randevular" element={<div>Randevular</div>} />
-                    <Route path="sonuclar" element={<div>Hastalarýn Sonuçlarý</div>} />
-                    <Route path="feedbacks" element={<div>Feedbacks</div>} />
+                    <Route path="randevular" element={<Randevular />} />
+                    <Route path="sonuclar" element={<Sonuclar />} />
+                    <Route path="feedbacks" element={<Feedbacks />} />
                 </Route>
 
                 {/* Kullanýcý Paneli */}
