@@ -10,6 +10,7 @@ namespace AppointmentSystem.Server.Controllers.Patient
 {
     [Route("api/patient/feedback")]
     [ApiController]
+    [Authorize(Roles = "3")]
     public class FeedBackController : ControllerBase
     {
         private readonly ApplicationDbContext _context;

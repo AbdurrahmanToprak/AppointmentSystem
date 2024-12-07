@@ -10,6 +10,7 @@ namespace AppointmentSystem.Server.Controllers.Patient
 {
     [Route("api/patient/result")]
     [ApiController]
+    [Authorize(Roles = "1")]
     public class ResultController : ControllerBase
     {
         private readonly ApplicationDbContext _context;

@@ -2,11 +2,13 @@
 using Microsoft.EntityFrameworkCore;
 using AppointmentSystem.Server.Data;
 using AppointmentSystem.Server.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AppointmentSystem.Server.Controllers
 {
     [ApiController]
     [Route("api/admin/appointment")]
+    [Authorize(Roles = "1")]
     public class AppointmentController : ControllerBase
     {
         private readonly ApplicationDbContext _context;

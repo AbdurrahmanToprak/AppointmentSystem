@@ -9,6 +9,7 @@ namespace AppointmentSystem.Server.Controllers.Patient
 {
     [Route("api/patient/appointment")]
     [ApiController]
+    [Authorize(Roles = "3")]
     public class AppointmentController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -17,7 +18,7 @@ namespace AppointmentSystem.Server.Controllers.Patient
         {
             _context = context;
         }
-        [Authorize]
+
         [HttpGet("myappointments")]
         public async Task<IActionResult> GetMyAppointments()
         {
@@ -63,7 +64,7 @@ namespace AppointmentSystem.Server.Controllers.Patient
 
             return Ok(appointment);
         }
-        [Authorize]
+
         [HttpPost("create")]
         public async Task<IActionResult> CreateAppointment([FromBody] Appointment newAppointment)
         {
@@ -93,7 +94,7 @@ namespace AppointmentSystem.Server.Controllers.Patient
 
             return Ok(new { message = "Randevu başarıyla oluşturuldu." });
         }
-        [Authorize]
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAppointment(int id)
         {
