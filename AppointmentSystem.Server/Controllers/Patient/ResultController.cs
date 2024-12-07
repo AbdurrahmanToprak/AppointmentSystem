@@ -19,7 +19,6 @@ namespace AppointmentSystem.Server.Controllers.Patient
         {
             _context = context;
         }
-        [Authorize]
         [HttpGet("myresults")]
         public async Task<IActionResult> GetMyResults()
         {
@@ -41,7 +40,6 @@ namespace AppointmentSystem.Server.Controllers.Patient
             return Ok(myResults);
         }
 
-        [Authorize]
         [HttpGet("myresult/{id}")]
         public async Task<IActionResult> GetMyResult(int id)
         {
