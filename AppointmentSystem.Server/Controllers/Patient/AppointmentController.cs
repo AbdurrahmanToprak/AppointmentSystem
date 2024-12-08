@@ -7,119 +7,129 @@ using System.Security.Claims;
 
 namespace AppointmentSystem.Server.Controllers.Patient
 {
-    [Route("api/patient/appointment")]
-    [ApiController]
-    [Authorize(Roles = "3")]
-    public class AppointmentController : ControllerBase
-    {
-        private readonly ApplicationDbContext _context;
+	[Route("api/patient/appointment")]
+	[ApiController]
+	[Authorize(Roles = "3")]
+	public class AppointmentController : ControllerBase
+	{
+		private readonly ApplicationDbContext _context;
 
-        public AppointmentController(ApplicationDbContext context)
-        {
-            _context = context;
-        }
+		public AppointmentController(ApplicationDbContext context)
+		{
+			_context = context;
+		}
 
-        [HttpGet("myappointments")]
-        public async Task<IActionResult> GetMyAppointments()
-        {
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+		[HttpGet("myappointments")]
+		public async Task<IActionResult> GetMyAppointments()
+		{
+			var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
 
-            if (userIdClaim == null)
-            {
-                return Unauthorized(new { message = "Kullanıcı kimliği doğrulanamadı." });
-            }
+			if (userIdClaim == null)
+			{
+				return Unauthorized(new { message = "Kullanıcı kimliği doğrulanamadı." });
+			}
 
-            var userId = int.Parse(userIdClaim.Value);
-         
-            var myAppointments = await _context.Appointments
-                .Where(a => a.PatientId == userId)
-                .Include(a => a.Doctor) 
-                .Include(a => a.Patient)
-                .OrderBy(a => a.DateTime) 
-                .ToListAsync();
-            if (myAppointments == null)
-                return NotFound(new { message = "Veri Bulunamadı" });
+			var userId = int.Parse(userIdClaim.Value);
 
-            return Ok(myAppointments); 
-        }
+			var myAppointments = await _context.Appointments
+				.Where(a => a.PatientId == userId)
+				.Include(a => a.Doctor)
+				.Include(a => a.Patient)
+				.OrderBy(a => a.DateTime)
+				.ToListAsync();
+			if (myAppointments == null)
+				return NotFound(new { message = "Veri Bulunamadı" });
 
-        [HttpGet("myappointment/{id}")]
-        public async Task<IActionResult> GetAppointmentDetails(int id)
-        {
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
-            if (userIdClaim == null)
-            {
-                return Unauthorized(new { message = "Kullanıcı kimliği doğrulanamadı." });
-            }
+			return Ok(myAppointments);
+		}
 
-            var userId = int.Parse(userIdClaim.Value);
+		[HttpGet("myappointment/{id}")]
+		public async Task<IActionResult> GetAppointmentDetails(int id)
+		{
+			var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+			if (userIdClaim == null)
+			{
+				return Unauthorized(new { message = "Kullanıcı kimliği doğrulanamadı." });
+			}
 
-            var appointment = await _context.Appointments
-                .FirstOrDefaultAsync(a => a.AppointmentId == id && a.PatientId == userId);
+			var userId = int.Parse(userIdClaim.Value);
 
-            if (appointment == null)
-            {
-                return NotFound(new { message = "Randevu bulunamadı." });
-            }
+			var appointment = await _context.Appointments
+				.FirstOrDefaultAsync(a => a.AppointmentId == id && a.PatientId == userId);
 
-            return Ok(appointment);
-        }
+			if (appointment == null)
+			{
+				return NotFound(new { message = "Randevu bulunamadı." });
+			}
 
-        [HttpPost("create")]
-        public async Task<IActionResult> CreateAppointment([FromBody] Appointment newAppointment)
-        {
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
-            if (userIdClaim == null)
-            {
-                return Unauthorized(new { message = "Kullanıcı kimliği doğrulanamadı." });
-            }
+			return Ok(appointment);
+		}
 
-            var userId = int.Parse(userIdClaim.Value);
+		[HttpPost("create")]
+		public async Task<IActionResult> CreateAppointment([FromBody] Appointment newAppointment)
+		{
+			var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+			if (userIdClaim == null)
+			{
+				return Unauthorized(new { message = "Kullanıcı kimliği doğrulanamadı." });
+			}
 
-            newAppointment.PatientId = userId;
+			var userId = int.Parse(userIdClaim.Value);
 
-            var doctor = await _context.Users.FindAsync(newAppointment.DoctorId);
-            var patient = await _context.Users.FindAsync(newAppointment.PatientId);
+			newAppointment.PatientId = userId;
 
-            if (doctor == null || patient == null)
-            {
-                return BadRequest(new { message = "Doktor veya Hasta bulunamadı." });
-            }
+			var doctor = await _context.Users.FindAsync(newAppointment.DoctorId);
+			var patient = await _context.Users.FindAsync(newAppointment.PatientId);
 
-            newAppointment.Doctor = doctor;
-            newAppointment.Patient = patient;
+			if (doctor == null || patient == null)
+			{
+				return BadRequest(new { message = "Doktor veya Hasta bulunamadı." });
+			}
 
-            await _context.Appointments.AddAsync(newAppointment);
-            await _context.SaveChangesAsync();
+			newAppointment.Doctor = doctor;
+			newAppointment.Patient = patient;
 
-            return Ok(new { message = "Randevu başarıyla oluşturuldu." });
-        }
+			var existingAppointment = await _context.Appointments
+		.FirstOrDefaultAsync(a => a.DoctorId == newAppointment.DoctorId &&
+								  a.DateTime == newAppointment.DateTime
+								  );
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAppointment(int id)
-        {
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
-            if (userIdClaim == null)
-            {
-                return Unauthorized(new { message = "Kullanıcı kimliği doğrulanamadı." });
-            }
+			if (existingAppointment != null)
+			{
+				return BadRequest(new { message = "Bu saatte doktorun başka bir randevusu var." });
+			}
 
-            var userId = int.Parse(userIdClaim.Value);
+			await _context.Appointments.AddAsync(newAppointment);
+			await _context.SaveChangesAsync();
 
-            var appointment = await _context.Appointments
-                .FirstOrDefaultAsync(a => a.AppointmentId == id && a.PatientId == userId);
+			return Ok(new { message = "Randevu başarıyla oluşturuldu." });
+		}
 
-            if (appointment == null)
-            {
-                return NotFound(new { message = "Randevu bulunamadı." });
-            }
+		[HttpDelete("{id}")]
+		public async Task<IActionResult> DeleteAppointment(int id)
+		{
+			var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+			if (userIdClaim == null)
+			{
+				return Unauthorized(new { message = "Kullanıcı kimliği doğrulanamadı." });
+			}
 
-            _context.Appointments.Remove(appointment);
-            await _context.SaveChangesAsync();
+			var userId = int.Parse(userIdClaim.Value);
 
-            return Ok(new {message = "Randevu başarıyla silindi."});
-        }
+			var appointment = await _context.Appointments
+				.FirstOrDefaultAsync(a => a.AppointmentId == id && a.PatientId == userId);
+
+			if (appointment == null)
+			{
+				return NotFound(new { message = "Randevu bulunamadı." });
+			}
+
+			_context.Appointments.Remove(appointment);
+			await _context.SaveChangesAsync();
+
+			return Ok(new { message = "Randevu başarıyla silindi." });
+		}
 
 
-    }
+	}
 }

@@ -2,12 +2,15 @@
 using AppointmentSystem.Server.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 using System.Security.Claims;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace AppointmentSystem.Server.Controllers
 {
 	[ApiController]
 	[Route("api/[controller]")]
+	[Authorize(Roles = "2")]
 	public class DoctorController : Controller
 	{
 		private readonly ApplicationDbContext _context;
@@ -18,11 +21,10 @@ namespace AppointmentSystem.Server.Controllers
 		}
 
 		[HttpGet("profile/{userId}")]
-		[Authorize] // JWT doğrulaması zorunlu
 		public IActionResult GetDoctorProfile([FromRoute] int userId)
 		{
-			var roleIdClaim = User.FindFirst("RoleId")?.Value;
-			if (roleIdClaim == null || roleIdClaim != "2")
+			var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+			if ( userIdClaim == null)
 			{
 				return Unauthorized(new { message = "Yetkisiz erişim." });
 			}
@@ -79,7 +81,6 @@ namespace AppointmentSystem.Server.Controllers
 		}
 
 		[HttpPost("appointments/{appointmentId}/result")]
-		[Authorize]
 		public IActionResult AddAppointmentResult([FromRoute] int appointmentId, [FromBody] Result result)
 		{
 			// Kullanıcı doğrulaması
@@ -112,6 +113,49 @@ namespace AppointmentSystem.Server.Controllers
 			_context.SaveChanges();
 
 			return CreatedAtAction(nameof(AddAppointmentResult), new { id = result.ResultId }, result);
+		}
+
+		[HttpPut("profile/{userId}")]
+		public async Task<IActionResult> UpdateDoctorProfile([FromRoute] int userId, [FromBody] User user, [FromForm] IFormFile image)
+		{
+			var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+			if (userIdClaim == null || userIdClaim != userId.ToString())
+			{
+				return Unauthorized(new { message = "Bu profili yalnızca sahip olan kullanıcı güncelleyebilir." });
+			}
+
+			var doctor = _context.Users.FirstOrDefault(u => u.UserId == userId && u.RoleId == 2);
+			if (doctor == null)
+			{
+				return NotFound(new { message = "Doktor bulunamadı." });
+			}
+
+			if (image != null && image.Length > 0)
+			{
+				var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images");
+				if (!Directory.Exists(uploadsFolder))
+				{
+					Directory.CreateDirectory(uploadsFolder); // Eğer klasör yoksa oluşturulur
+				}
+				var filePath = Path.Combine(uploadsFolder, image.FileName);
+
+				using (var stream = new FileStream(filePath, FileMode.Create))
+				{
+					await image.CopyToAsync(stream);
+				}
+
+				doctor.ImageUrl = "~/Images/" + image.FileName;
+			}
+
+			doctor.Name = user.Name;
+			doctor.Surname = user.Surname;
+			doctor.Email = user.Email;
+			doctor.ImageUrl = user.ImageUrl;
+
+			_context.Users.Update(doctor);
+			await _context.SaveChangesAsync();
+
+			return Ok(new { message = "Profil başarıyla güncellendi." });
 		}
 	}
 }
