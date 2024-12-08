@@ -44,10 +44,10 @@ body {
     }
 
         .homepage-header nav ul li {
-            margin-left: 40px;
+            margin-left: 15px;
             position: relative;
             border: 2px solid white;
-            padding: 10px;
+            padding: 5px;
             border-radius: 25px;
             width: 150px;
             text-align: center;

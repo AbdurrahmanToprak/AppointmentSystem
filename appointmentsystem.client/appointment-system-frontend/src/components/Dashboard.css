@@ -1,0 +1,43 @@
+.dashboard {
+    padding: 20px;
+    font-family: "Arial", sans-serif;
+}
+
+    .dashboard h1 {
+        font-size: 28px;
+        color: #333;
+        margin-bottom: 20px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+.stats-container {
+    display: flex;
+    gap: 20px;
+    justify-content: space-around;
+}
+
+.stat-card {
+    flex: 1;
+    background: linear-gradient(135deg, #4caf50, #81c784);
+    color: white;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s;
+}
+
+    .stat-card:hover {
+        transform: scale(1.05);
+    }
+
+    .stat-card h2 {
+        font-size: 18px;
+        margin-bottom: 10px;
+        text-transform: uppercase;
+    }
+
+    .stat-card p {
+        font-size: 24px;
+        font-weight: bold;
+    }

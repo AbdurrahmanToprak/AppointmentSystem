@@ -1,0 +1,55 @@
+.psikologlar {
+    padding: 20px;
+}
+
+    .psikologlar h1 {
+        font-size: 26px;
+        margin-bottom: 20px;
+        text-align: center;
+        color: #2c3e50;
+    }
+
+.psikolog-table {
+    width: 100%;
+    border-collapse: collapse;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+    .psikolog-table th, .psikolog-table td {
+        padding: 15px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .psikolog-table th {
+        background-color: #2980b9;
+        color: white;
+        text-transform: uppercase;
+    }
+
+    .psikolog-table tr:hover {
+        background-color: #f5f5f5;
+    }
+
+.action-btn {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    color: white;
+    margin-right: 5px;
+}
+
+.edit-btn {
+    background-color: #3498db;
+}
+
+.delete-btn {
+    background-color: #e74c3c;
+}
+
+.action-btn:hover {
+    opacity: 0.8;
+}

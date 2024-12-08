@@ -11,7 +11,7 @@ const HomePage = () => {
             {/* Header */}
 
             <header className="homepage-header">
-                <div className="logo">MindSphere</div>
+                <div className="logo">Psikosağlık</div>
                 <nav>
                     <ul>
                         <li><a href="#hero">Ana Sayfa</a></li>
@@ -20,6 +20,8 @@ const HomePage = () => {
                         <li><a href="#team">Ekibimiz</a></li>
                         <li><a href="#blogs">Blog</a></li>
                         <li><a href="#contact">İletişim</a></li>
+                        <li><a href="/login">GİRİS</a></li>
+
                     </ul>
                 </nav>
             </header>

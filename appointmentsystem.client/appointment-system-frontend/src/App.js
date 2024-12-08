@@ -11,6 +11,15 @@ import HomePage from "./components/HomePage"; // Ana sayfa bileþeni eklendi
 import Randevular from "./components/Randevular";
 import Sonuclar from "./components/Sonuclar";
 import Feedbacks from "./components/Feedbacks";
+import Dashboard from "./components/Dashboard";
+import Psikologlar from "./components/Psikologlar";
+import Hastalar from "./components/Hastalar";
+import About from "./components/About";
+import Contact from "./components/Contact";
+import Feedback from "./components/Feedback";
+import Blogs from "./components/Blogs";
+import Roller from "./components/Roller";
+
 
 const App = () => {
     return (
@@ -25,14 +34,15 @@ const App = () => {
 
                 {/* Admin Paneli */}
                 <Route path="/admin" element={<AdminLayout />}>
-                    <Route path="dashboard" element={<div>Dashboard</div>} />
-                    <Route path="psikologlar" element={<div>Psikologlar</div>} />
-                    <Route path="hastalar" element={<div>Hastalar</div>} />
-                    <Route path="randevular" element={<div>Randevular</div>} />
-                    <Route path="about" element={<div>About</div>} />
-                    <Route path="contact" element={<div>Contact</div>} />
-                    <Route path="feedback" element={<div>Feedback</div>} />
-                    <Route path="blogs" element={<div>Blogs</div>} />
+                    <Route path="dashboard" element={<Dashboard />} />
+                    <Route path="psikologlar" element={<Psikologlar />} />
+                    <Route path="hastalar" element={<Hastalar />} />
+                    <Route path="randevular" element={<Randevular />} />
+                    <Route path="about" element={<About />} />
+                    <Route path="contact" element={<Contact />} />
+                    <Route path="feedback" element={<Feedback />} />
+                    <Route path="blogs" element={<Blogs />} />
+                    <Route path="roller" element={<Roller />} />
                 </Route>
 
                 {/* Psikolog Paneli */}

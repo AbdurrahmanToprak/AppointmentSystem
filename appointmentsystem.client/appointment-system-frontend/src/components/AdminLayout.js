@@ -35,6 +35,9 @@ const AdminLayout = () => {
                         <li>
                             <Link to="/admin/blogs">Blogs</Link>
                         </li>
+                        <li>
+                            <Link to="/admin/roller">Roller</Link>
+                        </li>
                     </ul>
                 </aside>
                 <main className="admin-main">
