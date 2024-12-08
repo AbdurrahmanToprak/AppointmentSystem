@@ -116,7 +116,11 @@ namespace AppointmentSystem.Server.Controllers
 		}
 
 		[HttpPut("profile/{userId}")]
-		public async Task<IActionResult> UpdateDoctorProfile([FromRoute] int userId, [FromBody] User user, [FromForm] IFormFile image)
+		public async Task<IActionResult> UpdateDoctorProfile([FromRoute] int userId,
+	[FromForm(Name = "name")] string Name,
+	[FromForm(Name = "surname")] string Surname,
+	[FromForm(Name = "email")] string Email,
+	[FromForm] IFormFile image)
 		{
 			var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 			if (userIdClaim == null || userIdClaim != userId.ToString())
@@ -132,7 +136,7 @@ namespace AppointmentSystem.Server.Controllers
 
 			if (image != null && image.Length > 0)
 			{
-				var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images");
+				var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "image");
 				if (!Directory.Exists(uploadsFolder))
 				{
 					Directory.CreateDirectory(uploadsFolder); // Eğer klasör yoksa oluşturulur
@@ -144,19 +148,19 @@ namespace AppointmentSystem.Server.Controllers
 					await image.CopyToAsync(stream);
 				}
 
-				doctor.ImageUrl = "~/Images/" + image.FileName;
+				doctor.ImageUrl = "~/image/" + image.FileName;
 			}
 
-			doctor.Name = user.Name;
-			doctor.Surname = user.Surname;
-			doctor.Email = user.Email;
-			doctor.ImageUrl = user.ImageUrl;
+			doctor.Name = Name;
+			doctor.Surname = Surname;
+			doctor.Email = Email;
 
 			_context.Users.Update(doctor);
 			await _context.SaveChangesAsync();
 
 			return Ok(new { message = "Profil başarıyla güncellendi." });
 		}
+
 	}
 }
 

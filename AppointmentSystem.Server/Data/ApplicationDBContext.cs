@@ -42,6 +42,9 @@ namespace AppointmentSystem.Server.Data
 
             modelBuilder.ApplyConfiguration(new RoleConfig());
 			modelBuilder.ApplyConfiguration(new UserConfig());
+			modelBuilder.ApplyConfiguration(new AboutConfig());
+			modelBuilder.ApplyConfiguration(new ContactConfig());
+			modelBuilder.ApplyConfiguration(new BlogConfig());
 		}
     }
 }
