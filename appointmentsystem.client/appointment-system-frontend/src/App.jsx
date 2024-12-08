@@ -10,7 +10,7 @@ import ResultsUser from "./components/ResultsUser";
 import HomePage from "./components/HomePage"; // Ana sayfa bileþeni eklendi
 import Randevular from "./components/Randevular";
 import Sonuclar from "./components/Sonuclar";
-import Feedbacks from "./components/Feedbacks";
+import AdminFeedbacks from "./components/AdminFeedbacks";
 import Dashboard from "./components/Dashboard";
 import Psikologlar from "./components/Psikologlar";
 import Hastalar from "./components/Hastalar";
@@ -19,7 +19,6 @@ import Contact from "./components/Contact";
 import Feedback from "./components/Feedback";
 import Blogs from "./components/Blogs";
 import Roller from "./components/Roller";
-
 
 const App = () => {
     return (
@@ -49,7 +48,7 @@ const App = () => {
                 <Route path="/psychologist" element={<PsychologistLayout />}>
                     <Route path="randevular" element={<Randevular />} />
                     <Route path="sonuclar" element={<Sonuclar />} />
-                    <Route path="feedbacks" element={<Feedbacks />} />
+                    <Route path="feedbacks" element={<AdminFeedbacks />} />
                 </Route>
 
                 {/* Kullanýcý Paneli */}

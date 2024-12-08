@@ -5,13 +5,6 @@
     box-sizing: border-box;
 }
 
-body {
-    font-family: "Poppins", sans-serif;
-    line-height: 1.6;
-    background: #05c4f7;
-    color: #333;
-    overflow-x: hidden;
-}
 
 /* Header */
 .homepage-header {
