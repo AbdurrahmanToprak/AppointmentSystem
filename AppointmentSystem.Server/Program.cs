@@ -39,6 +39,7 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+app.UseCors("AllowReactApp");
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
