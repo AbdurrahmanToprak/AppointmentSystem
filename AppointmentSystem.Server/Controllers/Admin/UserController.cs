@@ -9,6 +9,7 @@ namespace AppointmentSystem.Server.Controllers.Admin
     [ApiController]
     [Route("api/admin/user")]
     [Authorize(Roles = "1")]
+
     public class UserController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
