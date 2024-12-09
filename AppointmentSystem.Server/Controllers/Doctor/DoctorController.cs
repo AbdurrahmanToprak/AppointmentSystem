@@ -2,6 +2,7 @@
 using AppointmentSystem.Server.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Data;
 using System.Security.Claims;
 using static System.Net.Mime.MediaTypeNames;
@@ -10,8 +11,9 @@ namespace AppointmentSystem.Server.Controllers
 {
 	[ApiController]
 	[Route("api/[controller]")]
-	[Authorize(Roles = "2")]
-	public class DoctorController : Controller
+	[Authorize(Roles ="2")]
+
+	public class DoctorController : ControllerBase
 	{
 		private readonly ApplicationDbContext _context;
 
@@ -50,16 +52,17 @@ namespace AppointmentSystem.Server.Controllers
 		}
 
 		[HttpGet("appointments")]
-		[Authorize] // JWT doğrulaması zorunlu
-		public IActionResult GetDoctorAppointments([FromRoute] int userId)
+
+		public async Task<IActionResult> GetDoctorAppointments()
 		{
 			var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 			if (userIdClaim == null)
 			{
 				return Unauthorized(new { message = "Kullanıcı bilgileri eksik." });
 			}
+			var userId = int.Parse(userIdClaim);
 
-			var appointments = _context.Appointments
+			var appointments = await _context.Appointments
 				.Where(a => a.DoctorId == userId)
 				.Select(a => new
 				{
@@ -68,13 +71,32 @@ namespace AppointmentSystem.Server.Controllers
 					a.Time,
 					a.Status,
 					a.PatientId,
+					a.CreatedDate,
 					PatientName = a.Patient.Name + " " + a.Patient.Surname
 				})
-				.ToList();
+				.ToListAsync();
 
 			if (appointments == null || !appointments.Any())
 			{
 				return NotFound(new { message = "Hiç randevu bulunamadı." });
+			}
+
+			var now = DateTime.Now;
+
+			// Geçmiş randevuları güncelle
+			var pastAppointments = await _context.Appointments
+				.Where(a => a.DoctorId == userId && a.DateTime < now && a.Status == true)
+				.ToListAsync();
+
+			if (pastAppointments.Any())
+			{
+				foreach (var appointment in pastAppointments)
+				{
+					appointment.Status = false; // Geçmiş randevuların statüsünü güncelle
+				}
+
+				// Değişiklikleri kaydet
+				await _context.SaveChangesAsync();
 			}
 
 			return Ok(appointments);
