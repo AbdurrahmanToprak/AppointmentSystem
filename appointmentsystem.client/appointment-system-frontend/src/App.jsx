@@ -20,6 +20,8 @@ import Feedback from "./components/Feedback";
 import Blogs from "./components/Blogs";
 import Roller from "./components/Roller";
 
+
+
 const App = () => {
     return (
         <Router>
@@ -55,6 +57,7 @@ const App = () => {
                 <Route path="/user" element={<UserLayout />}>
                     <Route path="randevularim" element={<AppointmentsUser />} />
                     <Route path="sonuclarim" element={<ResultsUser />} />
+
                 </Route>
             </Routes>
         </Router>

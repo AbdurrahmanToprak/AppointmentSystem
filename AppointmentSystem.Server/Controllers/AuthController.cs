@@ -23,15 +23,15 @@ namespace AppointmentSystem.Server.Controllers
 		}
 
 		[HttpPost("register")]
-		public IActionResult Register([FromBody] User newUser)
+		public async Task<IActionResult>  Register([FromBody] User newUser)
 		{
 			if (_context.Users.Any(u => u.Email == newUser.Email))
 			{
 				return Conflict("Bu e-posta adresi zaten kayıtlı.");
 			}
 
-			_context.Users.Add(newUser);
-			_context.SaveChanges();
+			await _context.Users.AddAsync(newUser);
+			await _context.SaveChangesAsync();
 
 			return Ok("Kullanıcı başarıyla kaydedildi.");
 		}
