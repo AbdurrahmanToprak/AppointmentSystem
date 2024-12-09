@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios"; // Axios'u import ettik
 import "./RegisterForm.css"; // CSS dosyasý
 
 const API_URL = "https://localhost:7200/api/Auth"; // API URL'si
 
 const RegisterForm = () => {
     const [formData, setFormData] = useState({
-        
         name: "",
-        surname: "",  // Soyad eklendi
+        surname: "",
         email: "",
         password: "",
     });
@@ -20,40 +20,30 @@ const RegisterForm = () => {
 
         const registerRequest = {
             name: formData.name,
-            surname: formData.surname,  // Soyad ekleniyor
+            surname: formData.surname,
             email: formData.email,
             password: formData.password,
         };
 
         try {
-            const response = await fetch(`${API_URL}/register`, {
-                method: "POST",
+            const response = await axios.post(`${API_URL}/register`, registerRequest, {
                 headers: {
                     "Content-Type": "application/json",
-                },
-                body: JSON.stringify(registerRequest),
+                }
             });
 
-            // Yanýtýn JSON olup olmadýðýný kontrol et
-            let responseData;
-            try {
-                responseData = await response.json();
-            } catch (error) {
-                responseData = await response.text();  // JSON deðilse ham metni al
-                console.error("Non-JSON response:", responseData);
-            }
-
-            if (response.ok) {
+            // Baþarýlý yanýt aldýðýmýzda yapýlacak iþlemler
+            if (response.status === 200) {
                 setMessage("Kayýt baþarýlý! Giriþ yapmak için yönlendiriliyorsunuz.");
                 setTimeout(() => {
                     navigate("/login");
                 }, 2000);
             } else {
-                setMessage(responseData.message || "Kayýt sýrasýnda bir hata oluþtu.");
+                setMessage(response.data.message || "Kayýt sýrasýnda bir hata oluþtu.");
             }
         } catch (error) {
             console.error("Register Error:", error);
-            setMessage("Bir hata oluþtu. Lütfen tekrar deneyin.");
+            setMessage(error.response?.data?.message || "Bir hata oluþtu. Lütfen tekrar deneyin.");
         }
     };
 
@@ -61,7 +51,7 @@ const RegisterForm = () => {
         <div className="register-container">
             <form onSubmit={handleRegister}>
                 <h2>Register</h2>
-                
+
                 <div className="form-group">
                     <label>Name:</label>
                     <input
@@ -74,7 +64,7 @@ const RegisterForm = () => {
                     />
                 </div>
                 <div className="form-group">
-                    <label>Surname:</label> {/* Soyad alaný eklendi */}
+                    <label>Surname:</label>
                     <input
                         type="text"
                         value={formData.surname}

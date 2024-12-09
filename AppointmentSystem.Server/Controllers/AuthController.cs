@@ -30,6 +30,7 @@ namespace AppointmentSystem.Server.Controllers
 				return Conflict("Bu e-posta adresi zaten kayıtlı.");
 			}
 
+			newUser.RoleId = 3;
 			await _context.Users.AddAsync(newUser);
 			await _context.SaveChangesAsync();
 
