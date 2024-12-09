@@ -158,7 +158,7 @@ namespace AppointmentSystem.Server.Controllers
 
 			if (image != null && image.Length > 0)
 			{
-				var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "image");
+				var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "image", "user");
 				if (!Directory.Exists(uploadsFolder))
 				{
 					Directory.CreateDirectory(uploadsFolder); // Eğer klasör yoksa oluşturulur

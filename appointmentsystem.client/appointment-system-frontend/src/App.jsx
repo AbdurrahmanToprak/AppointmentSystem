@@ -9,11 +9,13 @@ import AppointmentsUser from "./components/AppointmentsUser";
 import ResultsUser from "./components/ResultsUser";
 import HomePage from "./components/HomePage"; // Ana sayfa bileþeni eklendi
 import Randevular from "./components/Randevular";
+import AdminRandevular from "./components/AdminRandevular";
 import Sonuclar from "./components/Sonuclar";
 import AdminFeedbacks from "./components/AdminFeedbacks";
 import Dashboard from "./components/Dashboard";
 import Psikologlar from "./components/Psikologlar";
 import Hastalar from "./components/Hastalar";
+import HastaDetay from "./components/HastaDetay";
 import About from "./components/About";
 import Contact from "./components/Contact";
 import Feedback from "./components/Feedback";
@@ -40,7 +42,8 @@ const App = () => {
                     <Route path="dashboard" element={<Dashboard />} />
                     <Route path="psikologlar" element={<Psikologlar />} />
                     <Route path="hastalar" element={<Hastalar />} />
-                    <Route path="randevular" element={<Randevular />} />
+                    <Route path="hastalar/:id" element={<HastaDetay />} />
+                    <Route path="randevular" element={<AdminRandevular />} />
                     <Route path="about" element={<About />} />
                     <Route path="contact" element={<Contact />} />
                     <Route path="feedback" element={<Feedback />} />

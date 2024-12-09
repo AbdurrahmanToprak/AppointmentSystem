@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./Psikologlar.css";
 
-// Token'ý localStorage'dan alýp axios ile kullan
+
 const token = localStorage.getItem("token");
 
 const apiClient = axios.create({
     headers: {
-        Authorization: `Bearer ${token}` // JWT Token'ý baþlýða ekle
+        Authorization: `Bearer ${token}`
     }
 });
 
@@ -16,7 +16,6 @@ const Psikologlar = () => {
     const [psikologlar, setPsikologlar] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    // Fetch psikolog data from the API
     const fetchDoctors = async () => {
         try {
             const response = await apiClient.get("https://localhost:7200/api/admin/user/doctors");
@@ -27,7 +26,6 @@ const Psikologlar = () => {
         }
     };
 
-    // Delete a doctor
      const deleteDoctor = async (id) => {
         if (!window.confirm("Bu doktoru silmek istediðinize emin misiniz?")) return;
 

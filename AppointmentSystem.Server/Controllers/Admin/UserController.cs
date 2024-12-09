@@ -146,6 +146,31 @@ namespace AppointmentSystem.Server.Controllers.Admin
             return NotFound(new { message = "Hasta bulunamadı." });
         }
 
+        [HttpGet("patients/{id}")]
+        public async Task<IActionResult> GetPatientById(int id)
+        {
+
+            var patient = await _context.Users
+                .Where(x => x.RoleId == 3 && x.UserId == id)
+                .Include(x => x.Role)
+                .FirstOrDefaultAsync();
+
+            if (patient == null)
+            {
+                return NotFound(new { message = "Hasta bulunamadı." });
+            }
+
+
+            return Ok(new
+            {
+                Id = patient.UserId,
+                Name = patient.Name,
+                Surname = patient.Surname,
+                Email = patient.Email,
+                Role = patient.Role?.RoleName ?? "Belirtilmemiş",
+            });
+        }
+
         [HttpDelete("patients/{id}")]
         public async Task<IActionResult> DeletePatient(int id)
         {
