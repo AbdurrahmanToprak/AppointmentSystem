@@ -65,7 +65,23 @@ namespace AppointmentSystem.Server.Controllers.Patient
 			return Ok(appointment);
 		}
 
-		[HttpPost("create")]
+        [HttpGet("doctors")]
+        public async Task<IActionResult> GetDoctors()
+        {
+            var doctors = await _context.Users
+                .Where(u => u.RoleId == 2) 
+                .Select(d => new
+                {
+                    d.UserId,
+                    d.Name,
+					d.Surname
+                })
+                .ToListAsync();
+
+            return Ok(doctors);
+        }
+
+        [HttpPost("create")]
 		public async Task<IActionResult> CreateAppointment([FromBody] Appointment newAppointment)
 		{
 			var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
