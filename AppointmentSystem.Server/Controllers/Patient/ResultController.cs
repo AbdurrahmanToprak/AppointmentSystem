@@ -10,7 +10,7 @@ namespace AppointmentSystem.Server.Controllers.Patient
 {
     [Route("api/patient/result")]
     [ApiController]
-    [Authorize(Roles = "1")]
+    [Authorize(Roles ="3")]
     public class ResultController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -19,28 +19,40 @@ namespace AppointmentSystem.Server.Controllers.Patient
         {
             _context = context;
         }
-        [HttpGet("myresults")]
-        public async Task<IActionResult> GetMyResults()
-        {
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+		[HttpGet("myresults")]
+		public async Task<IActionResult> GetMyResults()
+		{
+			var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
 
-            if (userIdClaim == null)
-            {
-                return Unauthorized(new { message = "Kullanıcı bulunamadı." });
-            }
-            var userId = int.Parse(userIdClaim.Value);
+			if (userIdClaim == null)
+			{
+				return Unauthorized(new { message = "Kullanıcı bulunamadı." });
+			}
 
-            var myResults = await _context.Results
-                .Where(a => a.PatientId == userId)
-                .OrderBy(a => a.CreatedDate)
-                .ToListAsync();
-            if (myResults == null)
-                return NotFound(new { message = "Veri Bulunamadı" });
+			var userId = int.Parse(userIdClaim.Value);
 
-            return Ok(myResults);
-        }
+			var myResults = await _context.Results
+				.Where(a => a.PatientId == userId)
+				.OrderBy(a => a.CreatedDate)
+				.ToListAsync();
 
-        [HttpGet("myresult/{id}")]
+			if (myResults == null || !myResults.Any())
+				return NotFound(new { message = "Veri bulunamadı." });
+
+			// Sonuçların döndürüleceği veriyi oluşturuyoruz
+			var resultData = myResults.Select(result => new
+			{
+				result.ResultId,
+				CreatedDate = result.CreatedDate.ToString("yyyy-MM-dd"),
+				result.Message
+			}).ToList();
+            //Console.WriteLine(userId);
+			return Ok(resultData);
+		}
+
+
+
+		[HttpGet("myresult/{id}")]
         public async Task<IActionResult> GetMyResult(int id)
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);

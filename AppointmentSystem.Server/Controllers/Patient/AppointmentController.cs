@@ -26,22 +26,36 @@ namespace AppointmentSystem.Server.Controllers.Patient
 
 			if (userIdClaim == null)
 			{
-				return Unauthorized(new { message = "Kullanıcı kimliği doğrulanamadı." });
+				return Unauthorized(new { message = "Kullanıcı bulunamadı." });
 			}
 
 			var userId = int.Parse(userIdClaim.Value);
-
 			var myAppointments = await _context.Appointments
 				.Where(a => a.PatientId == userId)
-				.Include(a => a.Doctor)
-				.Include(a => a.Patient)
-				.OrderBy(a => a.DateTime)
+				.Include(a => a.Doctor) 
+				.Include(a => a.Patient) 
+				.OrderBy(a => a.DateTime) 
 				.ToListAsync();
-			if (myAppointments == null)
-				return NotFound(new { message = "Veri Bulunamadı" });
 
-			return Ok(myAppointments);
+			if (myAppointments == null || !myAppointments.Any())
+			{
+				return NotFound(new { message = "Randevu bulunamadı." });
+			}
+
+			// Döndürülecek veriyi oluşturuyoruz
+			var appointmentData = myAppointments.Select(appointment => new
+			{
+				appointment.AppointmentId,
+				AppointmentDate = appointment.DateTime.ToString("yyyy-MM-dd"),
+				AppointmentTime = appointment.DateTime.ToString("HH:mm"),
+				DoctorName = $"{appointment.Doctor?.Name} {appointment.Doctor?.Surname}",
+				PatientName = appointment.Patient?.Name
+			}).ToList();
+
+			return Ok(appointmentData);
 		}
+
+
 
 		[HttpGet("myappointment/{id}")]
 		public async Task<IActionResult> GetAppointmentDetails(int id)

@@ -1,32 +1,76 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
+
+const token = localStorage.getItem("token");
+
+const apiClient = axios.create({
+    headers: {
+        Authorization: `Bearer ${token}`
+    }
+});
 
 const AppointmentsUser = () => {
-    const [appointments, setAppointments] = useState([]);
+    const [appointments, setappointments] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
-        // API'den randevu verilerini al
-        fetch("/api/appointments/user")
-            .then((response) => response.json())
-            .then((data) => setAppointments(data))
-            .catch((error) => console.error("Error fetching appointments:", error));
+        const fetchData = async () => {
+            try {
+                const response = await apiClient.get("https://localhost:7200/api/patient/appointment/myappointments");
+                console.log(response.data); // Gelen veriyi kontrol edin
+                setappointments(response.data);
+            } catch (err) {
+                console.error("Error fetching data:", err);
+                setError(err.message || "Error fetching data");
+            } finally {
+                setLoading(false);
+            }
+        };
+        
+        fetchData();
     }, []);
 
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
+    if (error) {
+        return <div>Error: {error}</div>;
+    }
+
     return (
-        <div>
+        <div className="table-container">
             <h2>Randevularým</h2>
-            {appointments.length > 0 ? (
-                <ul>
-                    {appointments.map((appointment) => (
-                        <li key={appointment.id}>
-                            {appointment.date} - {appointment.psychologistName}
-                        </li>
-                    ))}
-                </ul>
-            ) : (
-                <p>Henüz bir randevunuz yok.</p>
-            )}
+            <table className="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Tarih</th>
+                        <th>Doktor Adý</th>
+                        <th>Randevu</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {appointments && appointments.length > 0 ? (
+                        appointments.map((appointment) => (
+                            <tr key={appointment.appointmentId}>
+                                <td>{appointment.appointmentId}</td>
+                                <td>{appointment.appointmentDate}</td>
+                                <td>{appointment.doctorName}</td>
+                                <td>{appointment.appointmentTime}</td>
+                            </tr>
+                        ))
+                    ) : (
+                        <tr><td colSpan="4">No appointments found.</td></tr>
+                    )}
+                </tbody>
+            </table>
         </div>
+
     );
 };
+
+
 
 export default AppointmentsUser;    
