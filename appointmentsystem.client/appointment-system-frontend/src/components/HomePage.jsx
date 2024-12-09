@@ -73,7 +73,12 @@ const HomePage = () => {
                         Bilimsel yöntemler ve uzman terapistlerimizle hayatınızı iyileştirin, her geçen gün daha güçlü bir zihin için yatırım yapın! <br />
                         İyi bir akıl sağlığı, sağlıklı kararlar ve daha mutlu bir yaşamın kapılarını aralar.
                     </p>
-                    <button className="cta-button">Randevu Al</button>
+                    <button
+                        className="cta-button"
+                        onClick={() => window.location.href = "/appointment"}
+                    >
+                        Randevu Al
+                    </button>
                 </div>
             </section>
 

@@ -1,0 +1,147 @@
+.appointment-page {
+    font-family: 'Poppins', sans-serif;
+    background: radial-gradient(circle at center, #1a2a6c, #b21f1f, #fdbb2d);
+    color: #fff;
+    padding: 30px;
+    text-align: center;
+    min-height: 100vh;
+}
+
+h1, h2 {
+    margin-bottom: 20px;
+    font-weight: bold;
+    text-shadow: 0 4px 20px rgba(255, 255, 255, 0.7);
+    font-size: 2.5em;
+    color: #ffe600;
+    animation: glow 1.5s infinite alternate;
+}
+
+@keyframes glow {
+    from {
+        text-shadow: 0 4px 20px rgba(255, 255, 255, 0.5);
+    }
+
+    to {
+        text-shadow: 0 4px 40px rgba(255, 255, 255, 1);
+    }
+}
+
+.appointment-form {
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.2);
+    padding: 25px;
+    border-radius: 15px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+    margin: 20px auto;
+    width: 90%;
+    max-width: 500px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+    .appointment-form:hover {
+        transform: scale(1.05);
+        box-shadow: 0 10px 50px rgba(255, 255, 255, 0.7);
+    }
+
+    .appointment-form label {
+        display: block;
+        margin: 10px 0;
+        font-weight: bold;
+        color: #ffe600;
+        text-transform: uppercase;
+        font-size: 0.9em;
+    }
+
+    .appointment-form select,
+    .appointment-form input {
+        padding: 12px;
+        width: 100%;
+        margin-bottom: 15px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 8px;
+        background: rgba(0, 0, 0, 0.4);
+        color: #ffe600;
+        font-size: 1em;
+        outline: none;
+        transition: border 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .appointment-form select:focus,
+        .appointment-form input:focus {
+            border: 2px solid #ffe600;
+            box-shadow: 0 0 10px rgba(255, 230, 0, 0.8);
+        }
+
+    .appointment-form button {
+        background-color: #ffe600;
+        color: #1a2a6c;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 1em;
+        font-weight: bold;
+        text-transform: uppercase;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+        .appointment-form button:hover {
+            background-color: #ffd700;
+            transform: scale(1.1);
+        }
+
+.message {
+    margin-top: 10px;
+    color: #ffd700;
+    font-weight: bold;
+    font-size: 1em;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+}
+
+h2 {
+    color: #ffe600;
+    font-size: 2em;
+}
+
+.appointments-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.appointment-card {
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.5);
+    text-align: left;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+    .appointment-card:hover {
+        transform: scale(1.03);
+        box-shadow: 0 10px 20px rgba(255, 255, 255, 0.6);
+    }
+
+    .appointment-card p {
+        margin: 5px 0;
+        color: #ffe600;
+    }
+
+.delete-button {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+    .delete-button:hover {
+        background-color: #c0392b;
+        transform: scale(1.1);
+    }

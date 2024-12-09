@@ -19,6 +19,7 @@ import Contact from "./components/Contact";
 import Feedback from "./components/Feedback";
 import Blogs from "./components/Blogs";
 import Roller from "./components/Roller";
+import AppointmentPage from "./components/AppointmentPage";
 
 
 
@@ -28,6 +29,7 @@ const App = () => {
             <Routes>
                 {/* Ana Sayfa */}
                 <Route path="/" element={<HomePage />} />
+                <Route path="/appointment" element={<AppointmentPage />} />
 
                 {/* Login ve Register */}
                 <Route path="/login" element={<LoginForm />} />
