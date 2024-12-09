@@ -47,7 +47,7 @@ const App = () => {
                     <Route path="randevular" element={<AdminRandevular />} />
                     <Route path="about" element={<About />} />
                     <Route path="contact" element={<Contact />} />
-                    <Route path="feedback" element={<Feedback />} />
+                    <Route path="feedbacks" element={<AdminFeedbacks />} />
                     <Route path="blogs" element={<Blogs />} />
                     <Route path="roller" element={<Roller />} />
                 </Route>
@@ -56,7 +56,7 @@ const App = () => {
                 <Route path="/psychologist" element={<PsychologistLayout />}>
                     <Route path="randevular" element={<Randevular />} />
                     <Route path="sonuclar" element={<Sonuclar />} />
-                    <Route path="feedbacks" element={<AdminFeedbacks />} />
+
                 </Route>
 
                 {/* Kullanýcý Paneli */}

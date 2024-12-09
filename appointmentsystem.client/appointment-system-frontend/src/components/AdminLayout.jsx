@@ -39,7 +39,7 @@ const AdminLayout = () => {
                             <Link to="/admin/contact">Contact</Link>
                         </li>
                         <li>
-                            <Link to="/admin/feedback">Feedback</Link>
+                            <Link to="/admin/feedbacks">Feedback</Link>
                         </li>
                         <li>
                             <Link to="/admin/blogs">Blogs</Link>
