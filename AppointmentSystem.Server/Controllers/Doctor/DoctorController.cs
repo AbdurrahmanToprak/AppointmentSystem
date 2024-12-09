@@ -183,6 +183,75 @@ namespace AppointmentSystem.Server.Controllers
 			return Ok(new { message = "Profil başarıyla güncellendi." });
 		}
 
+		[HttpGet("results")]
+		public async Task<IActionResult> GetDoctorResults()
+		{
+			// Kullanıcı kimliği doğrulaması
+			var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+			if (userIdClaim == null)
+			{
+				return Unauthorized(new { message = "Kullanıcı bilgileri eksik." });
+			}
+			var userId = int.Parse(userIdClaim);
+
+			// Doktora ait sonuçları al
+			var results = await _context.Results
+				.Where(r => r.DoctorId == userId)
+				.Select(r => new
+				{
+					r.ResultId,
+					r.Message,
+					r.PatientId,
+					PatientName = _context.Users
+						.Where(u => u.UserId == r.PatientId)
+						.Select(u => u.Name + " " + u.Surname)
+						.FirstOrDefault(),
+					r.CreatedDate
+				})
+				.ToListAsync();
+
+			if (results == null || !results.Any())
+			{
+				return NotFound(new { message = "Sonuç bulunamadı." });
+			}
+
+			return Ok(results);
+		}
+
+
+		//[HttpGet("feedbacks")]
+		//public async Task<IActionResult> GetDoctorFeedbacks()
+		//{
+		//	// Kullanıcı kimliği doğrulaması
+		//	var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+		//	if (userIdClaim == null)
+		//	{
+		//		return Unauthorized(new { message = "Kullanıcı bilgileri eksik." });
+		//	}
+		//	var userId = int.Parse(userIdClaim);
+
+		//	// Doktora ait feedback'leri al
+		//	var feedbacks = await _context.FeedBacks
+		//		.Where(f => f.Status == true && f.PatientId == userId) // Status aktif ve hastanın ID'si doktorunkiyle eşleşenler
+		//		.Select(f => new
+		//		{
+		//			f.FeedBackId,
+		//			f.Comment,
+		//			f.Point,
+		//			f.PatientId,
+		//			f.CreatedDate
+		//		})
+		//		.ToListAsync();
+
+		//	if (feedbacks == null || !feedbacks.Any())
+		//	{
+		//		return NotFound(new { message = "Hiç geri bildirim bulunamadı." });
+		//	}
+
+		//	return Ok(feedbacks);
+		//}
+
+
 	}
 }
 

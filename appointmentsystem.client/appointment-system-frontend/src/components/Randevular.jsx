@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./PsychologistLayout.css";
 
-// Token'ý localStorage'dan alýp axios ile kullan
+
 const token = localStorage.getItem("token");
 
 const apiClient = axios.create({
     headers: {
-        Authorization: `Bearer ${token}` // JWT Token'ý baþlýða ekle
+        Authorization: `Bearer ${token}` 
     }
 });
 
