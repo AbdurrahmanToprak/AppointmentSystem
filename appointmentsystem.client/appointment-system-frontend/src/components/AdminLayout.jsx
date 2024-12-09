@@ -3,10 +3,19 @@ import { Outlet, Link } from "react-router-dom";
 import "./AdminLayout.css";
 
 const AdminLayout = () => {
+    const handleLogout = () => {
+        // Çýkýþ yapma iþlemi için gerekli kodlarý buraya ekleyebilirsiniz.
+        // Örneðin, kullanýcýnýn giriþ bilgilerini temizlemek için localStorage veya sessionStorage kullanabilirsiniz.
+        localStorage.removeItem("userToken");
+        window.location.href = "/"; // Ana sayfaya yönlendirme
+    };
     return (
         <div className="admin-layout">
             <header className="admin-header">
                 <h1>Admin Panel</h1>
+                <button onClick={handleLogout} className="header-button logout-button">
+                    Çýkýþ Yap
+                </button>
             </header>
             <div className="admin-container">
                 <aside className="admin-sidebar">
