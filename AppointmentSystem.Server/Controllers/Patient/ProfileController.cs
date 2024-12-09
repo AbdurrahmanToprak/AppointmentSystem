@@ -42,7 +42,7 @@ namespace AppointmentSystem.Server.Controllers.Patient
         }
 
         [HttpPut]
-        public async Task<IActionResult> EditProfile(int userId, User updatedProfile)
+        public async Task<IActionResult> EditProfile(User updatedProfile)
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
             if (userIdClaim == null)
@@ -50,7 +50,7 @@ namespace AppointmentSystem.Server.Controllers.Patient
                 return Unauthorized(new { message = "Kullanıcı kimliği doğrulanamadı." });
             }
 
-            userId = int.Parse(userIdClaim.Value);
+            var userId = int.Parse(userIdClaim.Value);
 
             var existProfile = await _context.Users.FirstOrDefaultAsync(x => x.UserId == userId);
 
@@ -69,7 +69,7 @@ namespace AppointmentSystem.Server.Controllers.Patient
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteProfile(int userId)
+        public async Task<IActionResult> DeleteProfile()
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
             if (userIdClaim == null)
@@ -77,7 +77,7 @@ namespace AppointmentSystem.Server.Controllers.Patient
                 return Unauthorized(new { message = "Kullanıcı kimliği doğrulanamadı." });
             }
 
-            userId = int.Parse(userIdClaim.Value);
+            var userId = int.Parse(userIdClaim.Value);
 
             var existProfile = await _context.Users.FirstOrDefaultAsync(x => x.UserId == userId);
             if (existProfile == null)

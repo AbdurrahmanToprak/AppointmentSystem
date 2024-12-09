@@ -1,8 +1,18 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios"; // Axios import ediliyor
 import "./AppointmentPage.css";
 
-const API_URL = "https://localhost:7200/api/Appointments"; // Randevu API URL
-const DOCTOR_API_URL = "https://localhost:7200/api/Doctors"; // Doktorlar API URL
+// Token'ý localStorage'dan alýp axios ile kullan
+const token = localStorage.getItem("token");
+
+const apiClient = axios.create({
+    headers: {
+        Authorization: `Bearer ${token}` // JWT Token'ý baþlýða ekle
+    }
+});
+
+const API_URL = "https://localhost:7200/api/patient/appointment"; // Randevu API URL
+const DOCTOR_API_URL = "https://localhost:7200/api/patient/appointment/doctors"; // Doktorlar API URL
 
 const AppointmentPage = () => {
     const [appointments, setAppointments] = useState([]);
@@ -12,7 +22,7 @@ const AppointmentPage = () => {
     const [selectedDoctorId, setSelectedDoctorId] = useState("");
     const [message, setMessage] = useState("");
 
-    // Randevularý yükle
+    // Randevularý ve doktorlarý yükle
     useEffect(() => {
         fetchAppointments();
         fetchDoctors();
@@ -20,29 +30,21 @@ const AppointmentPage = () => {
 
     const fetchAppointments = async () => {
         try {
-            const response = await fetch(API_URL);
-            if (response.ok) {
-                const data = await response.json();
-                setAppointments(data);
-            } else {
-                console.error("Randevular yüklenemedi.");
-            }
+            const response = await apiClient.get(`${API_URL}/myappointments`);
+            setAppointments(response.data);
         } catch (error) {
-            console.error("Randevu alma hatasý:", error);
+            console.error("Randevular yüklenemedi.", error);
+            setMessage("Randevular yüklenemedi.");
         }
     };
 
     const fetchDoctors = async () => {
         try {
-            const response = await fetch(DOCTOR_API_URL);
-            if (response.ok) {
-                const data = await response.json();
-                setDoctors(data);
-            } else {
-                console.error("Doktorlar yüklenemedi.");
-            }
+            const response = await apiClient.get(DOCTOR_API_URL);
+            setDoctors(response.data);
         } catch (error) {
-            console.error("Doktor alma hatasý:", error);
+            console.error("Doktorlar yüklenemedi.", error);
+            setMessage("Doktorlar yüklenemedi.");
         }
     };
 
@@ -53,21 +55,18 @@ const AppointmentPage = () => {
         }
 
         const newAppointment = {
-            date: selectedDate,
-            time: selectedTime,
-            doctorId: selectedDoctorId,
+            DateTime: `${selectedDate}T${selectedTime}`,
+            DoctorId: selectedDoctorId,
         };
 
         try {
-            const response = await fetch(API_URL, {
-                method: "POST",
+            const response = await apiClient.post(`${API_URL}/create`, newAppointment, {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(newAppointment),
             });
 
-            if (response.ok) {
+            if (response.status === 201) {
                 setMessage("Randevu baþarýyla alýndý!");
                 fetchAppointments();
             } else {
@@ -81,11 +80,8 @@ const AppointmentPage = () => {
 
     const handleDeleteAppointment = async (id) => {
         try {
-            const response = await fetch(`${API_URL}/${id}`, {
-                method: "DELETE",
-            });
-
-            if (response.ok) {
+            const response = await apiClient.delete(`${API_URL}/${id}`);
+            if (response.status === 200) {
                 setMessage("Randevu baþarýyla silindi!");
                 fetchAppointments();
             } else {
@@ -108,8 +104,8 @@ const AppointmentPage = () => {
                 >
                     <option value="">Bir doktor seçin</option>
                     {doctors.map((doctor) => (
-                        <option key={doctor.id} value={doctor.id}>
-                            {doctor.name}
+                        <option key={doctor.userId} value={doctor.userId}>
+                            {doctor.name} {doctor.surname}
                         </option>
                     ))}
                 </select>
@@ -133,13 +129,19 @@ const AppointmentPage = () => {
             <h2>Randevularým</h2>
             <div className="appointments-list">
                 {appointments.map((appointment) => (
-                    <div key={appointment.id} className="appointment-card">
-                        <p>Doktor: {appointment.doctorName}</p>
-                        <p>Tarih: {appointment.date}</p>
-                        <p>Saat: {appointment.time}</p>
+                    <div key={appointment.appointmentId} className="appointment-card">
+                        <p>
+                            Doktor: {appointment.doctor.name} {appointment.doctor.surname}
+                        </p>
+                        <p>
+                            Tarih: {new Date(appointment.dateTime).toLocaleDateString()}
+                        </p>
+                        <p>
+                            Saat: {new Date(appointment.dateTime).toLocaleTimeString()}
+                        </p>
                         <button
                             className="delete-button"
-                            onClick={() => handleDeleteAppointment(appointment.id)}
+                            onClick={() => handleDeleteAppointment(appointment.appointmentId)}
                         >
                             Sil
                         </button>

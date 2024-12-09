@@ -22,6 +22,7 @@ import Feedback from "./components/Feedback";
 import Blogs from "./components/Blogs";
 import Roller from "./components/Roller";
 import AppointmentPage from "./components/AppointmentPage";
+import ProfilePage from './components/ProfilePage';
 
 
 
@@ -62,6 +63,7 @@ const App = () => {
                 <Route path="/user" element={<UserLayout />}>
                     <Route path="randevularim" element={<AppointmentsUser />} />
                     <Route path="sonuclarim" element={<ResultsUser />} />
+                    <Route path="profilim" element={<ProfilePage />} /> {/* Profilim sayfasý */}
 
                 </Route>
             </Routes>

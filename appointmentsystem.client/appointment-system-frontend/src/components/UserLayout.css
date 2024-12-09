@@ -1,50 +1,178 @@
+/* Genel Layout Ayarlarý */
 .user-layout {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    min-height: 100vh;
+    background-color: #f4f7fc;
 }
 
+/* Header Tasarýmý */
 .user-header {
-    background-color: #ffc107;
-    color: black;
-    padding: 10px 20px;
-    font-size: 20px;
-    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #3f72af;
+    padding: 20px 30px;
+    color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-bottom: 3px solid #2d5c8c;
 }
 
+    .user-header h1 {
+        margin: 0;
+        font-size: 26px;
+        font-weight: 600;
+        letter-spacing: 1px;
+    }
+
+.header-buttons {
+    display: flex;
+    align-items: center;
+}
+
+.header-button {
+    background-color: #ffffff;
+    color: #3f72af;
+    border: 1px solid #3f72af;
+    padding: 10px 20px;
+    margin-left: 15px;
+    text-decoration: none;
+    font-weight: 500;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+    .header-button:hover {
+        background-color: #3f72af;
+        color: white;
+    }
+
+.logout-button {
+    background-color: #f44336;
+    border-color: #f44336;
+}
+
+    .logout-button:hover {
+        background-color: #d32f2f;
+    }
+
+/* Container (Sidebar ve Main Bölüm) */
 .user-container {
     display: flex;
-    height: 100%;
+    flex-grow: 1;
+    margin-top: 30px;
 }
 
+/* Sidebar Tasarýmý */
 .user-sidebar {
     width: 250px;
-    background-color: #f8f9fa;
+    background-color: #ffffff;
     padding: 20px;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    border-right: 2px solid #ddd;
+    height: 100%;
+    box-shadow: 2px 0 6px rgba(0, 0, 0, 0.1);
 }
 
     .user-sidebar ul {
-        list-style: none;
+        list-style-type: none;
         padding: 0;
+        margin: 0;
     }
 
-        .user-sidebar ul li {
-            margin-bottom: 15px;
+    .user-sidebar li {
+        margin: 15px 0;
+    }
+
+    .user-sidebar a {
+        text-decoration: none;
+        color: #3f72af;
+        font-size: 18px;
+        display: block;
+        padding: 12px;
+        border-radius: 6px;
+        transition: background-color 0.3s ease, padding-left 0.3s ease;
+    }
+
+        .user-sidebar a:hover {
+            background-color: #3f72af;
+            color: white;
+            padding-left: 25px;
         }
 
-            .user-sidebar ul li a {
-                text-decoration: none;
-                color: #333;
-                font-weight: bold;
-            }
-
-                .user-sidebar ul li a:hover {
-                    color: #ffc107;
-                }
-
+/* Main Bölüm (Content) */
 .user-main {
-    flex: 1;
+    flex-grow: 1;
     padding: 20px;
-    overflow-y: auto;
+    background-color: #ffffff;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+/* Button (Profilim, Home ve Logout) */
+.header-button,
+.logout-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: 500;
+    border-radius: 30px;
+    cursor: pointer;
+    text-decoration: none;
+    border: none;
+    transition: 0.3s ease;
+}
+
+.logout-button {
+    background-color: #e74c3c;
+    color: white;
+    margin-left: 20px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+    .logout-button:hover {
+        background-color: #c0392b;
+    }
+
+.header-button:hover {
+    background-color: #3f72af;
+    color: white;
+}
+
+/* Sidebar ve Header Responsive Tasarým */
+@media (max-width: 768px) {
+    .user-header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 15px;
+    }
+
+    .header-buttons {
+        margin-top: 10px;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .user-container {
+        flex-direction: column;
+    }
+
+    .user-sidebar {
+        width: 100%;
+        padding: 15px;
+        border-right: none;
+        border-bottom: 2px solid #ddd;
+    }
+
+    .user-main {
+        padding: 15px;
+    }
+
+    .header-button {
+        margin-left: 0;
+        margin-bottom: 12px;
+    }
 }
