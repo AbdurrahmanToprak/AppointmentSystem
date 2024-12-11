@@ -22,7 +22,6 @@ const Dashboard = () => {
         const fetchDashboardData = async () => {
             try {
                 const response = await apiClient.get("https://localhost:7200/api/admin/dashboard");
-                console.log(response.data);
                 setStats(response.data); 
             } catch (error) {
                 console.error("Error fetching dashboard data:", error);
