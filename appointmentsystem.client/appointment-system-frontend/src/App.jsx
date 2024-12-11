@@ -23,6 +23,7 @@ import Blogs from "./components/Blogs";
 import Roller from "./components/Roller";
 import AppointmentPage from "./components/AppointmentPage";
 import ProfilePage from './components/ProfilePage';
+import AdminProfilePage from './components/AdminProfilePage';
 
 
 
@@ -50,6 +51,7 @@ const App = () => {
                     <Route path="feedbacks" element={<AdminFeedbacks />} />
                     <Route path="blogs" element={<Blogs />} />
                     <Route path="roller" element={<Roller />} />
+                    <Route path="profilim" element={<AdminProfilePage />} />
                 </Route>
 
                 {/* Psikolog Paneli */}
@@ -63,7 +65,7 @@ const App = () => {
                 <Route path="/user" element={<UserLayout />}>
                     <Route path="randevularim" element={<AppointmentsUser />} />
                     <Route path="sonuclarim" element={<ResultsUser />} />
-                    <Route path="profilim" element={<ProfilePage />} /> {/* Profilim sayfasý */}
+                    <Route path="profilim" element={<ProfilePage />} /> 
 
                 </Route>
             </Routes>
