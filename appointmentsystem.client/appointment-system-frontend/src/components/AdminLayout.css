@@ -43,6 +43,23 @@
                     color: #007bff;
                 }
 
+.header-button {
+    background-color: #ffffff;
+    color: #3f72af;
+    border: 1px solid #3f72af;
+    padding: 10px 20px;
+    margin-left: 15px;
+    text-decoration: none;
+    font-weight: 500;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+    .header-button:hover {
+        background-color: #3f72af;
+        color: white;
+    }
 .admin-main {
     flex: 1;
     padding: 20px;

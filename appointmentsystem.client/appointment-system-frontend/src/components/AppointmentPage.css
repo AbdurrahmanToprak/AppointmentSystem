@@ -1,6 +1,7 @@
+/* Genel Sayfa Tasarýmý */
 .appointment-page {
     font-family: 'Poppins', sans-serif;
-    background: radial-gradient(circle at center, #1a2a6c, #b21f1f, #fdbb2d);
+    background: radial-gradient(circle at center, #6a1b9a, #ff4081, #f57c00);
     color: #fff;
     padding: 30px;
     text-align: center;
@@ -12,7 +13,7 @@ h1, h2 {
     font-weight: bold;
     text-shadow: 0 4px 20px rgba(255, 255, 255, 0.7);
     font-size: 2.5em;
-    color: #ffe600;
+    color: #fdbb2d;
     animation: glow 1.5s infinite alternate;
 }
 
@@ -26,9 +27,10 @@ h1, h2 {
     }
 }
 
+/* Randevu Formu */
 .appointment-form {
     backdrop-filter: blur(10px);
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.1);
     padding: 25px;
     border-radius: 15px;
     border: 2px solid rgba(255, 255, 255, 0.3);
@@ -48,7 +50,7 @@ h1, h2 {
         display: block;
         margin: 10px 0;
         font-weight: bold;
-        color: #ffe600;
+        color: #fdbb2d;
         text-transform: uppercase;
         font-size: 0.9em;
     }
@@ -61,7 +63,7 @@ h1, h2 {
         border: 2px solid rgba(255, 255, 255, 0.3);
         border-radius: 8px;
         background: rgba(0, 0, 0, 0.4);
-        color: #ffe600;
+        color: #fdbb2d;
         font-size: 1em;
         outline: none;
         transition: border 0.3s ease, box-shadow 0.3s ease;
@@ -69,12 +71,12 @@ h1, h2 {
 
         .appointment-form select:focus,
         .appointment-form input:focus {
-            border: 2px solid #ffe600;
-            box-shadow: 0 0 10px rgba(255, 230, 0, 0.8);
+            border: 2px solid #fdbb2d;
+            box-shadow: 0 0 10px rgba(255, 187, 0, 0.8);
         }
 
     .appointment-form button {
-        background-color: #ffe600;
+        background-color: #fdbb2d;
         color: #1a2a6c;
         border: none;
         padding: 12px 20px;
@@ -91,6 +93,7 @@ h1, h2 {
             transform: scale(1.1);
         }
 
+/* Mesajlar */
 .message {
     margin-top: 10px;
     color: #ffd700;
@@ -99,15 +102,12 @@ h1, h2 {
     text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
 }
 
-h2 {
-    color: #ffe600;
-    font-size: 2em;
-}
-
+/* Randevular Listesi */
 .appointments-list {
     display: flex;
     flex-direction: column;
     gap: 15px;
+    margin-top: 30px;
 }
 
 .appointment-card {
@@ -127,7 +127,7 @@ h2 {
 
     .appointment-card p {
         margin: 5px 0;
-        color: #ffe600;
+        color: #fdbb2d;
     }
 
 .delete-button {

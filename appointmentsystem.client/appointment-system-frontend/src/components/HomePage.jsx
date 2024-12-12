@@ -95,7 +95,7 @@ const HomePage = () => {
                     <div className="about-image-container">
                         <div className="image-wrapper">
                             <img
-                                src={about ? about.imageUrl : "https://via.placeholder.com/300"}
+                                src={about && about.imageUrl ? `https://localhost:7200/${about.imageUrl}`  : `https://localhost:7200/default-image.jpg`}
                                 alt="About Us"
                                 className="about-image"
                             />
@@ -179,6 +179,15 @@ const HomePage = () => {
                     {blogs.map((blog, index) => (
                         <div class="blog-post">
                             <div class="post-content">
+                                <div className="blog-image-container">
+                                    <div className="image-wrapper">
+                                        <img
+                                            src={blog && blog.imageUrl ? `https://localhost:7200/${blog.imageUrl}` : `https://localhost:7200/default-image.jpg`}
+                                            alt="About Us"
+                                            className="about-image"
+                                        />
+                                    </div>
+                                </div>
                                 <h3 class="post-title">{blog.title}</h3>
                                 <p class="post-summary">
                                     {blog.content}

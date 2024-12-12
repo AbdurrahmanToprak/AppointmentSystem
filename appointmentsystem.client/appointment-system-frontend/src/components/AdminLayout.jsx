@@ -13,6 +13,7 @@ const AdminLayout = () => {
         <div className="admin-layout">
             <header className="admin-header">
                 <h1>Admin Panel</h1>
+                <Link to="/admin/profilim" className="header-button">Profilim</Link>
                 <button onClick={handleLogout} className="header-button logout-button">
                     Çýkýþ Yap
                 </button>
@@ -39,7 +40,7 @@ const AdminLayout = () => {
                             <Link to="/admin/contact">Contact</Link>
                         </li>
                         <li>
-                            <Link to="/admin/feedback">Feedback</Link>
+                            <Link to="/admin/feedbacks">Feedback</Link>
                         </li>
                         <li>
                             <Link to="/admin/blogs">Blogs</Link>

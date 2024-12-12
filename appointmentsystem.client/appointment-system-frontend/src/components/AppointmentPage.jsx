@@ -31,6 +31,7 @@ const AppointmentPage = () => {
     const fetchAppointments = async () => {
         try {
             const response = await apiClient.get(`${API_URL}/myappointments`);
+            console.log(response.data);
             setAppointments(response.data);
         } catch (error) {
             console.error("Randevular yüklenemedi.", error);
@@ -66,7 +67,7 @@ const AppointmentPage = () => {
                 },
             });
 
-            if (response.status === 201) {
+            if (response.status >= 200 && response.status < 300) {
                 setMessage("Randevu baþarýyla alýndý!");
                 fetchAppointments();
             } else {
@@ -131,13 +132,13 @@ const AppointmentPage = () => {
                 {appointments.map((appointment) => (
                     <div key={appointment.appointmentId} className="appointment-card">
                         <p>
-                            Doktor: {appointment.doctor.name} {appointment.doctor.surname}
+                            Doktor: {appointment.doctorName}
                         </p>
                         <p>
-                            Tarih: {new Date(appointment.dateTime).toLocaleDateString()}
+                            Tarih: {new Date(appointment.appointmentDate).toLocaleDateString()}
                         </p>
                         <p>
-                            Saat: {new Date(appointment.dateTime).toLocaleTimeString()}
+                            Saat: {appointment.appointmentTime}
                         </p>
                         <button
                             className="delete-button"
