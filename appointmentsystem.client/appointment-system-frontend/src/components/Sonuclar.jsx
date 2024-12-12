@@ -22,7 +22,10 @@ const Sonuclar = () => {
                 setResults(response.data); // setResults kullandýk
             } catch (err) {
                 console.error("Error fetching data:", err);
-                setError(err.message || "Error fetching data");
+
+                // Eðer hata mesajý spesifik deðilse, sonuç bulunamadý mesajý ayarla
+                const errorMessage = err.response?.data?.message || "Sonuç bulunamadý";
+                setError(errorMessage);
             } finally {
                 setLoading(false);
             }

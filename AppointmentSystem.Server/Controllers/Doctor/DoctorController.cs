@@ -22,15 +22,19 @@ namespace AppointmentSystem.Server.Controllers
 			_context = context;
 		}
 
-		[HttpGet("profile/{userId}")]
-		public IActionResult GetDoctorProfile([FromRoute] int userId)
+		[HttpGet("profile")]
+		public IActionResult GetDoctorProfile()
 		{
+			// Kullanıcı ID'sini token'dan alıyoruz
 			var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
-			if ( userIdClaim == null)
+			if (userIdClaim == null)
 			{
 				return Unauthorized(new { message = "Yetkisiz erişim." });
 			}
 
+			int userId = int.Parse(userIdClaim.Value); // Token'dan gelen ID'yi alıyoruz
+
+			// Doktorun bilgilerini veritabanından sorguluyoruz
 			var doctor = _context.Users
 				.Where(u => u.UserId == userId && u.RoleId == 2)
 				.Select(u => new
@@ -43,13 +47,16 @@ namespace AppointmentSystem.Server.Controllers
 				})
 				.FirstOrDefault();
 
+			// Eğer doktor bulunamazsa hata döndürüyoruz
 			if (doctor == null)
 			{
 				return NotFound(new { message = "Doktor bulunamadı." });
 			}
 
+			// Doktor bilgilerini döndürüyoruz
 			return Ok(doctor);
 		}
+
 
 		[HttpGet("appointments")]
 
