@@ -23,7 +23,7 @@ import Blogs from "./components/Blogs";
 import Roller from "./components/Roller";
 import AppointmentPage from "./components/AppointmentPage";
 import ProfilePage from './components/ProfilePage';
-
+import AdminProfilePage from './components/AdminProfilePage';
 
 
 const App = () => {

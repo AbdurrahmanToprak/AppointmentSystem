@@ -118,8 +118,9 @@ namespace AppointmentSystem.Server.Controllers.Patient
 
 			newAppointment.Doctor = doctor;
 			newAppointment.Patient = patient;
+			newAppointment.Status = true;
 
-			var existingAppointment = await _context.Appointments
+            var existingAppointment = await _context.Appointments
 		.FirstOrDefaultAsync(a => a.DoctorId == newAppointment.DoctorId &&
 								  a.DateTime == newAppointment.DateTime
 								  );

@@ -21,20 +21,33 @@ namespace AppointmentSystem.Server.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAppointments()
         {
+            var turkeyTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Turkey Standard Time");
+            var nowInTurkey = TimeZoneInfo.ConvertTime(DateTime.UtcNow, turkeyTimeZone);
+
+            var expiredAppointments = _context.Appointments
+                .Where(a => a.DateTime < nowInTurkey); 
+
+            foreach (var appointment in expiredAppointments)
+            {
+                appointment.Status = false;
+            }
+
+            await _context.SaveChangesAsync();
+
             var appointments = await _context.Appointments
                 .Include(x => x.Doctor)
                 .Include(x => x.Patient)
                 .Select(a => new
-                  {
-                      a.AppointmentId,
-                      a.DateTime,
-                      a.Time,
-                      a.Status,
-                      a.PatientId,
-                      a.CreatedDate,
-                      PatientName = a.Patient.Name + " " + a.Patient.Surname,
-                      DoctorName = a.Doctor.Name + " " + a.Doctor.Surname
-                  })
+                {
+                    a.AppointmentId,
+                    a.DateTime,
+                    a.Time,
+                    a.Status,
+                    a.PatientId,
+                    a.CreatedDate,
+                    PatientName = a.Patient.Name + " " + a.Patient.Surname,
+                    DoctorName = a.Doctor.Name + " " + a.Doctor.Surname
+                })
                 .ToListAsync();
 
             if (appointments.Any())
@@ -44,6 +57,8 @@ namespace AppointmentSystem.Server.Controllers
 
             return NotFound(new { message = "Randevu bulunamadı." });
         }
+
+
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAppointment(int id)

@@ -51,12 +51,12 @@ const Randevular = () => {
                 </thead>
                 <tbody>
                     {appointments.map((appointment) => (
-                        <tr key={appointment.id}>
+                        <tr key={appointment.appointmentId}>
                             <td>{appointment.appointmentId}</td>
                             <td>{new Date(appointment.dateTime).toLocaleDateString()}</td>
                             <td>{appointment.doctorName}</td>
                             <td>{appointment.patientName}</td>
-                            <td>{appointment.time}</td>
+                            <td>{new Date(appointment.dateTime).toLocaleTimeString()}</td>
                             <td>{appointment.status == true ? "Aktif" : "Randevu saati geçti"}</td>
 
                         </tr>
