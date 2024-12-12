@@ -16,6 +16,7 @@ const PsychologistProfilePage = () => {
     const [user, setUser] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
     const [message, setMessage] = useState(""); // Mesaj durumu
+    const [file, setFile] = useState(null);
 
     useEffect(() => {
         fetchUserProfile();
@@ -35,32 +36,24 @@ const PsychologistProfilePage = () => {
         setIsEditing(!isEditing);
     };
 
-    const handleFileChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const formData = new FormData();
-            formData.append("image", file);
-
-            axios.post("https://localhost:7200/api/doctor/upload-image", formData)
-                .then(response => {
-                    setUser((prevUser) => ({
-                        ...prevUser,
-                        imageUrl: response.data.imageUrl, // Backend'den dönen fotoðraf URL'sini al
-                    }));
-                })
-                .catch(error => {
-                    console.error("Fotoðraf yüklenirken hata oluþtu.", error);
-                });
-        }
-    };
 
     const handleSaveChanges = async () => {
+        const formData = new FormData();
+        formData.append("userId", user.userId);
+        formData.append("name", user.name);
+        formData.append("surname", user.surname);
+        formData.append("email", user.email);
+        formData.append("password", user.password);
+        if (file) {
+            formData.append("file", file);
+        }
+
         try {
-            const response = await apiClient.put(API_URL, user);
+            const response = await apiClient.put(API_URL, formData)
             if (response.status === 200) {
                 setMessage("Bilgiler baþarýyla güncellendi.");
-                setIsEditing(false); // Düzenleme modundan çýk
-                fetchUserProfile(); // Güncellenen bilgileri yeniden yükle
+                fetchUserProfile();
+                setIsEditing(false);
             } else {
                 setMessage("Bir hata oluþtu, lütfen tekrar deneyin.");
             }
@@ -70,12 +63,41 @@ const PsychologistProfilePage = () => {
         }
     };
 
+    const deleteProfile = async (deleteType) => {
+        try {
+            const response = await apiClient.delete(
+                `${API_URL}?userId=${user.userId}&deleteType=${deleteType}`
+            );
+
+            if (response.status === 200) {
+                setMessage(response.data.message);
+
+                if (deleteType === "account") {
+                } else {
+                    fetchUserProfile();
+                }
+            }
+        } catch (error) {
+            if (error.response && error.response.status === 400) {
+                const serverMessage = error.response.data.message;
+                setMessage(serverMessage);
+            } else {
+                console.error("Hata oluþtu:", error);
+                setMessage("Bir hata oluþtu.");
+            }
+        }
+    };
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setUser((prevUser) => ({
             ...prevUser,
             [name]: value,
         }));
+    };
+
+    const handleFileChange = (e) => {
+        setFile(e.target.files[0]);
     };
 
     return (
@@ -133,7 +155,9 @@ const PsychologistProfilePage = () => {
                             <p>
                                 <strong>Email:</strong> {user.email}
                             </p>
-                            <button onClick={handleEditToggle}>Düzenle</button>
+                                <button onClick={handleEditToggle}>Düzenle</button>
+                                <button onClick={() => deleteProfile("profilePhoto")}>Profil Fotoðrafýný Sil</button>
+                                <button onClick={() => deleteProfile("account")}>Hesabý Sil</button>
                         </div>
                     )}
                 </>

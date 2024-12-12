@@ -24,6 +24,7 @@ import Roller from "./components/Roller";
 import AppointmentPage from "./components/AppointmentPage";
 import ProfilePage from './components/ProfilePage';
 import AdminProfilePage from './components/AdminProfilePage';
+import PsychologistProfile from './components/PsychologistProfile';
 
 
 const App = () => {
@@ -58,6 +59,7 @@ const App = () => {
                     <Route path="randevular" element={<Randevular />} />
                     <Route path="sonuclar" element={<Sonuclar />} />
                     <Route path="feedbacks" element={<AdminFeedbacks />} />
+                    <Route path="profile" element={<PsychologistProfile />} />
                 </Route>
 
                 {/* Kullanýcý Paneli */}

@@ -16,7 +16,7 @@ const PsychologistLayout = () => {
                 <div className="header-right">
                     <span>Logo</span>
                     <Link to="/" className="header-button">Ana Sayfa</Link>
-                    <Link to="/psychologist/profiles" className="header-button">Profilim</Link>
+                    <Link to="/psychologist/profile" className="header-button">Profilim</Link>
                     <button onClick={handleLogout} className="header-button logout-button">
                         Çýkýþ Yap
                     </button>
