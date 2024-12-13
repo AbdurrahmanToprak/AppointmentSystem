@@ -25,7 +25,7 @@ import AppointmentPage from "./components/AppointmentPage";
 import ProfilePage from './components/ProfilePage';
 import AdminProfilePage from './components/AdminProfilePage';
 import PsychologistProfile from './components/PsychologistProfile';
-
+import Patient from './components/Patient';
 
 const App = () => {
     return (
@@ -60,6 +60,7 @@ const App = () => {
                     <Route path="sonuclar" element={<Sonuclar />} />
                     <Route path="feedbacks" element={<AdminFeedbacks />} />
                     <Route path="profile" element={<PsychologistProfile />} />
+                    <Route path="patients" element={<Patient />} />
                 </Route>
 
                 {/* Kullanýcý Paneli */}

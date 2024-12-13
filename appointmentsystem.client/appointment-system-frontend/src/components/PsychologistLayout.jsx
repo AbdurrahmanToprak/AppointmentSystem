@@ -4,10 +4,8 @@ import "./PsychologistLayout.css";
 
 const PsychologistLayout = () => {
     const handleLogout = () => {
-        // Çýkýþ yapma iþlemi için gerekli kodlarý buraya ekleyebilirsiniz.
-        // Örneðin, kullanýcýnýn giriþ bilgilerini temizlemek için localStorage veya sessionStorage kullanabilirsiniz.
         localStorage.removeItem("userToken");
-        window.location.href = "/"; // Ana sayfaya yönlendirme
+        window.location.href = "/";
     };
     return (
         <div className="psychologist-layout">
@@ -32,8 +30,9 @@ const PsychologistLayout = () => {
                             <Link to="/psychologist/sonuclar">Hastalarin Sonuclari</Link>
                         </li>
                         <li>
-                            <Link to="/psychologist/feedbacks">Feedbacks</Link>
+                            <Link to="/psychologist/Patients">Hastalar</Link>
                         </li>
+
                     </ul>
                 </aside>
                 <main className="psychologist-main">

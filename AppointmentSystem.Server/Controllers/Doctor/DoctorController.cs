@@ -109,8 +109,8 @@ namespace AppointmentSystem.Server.Controllers
 			return Ok(appointments);
 		}
 
-		[HttpPost("appointments/{appointmentId}/result")]
-		public IActionResult AddAppointmentResult([FromRoute] int appointmentId, [FromBody] Result result)
+		[HttpPost("appointments/result")]
+		public async Task<IActionResult> AddAppointmentResult([FromBody] Result result)
 		{
 			// Kullanıcı doğrulaması
 			var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -118,10 +118,14 @@ namespace AppointmentSystem.Server.Controllers
 			{
 				return Unauthorized(new { message = "Kullanıcı bilgileri eksik." });
 			}
+			var userId = int.Parse(userIdClaim);
+
+			// appointmentId'yi result'tan alıyoruz
+			var appointmentId = result.AppointmentId;
 
 			// Randevuyu kontrol et
-			var appointment = _context.Appointments
-				.FirstOrDefault(a => a.AppointmentId == appointmentId);
+			var appointment = await _context.Appointments
+				.FirstOrDefaultAsync(a => a.AppointmentId == appointmentId && a.DoctorId == userId);
 
 			if (appointment == null)
 			{
@@ -138,11 +142,21 @@ namespace AppointmentSystem.Server.Controllers
 			result.DoctorId = appointment.DoctorId;
 			result.PatientId = appointment.PatientId;
 
+			// Sonuç kaydetme
 			_context.Results.Add(result);
-			_context.SaveChanges();
+			try
+			{
+				await _context.SaveChangesAsync();
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(new { message = "Sonuç kaydedilemedi.", error = ex.Message });
+			}
 
 			return CreatedAtAction(nameof(AddAppointmentResult), new { id = result.ResultId }, result);
 		}
+
+
 
 		[HttpPut("profile/{userId}")]
 		public async Task<IActionResult> UpdateDoctorProfile([FromRoute] int userId,
@@ -225,38 +239,7 @@ namespace AppointmentSystem.Server.Controllers
 			return Ok(results);
 		}
 
-
-		//[HttpGet("feedbacks")]
-		//public async Task<IActionResult> GetDoctorFeedbacks()
-		//{
-		//	// Kullanıcı kimliği doğrulaması
-		//	var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-		//	if (userIdClaim == null)
-		//	{
-		//		return Unauthorized(new { message = "Kullanıcı bilgileri eksik." });
-		//	}
-		//	var userId = int.Parse(userIdClaim);
-
-		//	// Doktora ait feedback'leri al
-		//	var feedbacks = await _context.FeedBacks
-		//		.Where(f => f.Status == true && f.PatientId == userId) // Status aktif ve hastanın ID'si doktorunkiyle eşleşenler
-		//		.Select(f => new
-		//		{
-		//			f.FeedBackId,
-		//			f.Comment,
-		//			f.Point,
-		//			f.PatientId,
-		//			f.CreatedDate
-		//		})
-		//		.ToListAsync();
-
-		//	if (feedbacks == null || !feedbacks.Any())
-		//	{
-		//		return NotFound(new { message = "Hiç geri bildirim bulunamadı." });
-		//	}
-
-		//	return Ok(feedbacks);
-		//}
+	
 
 
 	}

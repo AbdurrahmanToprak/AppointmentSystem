@@ -14,7 +14,7 @@ const AppointmentsUser = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    useEffect(() => {
+    
         const fetchData = async () => {
             try {
                 const response = await apiClient.get("https://localhost:7200/api/patient/appointment/myappointments");
@@ -27,7 +27,7 @@ const AppointmentsUser = () => {
                 setLoading(false);
             }
         };
-        
+    useEffect(() => {  
         fetchData();
     }, []);
 
@@ -49,6 +49,7 @@ const AppointmentsUser = () => {
                         <th>Tarih</th>
                         <th>Doktor Adý</th>
                         <th>Randevu</th>
+                        <th>Durum</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -59,6 +60,7 @@ const AppointmentsUser = () => {
                                 <td>{appointment.appointmentDate}</td>
                                 <td>{appointment.doctorName}</td>
                                 <td>{appointment.appointmentTime}</td>
+                                <td>{appointment.status == true ? "Aktif" : "Randevu saati geçti"}</td>
                             </tr>
                         ))
                     ) : (

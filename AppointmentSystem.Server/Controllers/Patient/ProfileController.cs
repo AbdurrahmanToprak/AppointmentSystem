@@ -14,13 +14,15 @@ namespace AppointmentSystem.Server.Controllers.Patient
     public class ProfileController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+		private readonly IWebHostEnvironment _environment;
 
-        public ProfileController(ApplicationDbContext context)
-        {
-            _context = context;
-        }
+		public ProfileController(ApplicationDbContext context, IWebHostEnvironment environment)
+		{
+			_context = context;
+			_environment = environment;
+		}
 
-        [HttpGet]
+		[HttpGet]
         public async Task<IActionResult> GetProfile()
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
@@ -37,56 +39,113 @@ namespace AppointmentSystem.Server.Controllers.Patient
 
             if (profile == null)
                 return NotFound(new { message = "Veri bulunamadı" });
+			if (!string.IsNullOrEmpty(profile.ImageUrl))
+			{
+				profile.ImageUrl = $"https://localhost:7200{profile.ImageUrl}";
+			}
 
-            return Ok(profile);
+			return Ok(profile);
         }
 
-        [HttpPut]
-        public async Task<IActionResult> EditProfile(User updatedProfile)
-        {
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
-            if (userIdClaim == null)
-            {
-                return Unauthorized(new { message = "Kullanıcı kimliği doğrulanamadı." });
-            }
+		[HttpPut]
+		public async Task<IActionResult> EditProfile([FromForm] User updatedProfile, IFormFile? file)
+		{
+			var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+			if (userIdClaim == null)
+			{
+				return Unauthorized(new { message = "Kullanıcı kimliği doğrulanamadı." });
+			}
 
-            var userId = int.Parse(userIdClaim.Value);
+			var userId = int.Parse(userIdClaim.Value);
 
-            var existProfile = await _context.Users.FirstOrDefaultAsync(x => x.UserId == userId);
+			var existProfile = await _context.Users.FirstOrDefaultAsync(x => x.UserId == userId);
+			if (existProfile == null)
+				return NotFound(new { message = "Profil bulunamadı." });
 
-            if (existProfile == null)
-                return NotFound(new { message = "Veri bulunamadı." });
+			existProfile.Name = updatedProfile.Name;
+			existProfile.Surname = updatedProfile.Surname;
+			existProfile.Email = updatedProfile.Email;
+			existProfile.Password = updatedProfile.Password;
 
-            existProfile.Name = updatedProfile.Name;
-            existProfile.Surname = updatedProfile.Surname;
-            existProfile.Email = updatedProfile.Email;
-            existProfile.Password = updatedProfile.Password;
-            existProfile.ImageUrl = updatedProfile.ImageUrl;
+			if (file != null)
+			{
+				if (!string.IsNullOrEmpty(existProfile.ImageUrl))
+				{
+					var oldPath = Path.Combine(_environment.WebRootPath, existProfile.ImageUrl.TrimStart('/'));
+					if (System.IO.File.Exists(oldPath))
+					{
+						System.IO.File.Delete(oldPath);
+					}
+				}
 
-            _context.Users.Update(existProfile);
-            await _context.SaveChangesAsync();
-            return Ok(new { message = "Profil başarıyla güncellendi.", existProfile });
-        }
+				var fileName = Guid.NewGuid() + Path.GetExtension(file.FileName);
+				var savePath = Path.Combine(_environment.WebRootPath, "image", "user", fileName);
+				using (var stream = new FileStream(savePath, FileMode.Create))
+				{
+					await file.CopyToAsync(stream);
+				}
 
-        [HttpDelete]
-        public async Task<IActionResult> DeleteProfile()
-        {
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
-            if (userIdClaim == null)
-            {
-                return Unauthorized(new { message = "Kullanıcı kimliği doğrulanamadı." });
-            }
+				existProfile.ImageUrl = $"/image/user/{fileName}";
+			}
 
-            var userId = int.Parse(userIdClaim.Value);
+			_context.Users.Update(existProfile);
+			await _context.SaveChangesAsync();
 
-            var existProfile = await _context.Users.FirstOrDefaultAsync(x => x.UserId == userId);
-            if (existProfile == null)
-            {
-                return NotFound(new { message = "Profil bulunamadı." });
-            }
-            _context.Users.Remove(existProfile);
-            await _context.SaveChangesAsync();
-            return Ok(new { message = "Profil başarıyla silindi." });
-        }
-    }
+			return Ok(new { message = "Profil başarıyla güncellendi.", existProfile });
+		}
+
+		[HttpDelete]
+		public async Task<IActionResult> DeleteProfile(int userId, string deleteType)
+		{
+			var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+			if (userIdClaim == null)
+			{
+				return Unauthorized(new { message = "Kullanıcı kimliği doğrulanamadı." });
+			}
+
+			userId = int.Parse(userIdClaim.Value);
+
+			var existProfile = await _context.Users.FirstOrDefaultAsync(x => x.UserId == userId);
+			if (existProfile == null)
+			{
+				return NotFound(new { message = "Profil bulunamadı." });
+			}
+
+			if (deleteType == "profilePhoto")
+			{
+				if (!string.IsNullOrEmpty(existProfile.ImageUrl))
+				{
+					var oldPath = Path.Combine(_environment.WebRootPath, existProfile.ImageUrl.TrimStart('/'));
+					if (System.IO.File.Exists(oldPath))
+					{
+						System.IO.File.Delete(oldPath);
+					}
+					existProfile.ImageUrl = null;
+					_context.Users.Update(existProfile);
+					await _context.SaveChangesAsync();
+					return Ok(new { message = "Profil fotoğrafı başarıyla silindi." });
+				}
+
+				return BadRequest(new { message = "Silinecek profil fotoğrafı bulunamadı." });
+			}
+			else if (deleteType == "account")
+			{
+
+				if (!string.IsNullOrEmpty(existProfile.ImageUrl))
+				{
+					var oldPath = Path.Combine(_environment.WebRootPath, existProfile.ImageUrl.TrimStart('/'));
+					if (System.IO.File.Exists(oldPath))
+					{
+						System.IO.File.Delete(oldPath);
+					}
+				}
+
+				_context.Users.Remove(existProfile);
+				await _context.SaveChangesAsync();
+				return Ok(new { message = "Profil başarıyla silindi." });
+			}
+
+			return BadRequest(new { message = "Geçersiz işlem türü." });
+		}
+	}
 }
