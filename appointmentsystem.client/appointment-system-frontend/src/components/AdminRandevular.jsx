@@ -1,38 +1,48 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./Psikologlar.css";
-
-const token = localStorage.getItem("token");
-
-const apiClient = axios.create({
-    headers: {
-        Authorization: `Bearer ${token}`
-    }
-});
+import { useNavigate } from "react-router-dom";
 
 const Randevular = () => {
     const [appointments, setAppointments] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const navigate = useNavigate();
+
+    const token = localStorage.getItem("token");
+
+    useEffect(() => {
+        if (!token) {
+            navigate("/login");
+        }
+    }, [token, navigate]);
+
+    const apiClient = axios.create({
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await apiClient.get("https://localhost:7200/api/admin/appointment"); 
+                const response = await apiClient.get("https://localhost:7200/api/admin/appointment");
                 setAppointments(response.data);
             } catch (err) {
                 console.error("Error fetching data:", err);
-                setError(err.message || "Error fetching data");
+                setError("An error occurred while fetching appointments.");
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchData();
-    }, []);
+        if (token) {
+            fetchData();
+        }
+    }, [token]);
 
-    if (loading) return <div>Loading...</div>;
-    if (error) return <div>Error: {error}</div>;
+    if (loading) return <div>Yükleniyor...</div>;
+    if (error) return <div>Hata: {error}</div>;
     if (appointments.length === 0) return <div>Randevu bulunmamaktadýr.</div>;
 
     return (
@@ -50,17 +60,22 @@ const Randevular = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {appointments.map((appointment) => (
-                        <tr key={appointment.appointmentId}>
-                            <td>{appointment.appointmentId}</td>
-                            <td>{new Date(appointment.dateTime).toLocaleDateString()}</td>
-                            <td>{appointment.doctorName}</td>
-                            <td>{appointment.patientName}</td>
-                            <td>{new Date(appointment.dateTime).toLocaleTimeString()}</td>
-                            <td>{appointment.status == true ? "Aktif" : "Randevu saati geçti"}</td>
+                    {appointments.map((appointment) => {
+                        const dateTime = new Date(appointment.dateTime);
+                        const formattedDate = dateTime.toLocaleDateString();
+                        const formattedTime = dateTime.toLocaleTimeString();
 
-                        </tr>
-                    ))}
+                        return (
+                            <tr key={appointment.appointmentId}>
+                                <td>{appointment.appointmentId}</td>
+                                <td>{formattedDate}</td>
+                                <td>{appointment.doctorName || "Bilgi Yok"}</td>
+                                <td>{appointment.patientName || "Bilgi Yok"}</td>
+                                <td>{formattedTime}</td>
+                                <td>{appointment.status ? "Aktif" : "Randevu saati geçti"}</td>
+                            </tr>
+                        );
+                    })}
                 </tbody>
             </table>
         </div>
@@ -69,4 +84,3 @@ const Randevular = () => {
 
 export default Randevular;
 
-export { apiClient };

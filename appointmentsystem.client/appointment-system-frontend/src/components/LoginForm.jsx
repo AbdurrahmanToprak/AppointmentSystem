@@ -40,7 +40,7 @@ const LoginForm = () => {
 
                 // Kullanýcý rolüne göre yönlendirme yapýyoruz
                 if (roleId === "1") {
-                    navigate("/admin");
+                    navigate("/admin/dashboard");
                 } else if (roleId === "2") {
                     navigate("/psychologist");
                 } else if (roleId === "3") {

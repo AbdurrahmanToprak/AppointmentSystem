@@ -1,20 +1,23 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./About.css";
+import { useNavigate } from "react-router-dom"; 
 
-const token = localStorage.getItem("token");
-
-const apiClient = axios.create({
-    headers: {
-        Authorization: `Bearer ${token}`,
-    },
-});
 
 const Abouts = () => {
     const [abouts, setAbouts] = useState([]);
     const [about, setAbout] = useState({ title: "", content: "", image: null });
     const [message, setMessage] = useState("");
     const [editing, setEditing] = useState(false);
+    const navigate = useNavigate();
+
+    const token = localStorage.getItem("token");
+
+    const apiClient = axios.create({
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
 
     const fetchAbouts = async () => {
         try {
@@ -26,8 +29,12 @@ const Abouts = () => {
     };
 
     useEffect(() => {
-        fetchAbouts();
-    }, []);
+        if (!token) {
+            navigate("/login");
+        } else {
+            fetchAbouts();
+        }
+    }, [token, navigate]);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -40,6 +47,12 @@ const Abouts = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (!about.title || !about.content || !about.image) {
+            setMessage("Lütfen baþlýk, içerik ve resim ekleyin!");
+            return; 
+        }
+
         const formData = new FormData();
         formData.append("title", about.title);
         formData.append("content", about.content);
@@ -52,12 +65,12 @@ const Abouts = () => {
                 await apiClient.put(`https://localhost:7200/api/admin/about/${about.aboutId}`, formData, {
                     headers: { "Content-Type": "multipart/form-data" },
                 });
-                setMessage("about baþarýyla güncellendi!");
+                setMessage("About baþarýyla güncellendi!");
             } else {
                 await apiClient.post("https://localhost:7200/api/admin/about", formData, {
                     headers: { "Content-Type": "multipart/form-data" },
                 });
-                setMessage("about baþarýyla eklendi!");
+                setMessage("About baþarýyla eklendi!");
             }
             setEditing(false);
             setAbout({ title: "", content: "", image: null });
@@ -71,8 +84,8 @@ const Abouts = () => {
         if (window.confirm("Bu aboutu silmek istediðinize emin misiniz?")) {
             try {
                 await apiClient.delete(`https://localhost:7200/api/admin/about/${id}`);
-                setMessage("about baþarýyla silindi!");
-                fetchAbouts();
+                setMessage("About baþarýyla silindi!");
+                setAbouts((prevAbouts) => prevAbouts.filter((b) => b.aboutId !== id));
             } catch (error) {
                 setMessage(error.response?.data?.message || "Bir hata oluþtu.");
             }

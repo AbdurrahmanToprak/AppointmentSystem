@@ -1,15 +1,7 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";  
+import axios from "axios";
 import "./Dashboard.css";
-
-const token = localStorage.getItem("token");
-
-const apiClient = axios.create({
-    headers: {
-        Authorization: `Bearer ${token}`,
-    },
-});
-
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
     const [stats, setStats] = useState({
@@ -18,18 +10,29 @@ const Dashboard = () => {
         TodaysAppointments: 0,
     });
 
-    useEffect(() => {
-        const fetchDashboardData = async () => {
-            try {
-                const response = await apiClient.get("https://localhost:7200/api/admin/dashboard");
-                setStats(response.data); 
-            } catch (error) {
-                console.error("Error fetching dashboard data:", error);
-            }
-        };
+    const navigate = useNavigate();
+    const token = localStorage.getItem("token");
 
-        fetchDashboardData();
-    }, []); 
+    useEffect(() => {
+        if (!token) {
+            navigate("/login");
+        } else {
+            const fetchDashboardData = async () => {
+                try {
+                    const response = await axios.get("https://localhost:7200/api/admin/dashboard", {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    });
+                    setStats(response.data);
+                } catch (error) {
+                    console.error("Error fetching dashboard data:", error);
+                }
+            };
+
+            fetchDashboardData();
+        }
+    }, [token, navigate]);
 
     return (
         <div className="dashboard">

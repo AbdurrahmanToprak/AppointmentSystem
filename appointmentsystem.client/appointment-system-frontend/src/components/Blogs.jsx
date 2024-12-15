@@ -1,21 +1,23 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./Blogs.css";
+import { useNavigate } from "react-router-dom"; 
 
-const token = localStorage.getItem("token");
-
-const apiClient = axios.create({
-    headers: {
-        Authorization: `Bearer ${token}`,
-    },
-});
 
 const Blogs = () => {
     const [blogs, setBlogs] = useState([]);
     const [blog, setBlog] = useState({ title: "", content: "", image: null });
     const [message, setMessage] = useState("");
     const [editing, setEditing] = useState(false); 
+    const navigate = useNavigate();
 
+    const token = localStorage.getItem("token");
+
+    const apiClient = axios.create({
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
     const fetchBlogs = async () => {
         try {
             const response = await apiClient.get("https://localhost:7200/api/admin/blog");
@@ -26,8 +28,12 @@ const Blogs = () => {
     };
 
     useEffect(() => {
-        fetchBlogs();
-    }, []);
+        if (!token) {
+            navigate("/login");
+        } else {
+            fetchBlogs();
+        }
+    }, [token, navigate]);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;

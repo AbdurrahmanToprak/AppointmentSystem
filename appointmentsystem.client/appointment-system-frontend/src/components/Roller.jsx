@@ -1,14 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./Roller.css";
+import { useNavigate } from "react-router-dom"; 
 
-const token = localStorage.getItem("token");
 
-const apiClient = axios.create({
-    headers: {
-        Authorization: `Bearer ${token}`
-    }
-});
 
 const Roller = () => {
     const [roles, setRoles] = useState([]);
@@ -18,8 +13,16 @@ const Roller = () => {
     const [message, setMessage] = useState("");
 
     const apiBaseUrl = "https://localhost:7200/api/admin/role"; 
+    const navigate = useNavigate();
 
-    // Fetch all roles
+    const token = localStorage.getItem("token");
+
+    const apiClient = axios.create({
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+
     const fetchRoles = async () => {
         try {
             const response = await apiClient.get(apiBaseUrl);
@@ -34,16 +37,20 @@ const Roller = () => {
     };
 
     useEffect(() => {
-        fetchRoles();
-    }, []);
+        if (!token) {
+            navigate("/login");
+        } else {
+            fetchRoles();
+        }
+    }, [token, navigate]);
 
-    // Handle form input changes
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setRole({ ...role, [name]: value });
     };
 
-    // Add a new role
+
     const createRole = async () => {
         try {
             const response = await apiClient.post(apiBaseUrl, role);
@@ -55,7 +62,7 @@ const Roller = () => {
         }
     };
 
-    // Edit an existing role
+
     const editRole = async () => {
         try {
             const response = await apiClient.put(`${apiBaseUrl}/${editingId}`, role);
@@ -69,7 +76,7 @@ const Roller = () => {
         }
     };
 
-    // Delete a role
+
     const deleteRole = async (id) => {
         if (window.confirm("Bu rolü silmek istediðinizden emin misiniz?")) {
             try {
@@ -82,7 +89,7 @@ const Roller = () => {
         }
     };
 
-    // Populate form for editing
+
     const startEdit = (role) => {
         setRole(role);
         setIsEditing(true);

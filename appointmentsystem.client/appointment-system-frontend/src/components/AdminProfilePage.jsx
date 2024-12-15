@@ -1,14 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./AdminProfilePage.css";
+import { useNavigate } from "react-router-dom";
 
-const token = localStorage.getItem("token");
-
-const apiClient = axios.create({
-    headers: {
-        Authorization: `Bearer ${token}`,
-    },
-});
 
 const API_URL = "https://localhost:7200/api/admin/profile";
 
@@ -17,7 +11,23 @@ const ProfilePage = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [message, setMessage] = useState("");
     const [file, setFile] = useState(null);
+    const navigate = useNavigate();
 
+    const token = localStorage.getItem("token");
+
+    useEffect(() => {
+        if (!token) {
+            navigate("/login");
+        } else {
+            fetchUserProfile();
+        }
+    }, [token, navigate]);
+
+    const apiClient = axios.create({
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
     useEffect(() => {
         fetchUserProfile();
     }, []);

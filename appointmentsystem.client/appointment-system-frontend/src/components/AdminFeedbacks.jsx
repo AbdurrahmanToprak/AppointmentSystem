@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom"; 
 
-const token = localStorage.getItem("token");
-
-const apiClient = axios.create({
-    headers: {
-        Authorization: `Bearer ${token}`
-    }
-});
 
 const AdminFeedbacks = () => {
     const [feedbacks, setFeedbacks] = useState([]);
     const [message, setMessage] = useState("");
     const apiBaseUrl = "https://localhost:7200/api/admin/feedback";
+    const navigate = useNavigate();
 
+    const token = localStorage.getItem("token");
+
+    const apiClient = axios.create({
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
     const fetchFeedbacks = async () => {
         try {
             const response = await apiClient.get(apiBaseUrl);
@@ -62,8 +64,12 @@ const AdminFeedbacks = () => {
 
 
     useEffect(() => {
-        fetchFeedbacks();
-    }, []);
+        if (!token) {
+            navigate("/login");
+        } else {
+            fetchFeedbacks();
+        }
+    }, [token, navigate]);
 
     return (
         <div className="container mt-4">

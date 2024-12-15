@@ -1,20 +1,21 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./Psikologlar.css";
-
-
-const token = localStorage.getItem("token");
-
-const apiClient = axios.create({
-    headers: {
-        Authorization: `Bearer ${token}`
-    }
-});
+import { useNavigate } from "react-router-dom"; 
 
 
 const Psikologlar = () => {
     const [psikologlar, setPsikologlar] = useState([]);
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
+
+    const token = localStorage.getItem("token");
+
+    const apiClient = axios.create({
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
 
     const fetchDoctors = async () => {
         try {
@@ -39,8 +40,12 @@ const Psikologlar = () => {
     };
 
     useEffect(() => {
-        fetchDoctors();
-    }, []);
+        if (!token) {
+            navigate("/login");
+        } else {
+            fetchDoctors();
+        }
+    }, [token, navigate]);
 
     return (
         <div className="psikologlar">
@@ -85,4 +90,3 @@ const Psikologlar = () => {
 };
 
 export default Psikologlar;
-export { apiClient };

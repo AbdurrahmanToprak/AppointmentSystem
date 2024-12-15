@@ -1,13 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom"; 
 
-const token = localStorage.getItem("token");
 
-const apiClient = axios.create({
-    headers: {
-        Authorization: `Bearer ${token}`
-    }
-});
 
 const Contact = () => {
     const [contact, setContact] = useState(null);
@@ -21,6 +16,15 @@ const Contact = () => {
 
     const apiBaseUrl = "https://localhost:7200/api/admin/contact";
 
+    const navigate = useNavigate();
+
+    const token = localStorage.getItem("token");
+
+    const apiClient = axios.create({
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
     const fetchContact = async () => {
         try {
             const response = await apiClient.get(apiBaseUrl);
@@ -62,8 +66,12 @@ const Contact = () => {
     };
 
     useEffect(() => {
-        fetchContact();
-    }, []);
+        if (!token) {
+            navigate("/login");
+        } else {
+            fetchContact();
+        }
+    }, [token, navigate]);
 
     return (
         <div className="container mt-5">
