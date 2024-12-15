@@ -1,6 +1,8 @@
 ﻿import React, { useState, useEffect } from "react";
 import axios from "axios"; // Directly import axios
 import "./HomePage.css";
+import { FaFacebook, FaTwitter, FaInstagram } from "react-icons/fa";
+
 
 const HomePage = () => {
     const [about, setAbout] = useState(null);
@@ -16,7 +18,7 @@ const HomePage = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                
+
                 const aboutResponse = await axios.get("https://localhost:7200/api/Home/about");
                 // const servicesResponse = await axios.get("https://localhost:7200/api/Home/services");
                 const teamResponse = await axios.get("https://localhost:7200/api/Home/doctors");
@@ -95,7 +97,7 @@ const HomePage = () => {
                     <div className="about-image-container">
                         <div className="image-wrapper">
                             <img
-                                src={about && about.imageUrl ? `https://localhost:7200/${about.imageUrl}`  : `https://localhost:7200/default-image.jpg`}
+                                src={about && about.imageUrl ? `https://localhost:7200/${about.imageUrl}` : `https://localhost:7200/default-image.jpg`}
                                 alt="About Us"
                                 className="about-image"
                             />
@@ -179,15 +181,7 @@ const HomePage = () => {
                     {blogs.map((blog, index) => (
                         <div class="blog-post">
                             <div class="post-content">
-                                <div className="blog-image-container">
-                                    <div className="image-wrapper">
-                                        <img
-                                            src={blog && blog.imageUrl ? `https://localhost:7200/${blog.imageUrl}` : `https://localhost:7200/default-image.jpg`}
-                                            alt="About Us"
-                                            className="about-image"
-                                        />
-                                    </div>
-                                </div>
+
                                 <h3 class="post-title">{blog.title}</h3>
                                 <p class="post-summary">
                                     {blog.content}
@@ -198,18 +192,6 @@ const HomePage = () => {
                     ))}
                 </div>
             </section>
-
-
-
-
-
-
-
-
-
-
-
-
 
             <section id="contact" class="contact-section">
                 <div class="contact-title">
@@ -257,13 +239,18 @@ const HomePage = () => {
                             <li><i class="fas fa-map-marker-alt"></i> {contact.address}</li>
                         </ul>
                     </div>
-                    <div class="footer-right">
-                        <h3>Sosyal Medya</h3>
-                        <div class="social-links">
-                            <a href="#" class="social-icon"><i class="fa-brands fa-facebook"></i></a>
-                            <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
-                            <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
-                            <a href="#" class="social-icon"><i class="fab fa-linkedin"></i></a>
+                    <div className="footer-right">
+                        <h3>Sosyal medya</h3>
+                        <div className="social-links">
+                            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="social-icon">
+                                <FaFacebook />
+                            </a>
+                            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="social-icon">
+                                <FaTwitter />
+                            </a>
+                            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="social-icon">
+                                <FaInstagram />
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -271,9 +258,9 @@ const HomePage = () => {
                     <p>&copy; 2024 Psikolog Web. Tüm Hakları Saklıdır.</p>
                 </div>
             </footer>
-        
-    
-    );
+
+
+            );
 
 
 

@@ -1,29 +1,29 @@
-/* Genel Layout Ayarlarý */
+/* Genel Layout */
 .user-layout {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
-    background-color: #f4f7fc;
+    height: 100vh;
 }
 
-/* Header Tasarýmý */
+/* Header */
 .user-header {
+    background-color: #2980b9; /* Canlý mavi tonlarý */
+    color: white;
+    padding: 15px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #3f72af;
-    padding: 20px 30px;
-    color: white;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-bottom: 3px solid #2d5c8c;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    width: 100%;
 }
 
     .user-header h1 {
+        font-size: 24px;
         margin: 0;
-        font-size: 26px;
-        font-weight: 600;
-        letter-spacing: 1px;
     }
 
 .header-buttons {
@@ -32,147 +32,116 @@
 }
 
 .header-button {
-    background-color: #ffffff;
-    color: #3f72af;
-    border: 1px solid #3f72af;
-    padding: 10px 20px;
-    margin-left: 15px;
+    color: white;
     text-decoration: none;
-    font-weight: 500;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.3s ease;
+    margin-left: 20px;
+    font-size: 16px;
+    padding: 8px 16px;
+    background-color: #3498db; /* Mavi */
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
 }
 
     .header-button:hover {
-        background-color: #3f72af;
-        color: white;
+        background-color: #2980b9; /* Koyu mavi hover efekti */
     }
 
 .logout-button {
-    background-color: #f44336;
-    border-color: #f44336;
+    background-color: #e74c3c; /* Kýrmýzý */
 }
 
     .logout-button:hover {
-        background-color: #d32f2f;
+        background-color: #c0392b; /* Daha koyu kýrmýzý */
     }
 
-/* Container (Sidebar ve Main Bölüm) */
+/* Sidebar */
 .user-container {
     display: flex;
-    flex-grow: 1;
-    margin-top: 30px;
+    margin-top: 70px;
+    height: calc(100vh - 70px);
 }
 
-/* Sidebar Tasarýmý */
 .user-sidebar {
+    position: fixed;
+    top: 70px;
+    left: 0;
     width: 250px;
-    background-color: #ffffff;
-    padding: 20px;
-    border-right: 2px solid #ddd;
+    background-color: #2ecc71; /* Yeþil tonlarý */
     height: 100%;
-    box-shadow: 2px 0 6px rgba(0, 0, 0, 0.1);
+    padding: 20px 10px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    z-index: 900;
 }
 
     .user-sidebar ul {
-        list-style-type: none;
+        list-style: none;
         padding: 0;
-        margin: 0;
     }
 
     .user-sidebar li {
-        margin: 15px 0;
+        margin-bottom: 20px;
     }
 
     .user-sidebar a {
-        text-decoration: none;
-        color: #3f72af;
+        color: white;
         font-size: 18px;
+        text-decoration: none;
+        padding: 10px;
+        border-radius: 5px;
+        transition: all 0.3s ease;
         display: block;
-        padding: 12px;
-        border-radius: 6px;
-        transition: background-color 0.3s ease, padding-left 0.3s ease;
     }
 
         .user-sidebar a:hover {
-            background-color: #3f72af;
-            color: white;
-            padding-left: 25px;
+            background-color: #27ae60; /* Daha açýk yeþil hover efekti */
+            transform: translateX(10px);
+            padding-left: 15px;
         }
 
-/* Main Bölüm (Content) */
+        /* Sidebar Aktif Link */
+        .user-sidebar a.active {
+            background-color: #27ae60;
+            transform: translateX(10px);
+            padding-left: 15px;
+        }
+
+/* Ana Ýçerik */
 .user-main {
-    flex-grow: 1;
+    margin-left: 270px;
     padding: 20px;
-    background-color: #ffffff;
-    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+    flex: 1;
+    overflow-y: auto;
+    background-color: #ecf0f1; /* Açýk gri */
 }
 
-/* Button (Profilim, Home ve Logout) */
-.header-button,
-.logout-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px 20px;
-    font-size: 16px;
-    font-weight: 500;
-    border-radius: 30px;
-    cursor: pointer;
-    text-decoration: none;
-    border: none;
-    transition: 0.3s ease;
-}
-
-.logout-button {
-    background-color: #e74c3c;
-    color: white;
-    margin-left: 20px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-}
-
-    .logout-button:hover {
-        background-color: #c0392b;
-    }
-
-.header-button:hover {
-    background-color: #3f72af;
-    color: white;
-}
-
-/* Sidebar ve Header Responsive Tasarým */
-@media (max-width: 768px) {
-    .user-header {
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 15px;
-    }
-
-    .header-buttons {
-        margin-top: 10px;
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .user-container {
-        flex-direction: column;
-    }
-
-    .user-sidebar {
-        width: 100%;
-        padding: 15px;
-        border-right: none;
-        border-bottom: 2px solid #ddd;
-    }
-
-    .user-main {
-        padding: 15px;
+/* Responsive Tasarým */
+@media screen and (max-width: 768px) {
+    .user-header h1 {
+        font-size: 20px;
     }
 
     .header-button {
-        margin-left: 0;
-        margin-bottom: 12px;
+        font-size: 14px;
+        margin-left: 10px;
+    }
+
+    .user-sidebar {
+        width: 220px;
+        top: 60px;
+    }
+
+    .user-main {
+        margin-left: 240px;
+    }
+
+    .header-buttons {
+        display: none;
+    }
+
+    .user-header {
+        flex-direction: column;
+        align-items: center;
     }
 }

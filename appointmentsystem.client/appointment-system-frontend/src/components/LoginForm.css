@@ -49,6 +49,8 @@
     .info-panel h2 {
         font-size: 2.5rem;
         margin-bottom: 15px;
+        color: #fff; /* Burada renk belirtildi */
+        animation: none; /* Parlama animasyonunu devre dýþý býrakýyoruz */
     }
 
     .info-panel p {
@@ -72,6 +74,7 @@
             color: #fff;
             transform: scale(1.1);
         }
+
 
 /* Sað Kýsým - Form Paneli */
 .form-panel {
@@ -99,6 +102,7 @@
         font-size: 2rem;
         margin-bottom: 20px;
         color: #7597de;
+        animation: none; /* Parlama animasyonunu devre dýþý býrakýyoruz */
     }
 
 .form-group {

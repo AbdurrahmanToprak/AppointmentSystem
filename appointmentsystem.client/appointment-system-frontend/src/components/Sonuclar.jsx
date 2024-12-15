@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "./PsychologistLayout.css";
+import "./Sonuclar.css";
 
 const token = localStorage.getItem("token");
 
