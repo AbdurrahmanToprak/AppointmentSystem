@@ -1,12 +1,10 @@
 ﻿import React, { useState, useEffect } from "react";
-import axios from "axios"; // Directly import axios
+import axios from "axios"; 
 import "./HomePage.css";
 import { FaFacebook, FaTwitter, FaInstagram } from "react-icons/fa";
 
-
 const HomePage = () => {
     const [about, setAbout] = useState(null);
-    //const [services, setServices] = useState([]);
     const [team, setTeam] = useState([]);
     const [blogs, setBlogs] = useState([]);
     const [contact, setContact] = useState(null);
@@ -14,33 +12,50 @@ const HomePage = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    // Fetch data for all sections
     useEffect(() => {
+        // Only fetch data if necessary
         const fetchData = async () => {
+            setLoading(true); // Start loading before the API call
+
             try {
-
                 const aboutResponse = await axios.get("https://localhost:7200/api/Home/about");
-                // const servicesResponse = await axios.get("https://localhost:7200/api/Home/services");
-                const teamResponse = await axios.get("https://localhost:7200/api/Home/doctors");
-                const blogsResponse = await axios.get("https://localhost:7200/api/Home/blogs");
-                const contactResponse = await axios.get("https://localhost:7200/api/Home/contact");
-
                 setAbout(aboutResponse.data);
-                // setServices(servicesResponse.data);
-                setTeam(teamResponse.data);
-                setBlogs(blogsResponse.data);
-                setContact(contactResponse.data);
-
-                setLoading(false);
             } catch (err) {
-                console.error("Error fetching data:", err); // Log the error
-                setError("Error fetching data");
-                setLoading(false);
+                console.error("Error fetching about data:", err);
             }
+
+            try {
+                const teamResponse = await axios.get("https://localhost:7200/api/Home/doctors");
+                setTeam(teamResponse.data);
+            } catch (err) {
+                console.error("Error fetching team data:", err);
+            }
+
+            try {
+                const blogsResponse = await axios.get("https://localhost:7200/api/Home/blogs");
+                setBlogs(blogsResponse.data);
+            } catch (err) {
+                console.error("Error fetching blog data:", err);
+            }
+
+            try {
+                const contactResponse = await axios.get("https://localhost:7200/api/Home/contact");
+                setContact(contactResponse.data);
+            } catch (err) {
+                console.error("Error fetching contact data:", err);
+            }
+
+            setLoading(false); // End loading after all fetches are done
         };
 
-        fetchData(); // Fetch data when component mounts
-    }, []);
+        // Check if any of the necessary data is needed and only fetch accordingly
+        if (!about && !team.length && !blogs.length && !contact) {
+            fetchData();
+        } else {
+            setLoading(false); // If data is already available, no need to load
+        }
+
+    }, [about, team, blogs, contact]); // Dependencies to trigger fetching if data is not yet set
 
     if (loading) return <div>Loading...</div>;
     if (error) return <div>{error}</div>;
@@ -85,26 +100,28 @@ const HomePage = () => {
             </section>
 
             {/* About Section */}
-            <section id="about" className="about-section">
-                <div className="about-wrapper">
-                    <div className="about-text">
-                        <h2>Hakkımızda</h2>
-                        <p>{about ? about.content : "Yükleniyor..."}</p>
-                        <div className="about-action">
-                            <button className="cta-button">Daha Fazla</button>
+            {about && (
+                <section id="about" className="about-section">
+                    <div className="about-wrapper">
+                        <div className="about-text">
+                            <h2>Hakkımızda</h2>
+                            <p>{about.content}</p>
+                            <div className="about-action">
+                                <button className="cta-button">Daha Fazla</button>
+                            </div>
+                        </div>
+                        <div className="about-image-container">
+                            <div className="image-wrapper">
+                                <img
+                                    src={about.imageUrl ? `https://localhost:7200/${about.imageUrl}` : `https://localhost:7200/default-image.jpg`}
+                                    alt="About Us"
+                                    className="about-image"
+                                />
+                            </div>
                         </div>
                     </div>
-                    <div className="about-image-container">
-                        <div className="image-wrapper">
-                            <img
-                                src={about && about.imageUrl ? `https://localhost:7200/${about.imageUrl}` : `https://localhost:7200/default-image.jpg`}
-                                alt="About Us"
-                                className="about-image"
-                            />
-                        </div>
-                    </div>
-                </div>
-            </section>
+                </section>
+            )}
 
             {/* Services Section */}
             <section id="services" className="services-section">
@@ -145,14 +162,11 @@ const HomePage = () => {
                 </div>
             </section>
 
-
-
-
-
-            <section id="team" className="team-section">
-                <h2>Ekibimiz</h2>
-                {team.length > 0 ? (
-                    team.slice(0, 5).map((doctor, index) => (
+            {/* Team Section */}
+            {team.length > 0 && (
+                <section id="team" className="team-section">
+                    <h2>Ekibimiz</h2>
+                    {team.slice(0, 5).map((doctor, index) => (
                         <div key={index} className="team-container">
                             <div className="team-member">
                                 <div className="name-container">
@@ -167,111 +181,76 @@ const HomePage = () => {
                                 </p>
                             </div>
                         </div>
-                    ))
-                ) : (
-                    <p>Ekibimiz bilgisi yükleniyor...</p>
-                )}
-            </section>
-
-
-
-            <section id="blogs" class="blogs-section">
-                <h2 class="section-title">Bloglarımız</h2>
-                <div class="blog-posts-container">
-                    {blogs.map((blog, index) => (
-                        <div class="blog-post">
-                            <div class="post-content">
-
-                                <h3 class="post-title">{blog.title}</h3>
-                                <p class="post-summary">
-                                    {blog.content}
-                                </p>
-                                <a href="#" class="read-more">Devamını Oku</a>
-                            </div>
-                        </div>
                     ))}
-                </div>
-            </section>
+                </section>
+            )}
 
-            <section id="contact" class="contact-section">
-                <div class="contact-title">
-                    <h2>Bizimle İletişime Geçin</h2>
-                    <p>Yardımcı olmaktan memnuniyet duyarız! Sorularınız ve talepleriniz için bizimle iletişime geçin.</p>
-                </div>
-                <div class="contact-wrapper">
-                    <div class="contact-form">
-                        <form action="#" method="POST">
-                            <div class="input-group">
-                                <input type="text" id="name" name="name" placeholder="Adınız" required />
+            {/* Blog Section */}
+            {blogs.length > 0 && (
+                <section id="blogs" className="blogs-section">
+                    <h2 className="section-title">Bloglarımız</h2>
+                    <div className="blog-posts-container">
+                        {blogs.map((blog, index) => (
+                            <div key={index} className="blog-post">
+                                <div className="post-content">
+                                    <h3 className="post-title">{blog.title}</h3>
+                                    <p className="post-summary">{blog.content}</p>
+                                    <a href="#" className="read-more">Devamını Oku</a>
+                                </div>
                             </div>
-                            <div class="input-group">
-                                <input type="email" id="email" name="email" placeholder="E-posta Adresiniz" required />
-                            </div>
-                            <div class="input-group">
-                                <textarea id="message" name="message" placeholder="Mesajınızı yazın" required></textarea>
-                            </div>
-                            <button type="submit" class="submit-btn">Gönder</button>
-                        </form>
+                        ))}
                     </div>
-                    <div class="contact-info">
-                        <h3>Bize Ulaşın</h3>
-                        <ul>
-                            <li><strong>Telefon:</strong> {contact.phoneNumber}</li>
-                            <li><strong>Email:</strong> {contact.email}</li>
-                            <li><strong>Adres:</strong> {contact.address}</li>
-                        </ul>
-                    </div>
-                </div>
+                </section>
+            )}
 
-            </section>
-
-            <footer class="footer">
-                <div class="footer-container">
-                    <div class="footer-left">
-                        <h2 class="footer-logo">Psikolog Web</h2>
-                        <p>Huzur ve dengeye giden yol, doğru rehberlikten geçer.</p>
+            {/* Contact Section */}
+            {contact && (
+                <section id="contact" className="contact-section">
+                    <div className="contact-title">
+                        <h2>Bizimle İletişime Geçin</h2>
+                        <p>Yardımcı olmaktan memnuniyet duyarız! Sorularınız ve talepleriniz için bizimle iletişime geçin.</p>
                     </div>
-                    <div class="footer-center">
-                        <h3>İletişim Bilgileri</h3>
-                        <ul>
-                            <li><i class="fas fa-phone-alt"></i> {contact.phoneNumber}</li>
-                            <li><i class="fas fa-envelope"></i> {contact.email}</li>
-                            <li><i class="fas fa-map-marker-alt"></i> {contact.address}</li>
-                        </ul>
-                    </div>
-                    <div className="footer-right">
-                        <h3>Sosyal medya</h3>
-                        <div className="social-links">
-                            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="social-icon">
-                                <FaFacebook />
-                            </a>
-                            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="social-icon">
-                                <FaTwitter />
-                            </a>
-                            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="social-icon">
-                                <FaInstagram />
-                            </a>
+                    <div className="contact-wrapper">
+                        <div className="contact-form">
+                            <form action="#" method="POST">
+                                <div className="input-group">
+                                    <input type="text" id="name" name="name" placeholder="Adınız" required />
+                                    <input type="email" id="email" name="email" placeholder="E-posta" required />
+                                    <textarea id="message" name="message" rows="4" placeholder="Mesajınız" required></textarea>
+                                    <button type="submit" className="cta-button">Gönder</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div className="contact-details">
+                            <h3>İletişim Bilgilerimiz</h3>
+                            <ul>
+                                <li><strong>Telefon:</strong> {contact.email}</li>
+                                <li><strong>Telefon:</strong> {contact.phoneNumber}</li>
+                                <li><strong>Adres:</strong> {contact.address}</li>
+                            </ul>
+                            <div className="footer-right">
+                                <h3>Sosyal medya</h3>
+                                <div className="social-links">
+                                    <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="social-icon">
+                                        <FaFacebook />
+                                    </a>
+                                    <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="social-icon">
+                                        <FaTwitter />
+                                    </a>
+                                    <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="social-icon">
+                                        <FaInstagram />
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="footer-bottom">
-                    <p>&copy; 2024 Psikolog Web. Tüm Hakları Saklıdır.</p>
-                </div>
+                </section>
+            )}
+
+            {/* Footer */}
+            <footer className="footer">
+                <p>© 2024 Psikosağlık. Tüm hakları saklıdır.</p>
             </footer>
-
-
-            );
-
-
-
-
-
-
-
-
-
-
-
         </div>
     );
 };
