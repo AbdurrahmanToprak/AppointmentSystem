@@ -1,36 +1,42 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import "./PsychologistLayout.css";
 
-
-const token = localStorage.getItem("token");
-
-const apiClient = axios.create({
-    headers: {
-        Authorization: `Bearer ${token}` 
-    }
-});
 
 const Randevular = () => {
     const [appointments, setAppointments] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const navigate = useNavigate();
+
+    const token = localStorage.getItem("token");
+
+    const apiClient = axios.create({
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
+
+    const fetchData = async () => {
+        try {
+            const response = await apiClient.get("https://localhost:7200/api/Doctor/appointments");
+            setAppointments(response.data);
+        } catch (err) {
+            console.error("Error fetching data:", err);
+            setError(err.message || "Error fetching data");
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await apiClient.get("https://localhost:7200/api/Doctor/appointments"); 
-                setAppointments(response.data);
-            } catch (err) {
-                console.error("Error fetching data:", err);
-                setError(err.message || "Error fetching data");
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchData();
-    }, []);
+        if (!token) {
+            navigate("/login");
+        } else {
+            fetchData();
+        }
+    }, [token, navigate]);
 
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
@@ -68,4 +74,3 @@ const Randevular = () => {
 
 export default Randevular;
 
-export { apiClient };

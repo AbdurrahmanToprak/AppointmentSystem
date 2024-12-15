@@ -1,55 +1,62 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import "./Sonuclar.css";
 
-const token = localStorage.getItem("token");
 
-// Axios istemcisi oluþturma
-const apiClient = axios.create({
-    headers: {
-        Authorization: `Bearer ${token}`
-    }
-});
 
 const Sonuclar = () => {
-    const [results, setResults] = useState([]); // Sonuçlar
-    const [appointments, setAppointments] = useState([]); // Randevular
-    const [loading, setLoading] = useState(true); // Yükleniyor durumu
-    const [selectedAppointmentId, setSelectedAppointmentId] = useState(""); // Seçilen randevu ID'si
-    const [message, setMessage] = useState(""); // Gönderilecek mesaj
-    const [error, setError] = useState(null); // Hata mesajý
+    const [results, setResults] = useState([]);
+    const [appointments, setAppointments] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [selectedAppointmentId, setSelectedAppointmentId] = useState("");
+    const [message, setMessage] = useState("");
+    const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
-    // API çaðrýsý ile randevularý ve sonuçlarý çekme
+    const token = localStorage.getItem("token");
+
+    const apiClient = axios.create({
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
+
+    const fetchAppointments = async () => {
+        try {
+            const response = await apiClient.get("https://localhost:7200/api/Doctor/appointments");
+            setAppointments(response.data);
+        } catch (err) {
+            console.error("Error fetching appointments:", err);
+            const errorMessage = err.response?.data?.message || "Randevular bulunamadý.";
+            setError(errorMessage);
+        }
+    };
+
+    const fetchResults = async () => {
+        try {
+            const response = await apiClient.get("https://localhost:7200/api/Doctor/results");
+            setResults(response.data);
+        } catch (err) {
+            console.error("Error fetching results:", err);
+            const errorMessage = err.response?.data?.message || "Sonuçlar bulunamadý.";
+            setError(errorMessage);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+
     useEffect(() => {
-        const fetchAppointments = async () => {
-            try {
-                const response = await apiClient.get("https://localhost:7200/api/Doctor/appointments");
-                setAppointments(response.data);
-            } catch (err) {
-                console.error("Error fetching appointments:", err);
-                const errorMessage = err.response?.data?.message || "Randevular bulunamadý.";
-                setError(errorMessage);
-            }
-        };
+        if (!token) {
+            navigate("/login");
+        } else {
+            fetchAppointments();
+            fetchResults();
+        }
+    }, [token, navigate]);
 
-        const fetchResults = async () => {
-            try {
-                const response = await apiClient.get("https://localhost:7200/api/Doctor/results");
-                setResults(response.data);
-            } catch (err) {
-                console.error("Error fetching results:", err);
-                const errorMessage = err.response?.data?.message || "Sonuçlar bulunamadý.";
-                setError(errorMessage);
-            } finally {
-                setLoading(false);
-            }
-        };
 
-        fetchAppointments();
-        fetchResults();
-    }, []);
-
-    // Sonuç gönderme fonksiyonu (randevuya göre)
     const sendResult = async () => {
         if (!selectedAppointmentId || !message) {
             alert("Lütfen hasta seçin ve sonuç girin.");

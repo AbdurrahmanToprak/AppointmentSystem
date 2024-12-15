@@ -1,14 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import "./PsychologistProfile.css";
 
-const token = localStorage.getItem("token");
 
-const apiClient = axios.create({
-    headers: {
-        Authorization: `Bearer ${token}`,
-    },
-});
 
 const API_URL = "https://localhost:7200/api/doctor/profiles";
 
@@ -17,10 +12,15 @@ const PsychologistProfilePage = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [message, setMessage] = useState(""); // Mesaj durumu
     const [file, setFile] = useState(null);
+    const navigate = useNavigate();
 
-    useEffect(() => {
-        fetchUserProfile();
-    }, []);
+    const token = localStorage.getItem("token");
+
+    const apiClient = axios.create({
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
 
     const fetchUserProfile = async () => {
         try {
@@ -31,6 +31,14 @@ const PsychologistProfilePage = () => {
             alert("Kullanýcý bilgileri yüklenemedi. Lütfen tekrar deneyin.");
         }
     };
+
+    useEffect(() => {
+        if (!token) {
+            navigate("/login");
+        } else {
+            fetchUserProfile();
+        }
+    }, [token, navigate]);
 
     const handleEditToggle = () => {
         setIsEditing(!isEditing);

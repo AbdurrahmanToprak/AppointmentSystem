@@ -1,35 +1,41 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom"; 
 
-
-const token = localStorage.getItem("token");
-
-const apiClient = axios.create({
-    headers: {
-        Authorization: `Bearer ${token}`
-    }
-});
 
 const ResultsUser = () => {
     const [results, setResults] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const navigate = useNavigate();
+
+    const token = localStorage.getItem("token");
+
+    const apiClient = axios.create({
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
+
+    const fetchResultsUser = async () => {
+        try {
+            const response = await apiClient.get("https://localhost:7200/api/patient/result/myresults");
+            setResults(response.data);
+        } catch (err) {
+            console.error("Error fetching data:", err);
+            setError(err.message || "Error fetching data");
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await apiClient.get("https://localhost:7200/api/patient/result/myresults");
-                setResults(response.data);
-            } catch (err) {
-                console.error("Error fetching data:", err);
-                setError(err.message || "Error fetching data");
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchData();
-    }, []);
+        if (!token) {
+            navigate("/login");
+        } else {
+            fetchResultsUser();
+        }
+    }, [token, navigate]);
 
     return (
         <div>

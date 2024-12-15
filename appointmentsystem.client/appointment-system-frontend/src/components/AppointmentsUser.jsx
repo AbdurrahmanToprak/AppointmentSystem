@@ -1,19 +1,21 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-
-const token = localStorage.getItem("token");
-
-const apiClient = axios.create({
-    headers: {
-        Authorization: `Bearer ${token}`
-    }
-});
+import { useNavigate } from "react-router-dom"; 
 
 const AppointmentsUser = () => {
     const [appointments, setappointments] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
+
+    const token = localStorage.getItem("token");
+
+    const apiClient = axios.create({
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
     
         const fetchData = async () => {
             try {
@@ -28,8 +30,12 @@ const AppointmentsUser = () => {
             }
         };
     useEffect(() => {  
-        fetchData();
-    }, []);
+        if (!token) {
+            navigate("/login");
+        } else {
+            fetchData();
+        }
+    }, [token, navigate]);
 
     if (loading) {
         return <div>Loading...</div>;

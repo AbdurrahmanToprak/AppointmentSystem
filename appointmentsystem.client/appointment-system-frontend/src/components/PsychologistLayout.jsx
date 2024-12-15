@@ -1,12 +1,30 @@
-import React from "react";
-import { Outlet, Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Outlet, Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import "./PsychologistLayout.css";
 
 const PsychologistLayout = () => {
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+            navigate("/login");
+        }
+    }, [navigate]);
+
     const handleLogout = () => {
-        localStorage.removeItem("userToken");
-        window.location.href = "/";
+        localStorage.removeItem("token");
+        navigate("/");
     };
+    const token = localStorage.getItem("token");
+    const apiClient = axios.create({
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+
     return (
         <div className="psychologist-layout">
             <header className="psychologist-header">

@@ -1,14 +1,30 @@
-import React from "react";
-import { Outlet, Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Outlet, Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import "./UserLayout.css";
 
 const UserLayout = () => {
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+            navigate("/login");
+        }
+    }, [navigate]);
+
     const handleLogout = () => {
-        // Çýkýþ yapma iþlemi için gerekli kodlarý buraya ekleyebilirsiniz.
-        // Örneðin, kullanýcýnýn giriþ bilgilerini temizlemek için localStorage veya sessionStorage kullanabilirsiniz.
-        localStorage.removeItem("userToken");
-        window.location.href = "/"; // Ana sayfaya yönlendirme
+        localStorage.removeItem("token");
+        navigate("/");
     };
+
+    const token = localStorage.getItem("token");
+    const apiClient = axios.create({
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
 
     return (
         <div className="user-layout">

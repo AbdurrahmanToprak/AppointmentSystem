@@ -1,14 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import "./ProfilePage.css";
-
-const token = localStorage.getItem("token");
-
-const apiClient = axios.create({
-    headers: {
-        Authorization: `Bearer ${token}`
-    }
-});
 
 const API_URL = "https://localhost:7200/api/patient/profile";
 
@@ -18,11 +11,24 @@ const ProfilePage = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [message, setMessage] = useState("");
     const [file, setFile] = useState(null);
+    const navigate = useNavigate();
+
+    const token = localStorage.getItem("token");
+
+    const apiClient = axios.create({
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
 
     useEffect(() => {
-        fetchUserProfile();
-        fetchUserAppointments();
-    }, []);
+        if (!token) {
+            navigate("/login");
+        } else {
+            fetchUserProfile();
+            fetchUserAppointments();
+        }
+    }, [token, navigate]);
 
     const fetchUserProfile = async () => {
         try {
