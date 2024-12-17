@@ -1,21 +1,25 @@
 ﻿import React, { useState, useEffect } from "react";
-import axios from "axios"; 
+import axios from "axios";
 import "./HomePage.css";
 import { FaFacebook, FaTwitter, FaInstagram } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 const HomePage = () => {
     const [about, setAbout] = useState(null);
     const [team, setTeam] = useState([]);
     const [blogs, setBlogs] = useState([]);
     const [contact, setContact] = useState(null);
+    const [user, setUser] = useState(null); 
 
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    const navigate = useNavigate();
+
     useEffect(() => {
-        // Only fetch data if necessary
         const fetchData = async () => {
-            setLoading(true); // Start loading before the API call
+            setLoading(true);
 
             try {
                 const aboutResponse = await axios.get("https://localhost:7200/api/Home/about");
@@ -45,17 +49,49 @@ const HomePage = () => {
                 console.error("Error fetching contact data:", err);
             }
 
-            setLoading(false); // End loading after all fetches are done
+            const token = localStorage.getItem("token");
+            console.log("Token:", token);
+
+            if (token) {
+                try {
+                    const decodedToken = jwtDecode(token);
+                    setUser(decodedToken);  
+                } catch (err) {
+                    console.error("Token decode error:", err);
+                }
+            }
+
+            setLoading(false);
         };
 
-        // Check if any of the necessary data is needed and only fetch accordingly
-        if (!about && !team.length && !blogs.length && !contact) {
-            fetchData();
-        } else {
-            setLoading(false); // If data is already available, no need to load
-        }
+        fetchData();
+    }, []); 
 
-    }, [about, team, blogs, contact]); // Dependencies to trigger fetching if data is not yet set
+    const handlePanelRedirect = () => {
+        console.log("Panel button clicked", user);
+        if (user) {
+            const role = Number(user.role); 
+
+            switch (role) {
+                case 1:
+                    console.log("Redirecting to Admin Panel...");
+                    navigate("/admin/dashboard");
+                    break;
+                case 2:
+                    console.log("Redirecting to Psychologist Panel...");
+                    navigate("/psychologist");
+                    break;
+                case 3:
+                    console.log("Redirecting to User Panel...");
+                    navigate("/user");
+                    break;
+                default:
+                    console.log("Invalid user role");
+                    break;
+            }
+        }
+    };
+
 
     if (loading) return <div>Loading...</div>;
     if (error) return <div>{error}</div>;
@@ -73,7 +109,15 @@ const HomePage = () => {
                         <li><a href="#team">Ekibimiz</a></li>
                         <li><a href="#blogs">Blog</a></li>
                         <li><a href="#contact">İletişim</a></li>
-                        <li><a href="/login">GİRİS</a></li>
+                        {!user ? (
+                            <li><a href="/login">GİRİS</a></li>
+                        ) : (
+                            <li>
+                                <button className="panel-button" onClick={handlePanelRedirect}>
+                                    Panelim
+                                </button>
+                            </li>
+                        )}
                     </ul>
                 </nav>
             </header>
@@ -194,9 +238,16 @@ const HomePage = () => {
                             <div key={index} className="blog-post">
                                 <div className="post-content">
                                     <h3 className="post-title">{blog.title}</h3>
-                                    <p className="post-summary">{blog.content}</p>
-                                    <a href="#" className="read-more">Devamını Oku</a>
+                                    <p className="post-excerpt">{blog.shortContent}</p>
+                                    <a href={`/blog-details/${blog.id}`} className="cta-button">
+                                        Devamını Oku
+                                    </a>
                                 </div>
+                                <img
+                                    src={blog.imageUrl ? `https://localhost:7200/${blog.imageUrl}` : `https://localhost:7200/default-image.jpg`}
+                                    alt={blog.title}
+                                    className="post-image"
+                                />
                             </div>
                         ))}
                     </div>
@@ -206,49 +257,25 @@ const HomePage = () => {
             {/* Contact Section */}
             {contact && (
                 <section id="contact" className="contact-section">
-                    <div className="contact-title">
-                        <h2>Bizimle İletişime Geçin</h2>
-                        <p>Yardımcı olmaktan memnuniyet duyarız! Sorularınız ve talepleriniz için bizimle iletişime geçin.</p>
-                    </div>
-                    <div className="contact-wrapper">
-                        <div className="contact-form">
-                            <form action="#" method="POST">
-                                <div className="input-group">
-                                    <input type="text" id="name" name="name" placeholder="Adınız" required />
-                                    <input type="email" id="email" name="email" placeholder="E-posta" required />
-                                    <textarea id="message" name="message" rows="4" placeholder="Mesajınız" required></textarea>
-                                    <button type="submit" className="cta-button">Gönder</button>
-                                </div>
-                            </form>
-                        </div>
-                        <div className="contact-details">
-                            <h3>İletişim Bilgilerimiz</h3>
-                            <ul>
-                                <li><strong>Telefon:</strong> {contact.email}</li>
-                                <li><strong>Telefon:</strong> {contact.phoneNumber}</li>
-                                <li><strong>Adres:</strong> {contact.address}</li>
-                            </ul>
-                            <div className="footer-right">
-                                <h3>Sosyal medya</h3>
-                                <div className="social-links">
-                                    <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="social-icon">
-                                        <FaFacebook />
-                                    </a>
-                                    <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="social-icon">
-                                        <FaTwitter />
-                                    </a>
-                                    <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="social-icon">
-                                        <FaInstagram />
-                                    </a>
-                                </div>
-                            </div>
+                    <h2>İletişim</h2>
+                    <div className="contact-info">
+                        <p>
+                            <strong>Telefon:</strong> {contact.phone}
+                        </p>
+                        <p>
+                            <strong>Email:</strong> {contact.email}
+                        </p>
+                        <div className="social-links">
+                            <a href={contact.facebook}><FaFacebook /></a>
+                            <a href={contact.twitter}><FaTwitter /></a>
+                            <a href={contact.instagram}><FaInstagram /></a>
                         </div>
                     </div>
                 </section>
             )}
 
             {/* Footer */}
-            <footer className="footer">
+            <footer className="homepage-footer">
                 <p>© 2024 Psikosağlık. Tüm hakları saklıdır.</p>
             </footer>
         </div>
