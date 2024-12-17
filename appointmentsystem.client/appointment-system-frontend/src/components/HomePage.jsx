@@ -10,11 +10,12 @@ const HomePage = () => {
     const [team, setTeam] = useState([]);
     const [blogs, setBlogs] = useState([]);
     const [contact, setContact] = useState(null);
-    const [user, setUser] = useState(null); 
+    const [user, setUser] = useState(null);
 
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
+    const [selectedBlog, setSelectedBlog] = useState(null);
+    const [showModal, setShowModal] = useState(false)
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -55,7 +56,7 @@ const HomePage = () => {
             if (token) {
                 try {
                     const decodedToken = jwtDecode(token);
-                    setUser(decodedToken);  
+                    setUser(decodedToken);
                 } catch (err) {
                     console.error("Token decode error:", err);
                 }
@@ -65,12 +66,12 @@ const HomePage = () => {
         };
 
         fetchData();
-    }, []); 
+    }, []);
 
     const handlePanelRedirect = () => {
         console.log("Panel button clicked", user);
         if (user) {
-            const role = Number(user.role); 
+            const role = Number(user.role);
 
             switch (role) {
                 case 1:
@@ -92,6 +93,16 @@ const HomePage = () => {
         }
     };
 
+    const openBlogModal = (blog) => {
+        setSelectedBlog(blog);
+        setShowModal(true);
+    };
+
+    const closeModal = () => {
+        setShowModal(false);
+        setSelectedBlog(null);
+    };
+
 
     if (loading) return <div>Loading...</div>;
     if (error) return <div>{error}</div>;
@@ -100,7 +111,7 @@ const HomePage = () => {
         <div className="homepage">
             {/* Header */}
             <header className="homepage-header">
-                <div className="logo">Psikosaglık</div>
+                <div className="logo">Psikosağlık</div>
                 <nav>
                     <ul>
                         <li><a href="#hero">Ana Sayfa</a></li>
@@ -108,7 +119,7 @@ const HomePage = () => {
                         <li><a href="#services">Hizmetler</a></li>
                         <li><a href="#team">Ekibimiz</a></li>
                         <li><a href="#blogs">Blog</a></li>
-                        <li><a href="#contact">İletisim</a></li>
+                        <li><a href="#contact">İletişim</a></li>
                         {!user ? (
                             <li><a href="/login">GİRİS</a></li>
                         ) : (
@@ -125,9 +136,9 @@ const HomePage = () => {
             {/* Hero Section */}
             <section id="hero" className="hero-section">
                 <div className="hero-content">
-                    <h1>Akıl Saglığınıza Yatırım Yapın</h1>
+                    <h1>Akıl Sağlığınıza Yatırım Yapın</h1>
                     <div className="scrolling-text">
-                        <p>Saglıklı bir zihin, saglıklı bir yasam demektir | Zihinsel iyileşme, hayatın kalitesidir</p>
+                        <p>Sağlıklı bir zihin, sağlıklı bir yaşam demektir | Zihinsel iyileşme, hayatın kalitesidir</p>
                     </div>
                     <p>
                         Akıl sağlığınız en değerli varlığınızdır. <br />
@@ -232,43 +243,79 @@ const HomePage = () => {
             {/* Blog Section */}
             {blogs.length > 0 && (
                 <section id="blogs" className="blogs-section">
-                    <h2 className="section-title">Bloglarımız</h2>
-                    <div className="blog-posts-container">
+                    <h2>Bloglarımız</h2>
+                    <div className="blog-container">
                         {blogs.map((blog, index) => (
-                            <div key={index} className="blog-post">
-                                <div className="post-content">
-                                    <img
-                                        src={blog.imageUrl ? `https://localhost:7200/${blog.imageUrl}` : `https://localhost:7200/default-image.jpg`}
-                                        alt={blog.title}
-                                        className="about-image"
-                                    />
-                                    <h3 className="post-title">{blog.title}</h3>
-                                    <p className="post-excerpt">{blog.shortContent}</p>
-                                    <a href="#" className="cta-button">
-                                        Devamını Oku
-                                    </a>
-                                </div>
+                            <div key={index} className="blog-card">
+                                <img
+                                    src={blog.imageUrl ? `https://localhost:7200/${blog.imageUrl}` : "https://localhost:7200/default-image.jpg"}
+                                    alt={blog.title}
+                                    className="blog-image"
+                                />
+                                <h3>{blog.title}</h3>
+                                <button className="cta-button" onClick={() => openBlogModal(blog)}>
+                                    Devamını Oku
+                                </button>
                             </div>
                         ))}
                     </div>
                 </section>
             )}
 
+            {/* Blog Modal */}
+            {showModal && selectedBlog && (
+                <div className="modal-overlay" onClick={closeModal}>
+                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                        <span className="close-button" onClick={closeModal}>&times;</span>
+                        <h2>{selectedBlog.title}</h2>
+                        <img
+                            src={selectedBlog.imageUrl ? `https://localhost:7200/${selectedBlog.imageUrl}` : "https://localhost:7200/default-image.jpg"}
+                            alt={selectedBlog.title}
+                        />
+                        <p>{selectedBlog.content}</p>
+                    </div>
+                </div>
+            )}
+
             {/* Contact Section */}
             {contact && (
                 <section id="contact" className="contact-section">
-                    <h2>İletişim</h2>
-                    <div className="contact-info">
-                        <p>
-                            <strong>Telefon:</strong> {contact.phone}
-                        </p>
-                        <p>
-                            <strong>Email:</strong> {contact.email}
-                        </p>
-                        <div className="social-links">
-                            <a href={contact.facebook}><FaFacebook /></a>
-                            <a href={contact.twitter}><FaTwitter /></a>
-                            <a href={contact.instagram}><FaInstagram /></a>
+                    <div className="contact-title">
+                        <h2>Bizimle İletişime Geçin</h2>
+                        <p>Yardımcı olmaktan memnuniyet duyarız! Sorularınız ve talepleriniz için bizimle iletişime geçin.</p>
+                    </div>
+                    <div className="contact-wrapper">
+                        <div className="contact-form">
+                            <form action="#" method="POST">
+                                <div className="input-group">
+                                    <input type="text" id="name" name="name" placeholder="Adınız" required />
+                                    <input type="email" id="email" name="email" placeholder="E-posta" required />
+                                    <textarea id="message" name="message" rows="4" placeholder="Mesajınız" required></textarea>
+                                    <button type="submit" className="cta-button">Gönder</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div className="contact-details">
+                            <h3>İletişim Bilgilerimiz</h3>
+                            <ul>
+                                <li><strong>Telefon:</strong> {contact.email}</li>
+                                <li><strong>Telefon:</strong> {contact.phoneNumber}</li>
+                                <li><strong>Adres:</strong> {contact.address}</li>
+                            </ul>
+                            <div className="footer-right">
+                                <h3>Sosyal medya</h3>
+                                <div className="social-links">
+                                    <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="social-icon">
+                                        <FaFacebook />
+                                    </a>
+                                    <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="social-icon">
+                                        <FaTwitter />
+                                    </a>
+                                    <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="social-icon">
+                                        <FaInstagram />
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </section>
