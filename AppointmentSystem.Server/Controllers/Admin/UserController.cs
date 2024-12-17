@@ -108,6 +108,32 @@ namespace AppointmentSystem.Server.Controllers.Admin
             return NotFound(new { message = "Doktor bulunamadı." });
         }
 
+        [HttpPost("doctors")]
+        public async Task<IActionResult> AddDoctor([FromBody] User doctor)
+        {
+            doctor.RoleId = 2;
+
+            if (string.IsNullOrWhiteSpace(doctor.Name) ||
+                string.IsNullOrWhiteSpace(doctor.Email) ||
+                string.IsNullOrWhiteSpace(doctor.Password))
+            {
+                return BadRequest(new { message = "Lütfen gerekli tüm alanları doldurun." });
+            }
+
+
+            var existingDoctor = await _context.Users.FirstOrDefaultAsync(x => x.Email == doctor.Email);
+            if (existingDoctor != null)
+            {
+                return BadRequest(new { message = "Bu email adresi zaten kullanılıyor." });
+            }
+
+            _context.Users.Add(doctor);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Doktor başarıyla eklendi." });
+        }
+
+
         [HttpDelete("doctors/{id}")]
         public async Task<IActionResult> DeleteDoctor(int id)
         {
