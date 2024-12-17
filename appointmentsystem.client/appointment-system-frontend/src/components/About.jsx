@@ -138,8 +138,8 @@ const Abouts = () => {
                 <tbody>
                     {abouts.map((b) => (
                         <tr key={b.aboutId}>
-                            <td>{b.title}</td>
-                            <td>{b.content}</td>
+                            <td>{b.title.length > 30 ? b.title.substring(0, 30) + "..." : b.title}</td>
+                            <td>{b.content.length > 30 ? b.content.substring(0, 30) + "..." : b.content}</td>
                             <td>
                                 {b.imageUrl ? (
                                     <img
