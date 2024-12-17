@@ -35,16 +35,21 @@ const LoginForm = () => {
                 localStorage.setItem("token", data.token);
 
                 // Token'ý ayrýþtýralým
-                const decodedToken = JSON.parse(atob(data.token.split('.')[1])); // Base64 decode
+                const decodedToken = JSON.parse(atob(data.token.split('.')[1]));
                 const roleId = decodedToken.role;
 
-                // Kullanýcý rolüne göre yönlendirme yapýyoruz
-                if (roleId === "1") {
-                    navigate("/admin/dashboard");
-                } else if (roleId === "2") {
-                    navigate("/psychologist");
-                } else if (roleId === "3") {
-                    navigate("/user");
+                const redirectTo = localStorage.getItem("redirectTo") || "/user"; 
+                if (redirectTo && redirectTo !== "/user") {
+                    navigate(redirectTo);
+                    localStorage.removeItem("redirectTo"); // Yönlendirme tamamlandýktan sonra temizle
+                } else {
+                    if (roleId === "1") {
+                        navigate("/admin/dashboard");
+                    } else if (roleId === "2") {
+                        navigate("/psychologist");
+                    } else if (roleId === "3") {
+                        navigate("/user");
+                    }
                 }
 
                 setMessage("Giriþ baþarýlý!");
