@@ -271,6 +271,7 @@ const HomePage = () => {
                         <img
                             src={selectedBlog.imageUrl ? `https://localhost:7200/${selectedBlog.imageUrl}` : "https://localhost:7200/default-image.jpg"}
                             alt={selectedBlog.title}
+                            className="modal-image"
                         />
                         <p>{selectedBlog.content}</p>
                     </div>
