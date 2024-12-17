@@ -57,7 +57,7 @@ const Contact = () => {
     const handleDelete = async () => {
         try {
             await apiClient.delete(`${apiBaseUrl}/${contact.contactId}`);
-            setMessage("Baþarýyla silindi.");
+            setMessage("Basarýyla silindi.");
             setContact(null);
             setFormData({ email: "", phoneNumber: "", address: "" });
         } catch (error) {
@@ -80,7 +80,7 @@ const Contact = () => {
 
             {!contact ? (
                 <div>
-                    <h5>Henüz iletiþim bilgisi eklenmemiþ.</h5>
+                    <h5>Henuz iletisim bilgisi eklenmemis.</h5>
                     <form onSubmit={handleSubmit}>
                         <div className="form-group mb-3">
                             <label>Email</label>
@@ -122,7 +122,7 @@ const Contact = () => {
                     <p><strong>Telefon:</strong> {contact.phoneNumber}</p>
                     <p><strong>Adres:</strong> {contact.address}</p>
                     <button className="btn btn-warning me-2" onClick={() => setIsEditing(true)}>
-                        Düzenle
+                        Duzenle
                     </button>
                     <button className="btn btn-danger" onClick={handleDelete}>
                         Sil
@@ -132,7 +132,7 @@ const Contact = () => {
 
             {isEditing && (
                 <div className="mt-4">
-                    <h5>Ýletiþim Bilgilerini Güncelle</h5>
+                    <h5>Ýletisim Bilgilerini Güncelle</h5>
                     <form onSubmit={handleSubmit}>
                         <div className="form-group mb-3">
                             <label>Email</label>
@@ -164,7 +164,7 @@ const Contact = () => {
                             />
                         </div>
                         <button type="submit" className="btn btn-success">
-                            Güncelle
+                            Guncelle
                         </button>
                         <button
                             type="button"
@@ -174,7 +174,7 @@ const Contact = () => {
                                 setFormData(contact);
                             }}
                         >
-                            Ýptal
+                            iptal
                         </button>
                     </form>
                 </div>

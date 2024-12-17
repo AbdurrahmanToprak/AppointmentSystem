@@ -69,7 +69,7 @@ const Blogs = () => {
             setBlog({ title: "", content: "", image: null }); 
             fetchBlogs();
         } catch (error) {
-            setMessage(error.response?.data?.message || "Bir hata oluþtu.");
+            setMessage(error.response?.data?.message || "Bir hata olustu.");
         }
     };
 
@@ -77,10 +77,10 @@ const Blogs = () => {
         if (window.confirm("Bu blogu silmek istediðinize emin misiniz?")) {
             try {
                 await apiClient.delete(`https://localhost:7200/api/admin/blog/${id}`);
-                setMessage("Blog baþarýyla silindi!");
+                setMessage("Blog basarýyla silindi!");
                 fetchBlogs();
             } catch (error) {
-                setMessage(error.response?.data?.message || "Bir hata oluþtu.");
+                setMessage(error.response?.data?.message || "Bir hata olustu.");
             }
         }
     };
@@ -116,16 +116,16 @@ const Blogs = () => {
                 <div>
                     <input type="file" name="image" onChange={handleFileChange} />
                 </div>
-                <button className="add-blog-btn" type="submit">{editing ? "Güncelle" : "Ekle"}</button>
+                <button className="add-blog-btn" type="submit">{editing ? "Guncelle" : "Ekle"}</button>
             </form>
 
             <table className="blogs">
                 <thead>
                     <tr>
-                        <th>Baþlýk</th>
-                        <th>Ýçerik</th>
+                        <th>Baslýk</th>
+                        <th>Ýcerik</th>
                         <th>Resim</th>
-                        <th>Ýþlemler</th>
+                        <th>Ýslemler</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -145,7 +145,7 @@ const Blogs = () => {
                                 )}
                             </td>
                             <td>
-                                <button className="add-blog-btn" onClick={() => handleEdit(b)}>Düzenle</button>
+                                <button className="add-blog-btn" onClick={() => handleEdit(b)}>Duzenle</button>
                                 <button className="add-blog-btn" onClick={() => handleDelete(b.blogId)}>Sil</button>
                             </td>
                         </tr>

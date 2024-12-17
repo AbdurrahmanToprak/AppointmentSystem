@@ -50,7 +50,7 @@ const ResultsUser = () => {
                         <tr>
                             <th>Hasta ID</th>
                             <th>Tarih</th>
-                            <th>Sonuç</th>
+                            <th>Sonuc</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -64,7 +64,7 @@ const ResultsUser = () => {
                     </tbody>
                 </table>
             ) : (
-                <p>Henüz bir sonuç kaydýnýz bulunmamaktadýr.</p>
+                <p>Henüz bir sonuc kaydýnýz bulunmamaktadýr.</p>
             )}
         </div>
     );

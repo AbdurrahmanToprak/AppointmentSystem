@@ -29,14 +29,14 @@ const Psikologlar = () => {
     };
 
     const deleteDoctor = async (id) => {
-        if (!window.confirm("Bu doktoru silmek istediðinize emin misiniz?")) return;
+        if (!window.confirm("Bu doktoru silmek istediginize emin misiniz?")) return;
 
         try {
             await apiClient.delete(`https://localhost:7200/api/admin/user/doctors/${id}`);
             setPsikologlar(psikologlar.filter((psikolog) => psikolog.userId !== id));
             alert("Doktor baþarýyla silindi.");
         } catch (error) {
-            alert(error.response?.data?.message || "Bir hata oluþtu.");
+            alert(error.response?.data?.message || "Bir hata olustu.");
         }
     };
 
@@ -50,7 +50,7 @@ const Psikologlar = () => {
             await fetchDoctors(); 
             alert("Doktor baþarýyla eklendi.");
         } catch (error) {
-            alert(error.response?.data?.message || "Bir hata oluþtu.");
+            alert(error.response?.data?.message || "Bir hata olustu.");
         }
     };
 
@@ -101,7 +101,7 @@ const Psikologlar = () => {
                         />
                     </div>
                     <div>
-                        <label>Þifre:</label>
+                        <label>sifre:</label>
                         <input
                             type="password"
                             value={newDoctor.password}

@@ -71,7 +71,7 @@ const AppointmentsUser = () => {
                                     <td>{formattedDate}</td>
                                     <td>{formattedTime}</td>
                                     <td>{appointment.doctorName || "Bilgi Yok"}</td>
-                                    <td>{appointment.status ? "Aktif" : "Randevu saati geçti"}</td>
+                                    <td>{appointment.status ? "Aktif" : "Randevu saati gecti"}</td>
                                 </tr>
                             );
                         })

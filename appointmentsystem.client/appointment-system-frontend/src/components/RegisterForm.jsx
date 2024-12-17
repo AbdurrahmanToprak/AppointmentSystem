@@ -34,16 +34,16 @@ const RegisterForm = () => {
 
             // Başarılı yanıt aldığımızda yapılacak işlemler
             if (response.status === 200) {
-                setMessage("Kayıt başarılı! Giriş yapmak için yönlendiriliyorsunuz.");
+                setMessage("Kayıt basarılı! Giris yapmak icin yonlendiriliyorsunuz.");
                 setTimeout(() => {
                     navigate("/login");
                 }, 2000);
             } else {
-                setMessage(response.data.message || "Kayıt sırasında bir hata oluştu.");
+                setMessage(response.data.message || "Kayıt sırasında bir hata olustu.");
             }
         } catch (error) {
             console.error("Register Error:", error);
-            setMessage(error.response?.data?.message || "Bir hata oluştu. Lütfen tekrar deneyin.");
+            setMessage(error.response?.data?.message || "Bir hata olustu. Lutfen tekrar deneyin.");
         }
     };
 

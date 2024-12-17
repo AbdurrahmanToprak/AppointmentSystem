@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
+import "./AdminFeedback.css";
 
 
 const AdminFeedbacks = () => {
@@ -24,7 +25,7 @@ const AdminFeedbacks = () => {
             if (error.response) {
                 setMessage(error.response.data.message);
             } else {
-                setMessage("Bir hata oluþtu.");
+                setMessage("Bir hata olustu.");
             }
         }
     };
@@ -38,13 +39,13 @@ const AdminFeedbacks = () => {
             if (error.response) {
                 setMessage(error.response.data.message);
             } else {
-                setMessage("Bir hata oluþtu.");
+                setMessage("Bir hata olustu.");
             }
         }
     };
 
     const deleteFeedback = async (id) => {
-        if (window.confirm("Bu yorumu silmek istediðinizden emin misiniz?")) {
+        if (window.confirm("Bu yorumu silmek istediginizden emin misiniz?")) {
             try {
                 const response = await apiClient.delete(`${apiBaseUrl}/${id}`);
                 setMessage(response.data.message);
@@ -56,7 +57,7 @@ const AdminFeedbacks = () => {
                 if (error.response) {
                     setMessage(error.response.data.message);
                 } else {
-                    setMessage("Bir hata oluþtu.");
+                    setMessage("Bir hata olustu.");
                 }
             }
         }
@@ -84,8 +85,8 @@ const AdminFeedbacks = () => {
                             <th>Yorum</th>
                             <th>Puan</th>
                             <th>Durum</th>
-                            <th>Oluþturma Tarihi</th>
-                            <th>Ýþlemler</th>
+                            <th>Olusturma Tarihi</th>
+                            <th>islemler</th>
                         </tr>
                     </thead>
                     <tbody>

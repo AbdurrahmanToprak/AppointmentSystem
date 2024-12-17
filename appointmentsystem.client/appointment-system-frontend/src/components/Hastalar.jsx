@@ -31,15 +31,15 @@ const Hastalar = () => {
 
 
     const deletePatient = async (id) => {
-        if (!window.confirm("Bu hastayý silmek istediðinize emin misiniz?")) return;
+        if (!window.confirm("Bu hastayý silmek istediginize emin misiniz?")) return;
 
         try {
             await apiClient.delete(`https://localhost:7200/api/admin/user/patients/${id}`);
             setHastalar(hastalar.filter((hasta) => hasta.userId !== id));
-            alert("Hasta baþarýyla silindi.");
+            alert("Hasta basarýyla silindi.");
         } catch (error) {
-            console.error("Hata:", error.response?.data?.message || "Bir hata oluþtu.");
-            setError("Hasta silinirken bir hata oluþtu.");
+            console.error("Hata:", error.response?.data?.message || "Bir hata olustu.");
+            setError("Hasta silinirken bir hata olustu.");
         }
     };
 
@@ -57,9 +57,9 @@ const Hastalar = () => {
         }
     }, [token, navigate]);
 
-    if (loading) return <div>Yükleniyor...</div>;
+    if (loading) return <div>Yukleniyor...</div>;
     if (error) return <div>Hata: {error}</div>;
-    if (hastalar.length === 0) return <div>Hiç hasta bulunamadý.</div>;
+    if (hastalar.length === 0) return <div>Hic hasta bulunamadý.</div>;
 
     return (
         <div className="hastalar">
@@ -69,7 +69,7 @@ const Hastalar = () => {
                     <tr>
                         <th>Ad</th>
                         <th>E-mail</th>
-                        <th>Ýþlem</th>
+                        <th>Ýslem</th>
                     </tr>
                 </thead>
                 <tbody>

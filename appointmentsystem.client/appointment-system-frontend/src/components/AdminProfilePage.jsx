@@ -59,15 +59,15 @@ const ProfilePage = () => {
         try {
             const response = await apiClient.put(API_URL, formData)
             if (response.status === 200) {
-                setMessage("Bilgiler baþarýyla güncellendi.");
+                setMessage("Bilgiler basarýyla guncellendi.");
                 fetchUserProfile(); 
                 setIsEditing(false);
             } else {
-                setMessage("Bir hata oluþtu, lütfen tekrar deneyin.");
+                setMessage("Bir hata olustu, lutfen tekrar deneyin.");
             }
         } catch (error) {
-            console.error("Bilgiler güncellenirken hata oluþtu.", error);
-            setMessage("Bir hata oluþtu.");
+            console.error("Bilgiler güncellenirken hata olustu.", error);
+            setMessage("Bir hata olustu.");
         }
     };
 
@@ -90,8 +90,8 @@ const ProfilePage = () => {
                 const serverMessage = error.response.data.message;
                 setMessage(serverMessage);
             } else {
-                console.error("Hata oluþtu:", error);
-                setMessage("Bir hata oluþtu.");
+                console.error("Hata olustu:", error);
+                setMessage("Bir hata olustu.");
             }
         }
     };
@@ -160,7 +160,7 @@ const ProfilePage = () => {
                             <div className="profile-details">
                                 {user.imageUrl && (
                                     <p>
-                                        <strong>Profil Fotoðrafý:</strong>
+                                        <strong>Profil Fotografý:</strong>
                                         <br />
                                         <img
                                             src={`https://localhost:7200${user.imageUrl}`}
@@ -179,15 +179,15 @@ const ProfilePage = () => {
                                 <strong>Email:</strong> {user.email}
                             </p>
                             
-                                <button onClick={handleEditToggle}>Düzenle</button>
-                                <button onClick={() => deleteProfile("profilePhoto")}>Profil Fotoðrafýný Sil</button>
+                                <button onClick={handleEditToggle}>Duzenle</button>
+                                <button onClick={() => deleteProfile("profilePhoto")}>Profil Fotografýný Sil</button>
                                 <button onClick={() => deleteProfile("account")}>Hesabý Sil</button>
                         </div>
                     )}
                     {message && <p className="message">{message}</p>}
                 </>
             ) : (
-                <p>Yükleniyor...</p>
+                <p>Yukleniyor...</p>
             )}
         </div>
     );

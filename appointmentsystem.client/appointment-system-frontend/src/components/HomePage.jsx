@@ -100,7 +100,7 @@ const HomePage = () => {
         <div className="homepage">
             {/* Header */}
             <header className="homepage-header">
-                <div className="logo">Psikosağlık</div>
+                <div className="logo">Psikosaglık</div>
                 <nav>
                     <ul>
                         <li><a href="#hero">Ana Sayfa</a></li>
@@ -108,7 +108,7 @@ const HomePage = () => {
                         <li><a href="#services">Hizmetler</a></li>
                         <li><a href="#team">Ekibimiz</a></li>
                         <li><a href="#blogs">Blog</a></li>
-                        <li><a href="#contact">İletişim</a></li>
+                        <li><a href="#contact">İletisim</a></li>
                         {!user ? (
                             <li><a href="/login">GİRİS</a></li>
                         ) : (
@@ -125,9 +125,9 @@ const HomePage = () => {
             {/* Hero Section */}
             <section id="hero" className="hero-section">
                 <div className="hero-content">
-                    <h1>Akıl Sağlığınıza Yatırım Yapın</h1>
+                    <h1>Akıl Saglığınıza Yatırım Yapın</h1>
                     <div className="scrolling-text">
-                        <p>Sağlıklı bir zihin, sağlıklı bir yaşam demektir | Zihinsel iyileşme, hayatın kalitesidir</p>
+                        <p>Saglıklı bir zihin, saglıklı bir yasam demektir | Zihinsel iyileşme, hayatın kalitesidir</p>
                     </div>
                     <p>
                         Akıl sağlığınız en değerli varlığınızdır. <br />

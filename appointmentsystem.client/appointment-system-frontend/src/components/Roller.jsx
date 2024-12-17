@@ -119,7 +119,7 @@ const Roller = () => {
                     />
                 </div>
                 <button type="submit" className="add-role-btn">
-                    {isEditing ? "Güncelle" : "Ekle"}
+                    {isEditing ? "Guncelle" : "Ekle"}
                 </button>
                 {isEditing && (
                     <button
@@ -130,7 +130,7 @@ const Roller = () => {
                             setRole({ roleName: "" });
                         }}
                     >
-                        Vazgeç
+                        Vazgec
                     </button>
                 )}
             </form>
@@ -140,7 +140,7 @@ const Roller = () => {
                     <tr>
                         <th>#</th>
                         <th>Rol Adý</th>
-                        <th>Ýþlemler</th>
+                        <th>Ýslemler</th>
                     </tr>
                 </thead>
                 <tbody>

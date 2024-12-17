@@ -41,7 +41,7 @@ const Randevular = () => {
         }
     }, [token]);
 
-    if (loading) return <div>Yükleniyor...</div>;
+    if (loading) return <div>Yukleniyor...</div>;
     if (error) return <div>Hata: {error}</div>;
     if (appointments.length === 0) return <div>Randevu bulunmamaktadýr.</div>;
 
@@ -73,7 +73,7 @@ const Randevular = () => {
                                     <td>{appointment.doctorName || "Bilgi Yok"}</td>
                                     <td>{appointment.patientName || "Bilgi Yok"}</td>
                                     <td>{formattedTime}</td>
-                                    <td>{appointment.status ? "Aktif" : "Randevu saati geçti"}</td>
+                                    <td>{appointment.status ? "Aktif" : "Randevu saati gecti"}</td>
                                 </tr>
                             );
                         })

@@ -49,7 +49,7 @@ const Abouts = () => {
         e.preventDefault();
 
         if (!about.title || !about.content || !about.image) {
-            setMessage("Lütfen baþlýk, içerik ve resim ekleyin!");
+            setMessage("Lütfen baslýk, icerik ve resim ekleyin!");
             return; 
         }
 
@@ -81,13 +81,13 @@ const Abouts = () => {
     };
 
     const handleDelete = async (id) => {
-        if (window.confirm("Bu aboutu silmek istediðinize emin misiniz?")) {
+        if (window.confirm("Bu aboutu silmek istediginize emin misiniz?")) {
             try {
                 await apiClient.delete(`https://localhost:7200/api/admin/about/${id}`);
-                setMessage("About baþarýyla silindi!");
+                setMessage("About basarýyla silindi!");
                 setAbouts((prevAbouts) => prevAbouts.filter((b) => b.aboutId !== id));
             } catch (error) {
-                setMessage(error.response?.data?.message || "Bir hata oluþtu.");
+                setMessage(error.response?.data?.message || "Bir hata olustu.");
             }
         }
     };
@@ -99,7 +99,7 @@ const Abouts = () => {
 
     return (
         <div className="container">
-            <h2>about Yönetimi</h2>
+            <h2>about Yonetimi</h2>
             {message && <div className="alert alert-info">{message}</div>}
 
             <form onSubmit={handleSubmit}>
@@ -107,7 +107,7 @@ const Abouts = () => {
                     <input
                         type="text"
                         name="title"
-                        placeholder="Baþlýk"
+                        placeholder="Baslýk"
                         value={about.title}
                         onChange={handleInputChange}
                     />
@@ -115,7 +115,7 @@ const Abouts = () => {
                 <div>
                     <textarea
                         name="content"
-                        placeholder="Ýçerik"
+                        placeholder="Ýcerik"
                         value={about.content}
                         onChange={handleInputChange}
                     ></textarea>
@@ -123,16 +123,16 @@ const Abouts = () => {
                 <div>
                     <input type="file" name="image" onChange={handleFileChange} />
                 </div>
-                <button className="add-about-btn" type="submit">{editing ? "Güncelle" : "Ekle"}</button>
+                <button className="add-about-btn" type="submit">{editing ? "Guncelle" : "Ekle"}</button>
             </form>
 
             <table className="abouts">
                 <thead>
                     <tr>
-                        <th>Baþlýk</th>
-                        <th>Ýçerik</th>
+                        <th>Baslýk</th>
+                        <th>Ýcerik</th>
                         <th>Resim</th>
-                        <th>Ýþlemler</th>
+                        <th>Ýslemler</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -152,7 +152,7 @@ const Abouts = () => {
                                 )}
                             </td>
                             <td>
-                                <button className="add-about-btn" onClick={() => handleEdit(b)}>Düzenle</button>
+                                <button className="add-about-btn" onClick={() => handleEdit(b)}>Duzenle</button>
                                 <button className="add-about-btn" onClick={() => handleDelete(b.aboutId)}>Sil</button>
                             </td>
                         </tr>

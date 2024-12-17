@@ -50,11 +50,11 @@ const LoginForm = () => {
                 setMessage("Giriþ baþarýlý!");
             } else {
                 const errorData = await response.json();
-                setMessage(errorData.message || "Geçersiz kullanýcý adý veya þifre.");
+                setMessage(errorData.message || "Gecersiz kullanýcý adý veya sifre.");
             }
         } catch (error) {
             console.error("Login Error:", error);
-            setMessage("Bir hata oluþtu. Lütfen tekrar deneyin.");
+            setMessage("Bir hata olustu. Lutfen tekrar deneyin.");
         }
     };
 
@@ -78,15 +78,15 @@ const LoginForm = () => {
             });
 
             if (response.ok) {
-                setMessage("Kayýt baþarýlý! Giriþ yapmak için týklayýn.");
+                setMessage("Kayýt baþarýlý! Giris yapmak icin týklayýn.");
                 setIsRegistering(false);
             } else {
                 const errorData = await response.json();
-                setMessage(errorData.message || "Kayýt sýrasýnda bir hata oluþtu.");
+                setMessage(errorData.message || "Kayýt sýrasýnda bir hata olustu.");
             }
         } catch (error) {
             console.error("Register Error:", error);
-            setMessage("Bir hata oluþtu. Lütfen tekrar deneyin.");
+            setMessage("Bir hata olustu. Lutfen tekrar deneyin.");
         }
     };
 
@@ -154,7 +154,7 @@ const LoginForm = () => {
                     <div className="form-group">
                         <input
                             type="password"
-                            placeholder="Þifrenizi Giriniz"
+                            placeholder="sifrenizi Giriniz"
                             required
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}

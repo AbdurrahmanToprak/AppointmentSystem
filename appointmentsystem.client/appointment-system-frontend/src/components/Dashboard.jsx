@@ -38,7 +38,7 @@ const Dashboard = () => {
         <div className="dashboard">
             <h1>Admin Dashboard</h1>
             {stats.TotalDoctors === 0 && stats.TotalPatients === 0 && stats.TodaysAppointments === 0 ? (
-                <p>Veri yükleniyor...</p>
+                <p>Veri yukleniyor...</p>
             ) : (
                 <div className="stats-container">
                     <div className="stat-card">
@@ -50,7 +50,7 @@ const Dashboard = () => {
                         <p>{stats.totalPatients}</p>
                     </div>
                     <div className="stat-card">
-                        <h2>Bugünkü Randevular</h2>
+                        <h2>Bugunku Randevular</h2>
                         <p>{stats.todaysAppointments}</p>
                     </div>
                 </div>

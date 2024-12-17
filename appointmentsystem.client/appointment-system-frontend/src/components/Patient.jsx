@@ -18,7 +18,7 @@ const PatientList = () => {
             try {
                 const response = await fetch("https://localhost:7200/api/doctor/Patient"); 
                 if (!response.ok) {
-                    throw new Error("Veri alýnýrken bir hata oluþtu");
+                    throw new Error("Veri alýnýrken bir hata olustu");
                 }
                 const data = await response.json();
                 setPatients(data); 
@@ -33,7 +33,7 @@ const PatientList = () => {
         fetchPatients();
     }, []); 
 
-    if (loading) return <p>Yükleniyor...</p>;
+    if (loading) return <p>Yukleniyor...</p>;
     if (error) return <p>Hata: {error}</p>;
     return (
         <div>
@@ -54,13 +54,13 @@ const PatientList = () => {
                                 <td>{index + 1}</td>
                                 <td>{patient.name} {patient.surname}</td>
                                 <td>
-                                    <button onClick={() => handleDetails(patient)}>Detay Gör</button>
+                                    <button onClick={() => handleDetails(patient)}>Detay Gor</button>
                                 </td>
                             </tr>
                         ))
                     ) : (
                         <tr>
-                            <td colSpan="4">Hiç hasta bulunmamaktadýr.</td>
+                            <td colSpan="4">Hic hasta bulunmamaktadýr.</td>
                         </tr>
                     )}
                 </tbody>

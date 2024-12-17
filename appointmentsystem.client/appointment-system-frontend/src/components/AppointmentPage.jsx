@@ -51,7 +51,7 @@ const AppointmentPage = () => {
 
     const handleAddAppointment = async () => {
         if (!selectedDate || !selectedTime || !selectedDoctorId) {
-            setMessage("Lütfen tarih, saat ve doktor seçiniz.");
+            setMessage("Lutfen tarih, saat ve doktor seciniz.");
             return;
         }
 
@@ -68,14 +68,14 @@ const AppointmentPage = () => {
             });
 
             if (response.status >= 200 && response.status < 300) {
-                setMessage("Randevu baþarýyla alýndý!");
+                setMessage("Randevu basarýyla alýndý!");
                 fetchAppointments();
             } else {
-                setMessage("Randevu alýnýrken bir hata oluþtu.");
+                setMessage("Randevu alýnýrken bir hata olustu.");
             }
         } catch (error) {
             console.error("Randevu ekleme hatasý:", error);
-            setMessage("Bir hata oluþtu. Lütfen tekrar deneyin.");
+            setMessage("Bir hata olustu. Lutfen tekrar deneyin.");
         }
     };
 
@@ -83,14 +83,14 @@ const AppointmentPage = () => {
         try {
             const response = await apiClient.delete(`${API_URL}/${id}`);
             if (response.status === 200) {
-                setMessage("Randevu baþarýyla silindi!");
+                setMessage("Randevu basarýyla silindi!");
                 fetchAppointments();
             } else {
-                setMessage("Randevu silinirken bir hata oluþtu.");
+                setMessage("Randevu silinirken bir hata olustu.");
             }
         } catch (error) {
             console.error("Randevu silme hatasý:", error);
-            setMessage("Bir hata oluþtu. Lütfen tekrar deneyin.");
+            setMessage("Bir hata olustu. Lutfen tekrar deneyin.");
         }
     };
 
@@ -98,12 +98,12 @@ const AppointmentPage = () => {
         <div className="appointment-page">
             <h1>Randevu Alma</h1>
             <div className="appointment-form">
-                <label>Doktor Seçin:</label>
+                <label>Doktor Secin:</label>
                 <select
                     value={selectedDoctorId}
                     onChange={(e) => setSelectedDoctorId(e.target.value)}
                 >
-                    <option value="">Bir doktor seçin</option>
+                    <option value="">Bir doktor secin</option>
                     {doctors.map((doctor) => (
                         <option key={doctor.userId} value={doctor.userId}>
                             {doctor.name} {doctor.surname}
@@ -111,13 +111,13 @@ const AppointmentPage = () => {
                     ))}
                 </select>
 
-                <label>Tarih Seçin:</label>
+                <label>Tarih Secin:</label>
                 <input
                     type="date"
                     value={selectedDate}
                     onChange={(e) => setSelectedDate(e.target.value)}
                 />
-                <label>Saat Seçin:</label>
+                <label>Saat Secin:</label>
                 <input
                     type="time"
                     value={selectedTime}

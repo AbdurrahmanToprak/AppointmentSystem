@@ -45,7 +45,7 @@ const AdminLayout = () => {
                 <h1>Admin Panel</h1>
                 <Link to="/admin/profilim" className="header-button">Profilim</Link>
                 <button onClick={handleLogout} className="header-button logout-button">
-                    Çýkýþ Yap
+                    cýkýs Yap
                 </button>
             </header>
             <div className="admin-container">

@@ -1,18 +1,142 @@
-.about {
-    padding: 20px;
-    text-align: center;
+/* Genel Konteyner */
+.container {
+    width: 80%;
+    margin: 30px auto;
+    padding: 30px;
+    background-color: #f4f4f9;
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    font-family: 'Roboto', sans-serif;
+    color: #333;
 }
 
-    .about h1 {
-        font-size: 32px;
-        color: #34495e;
-        margin-bottom: 10px;
+/* Baþlýk */
+h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 25px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+/* Alert Message */
+.alert {
+    padding: 15px;
+    background-color: #e7f7ff;
+    color: #3178c6;
+    border: 1px solid #3178c6;
+    border-radius: 8px;
+    margin-bottom: 25px;
+    font-size: 1rem;
+    text-align: center;
+    font-weight: 500;
+}
+
+/* Form Alaný */
+form {
+    display: grid;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+    form input[type="text"],
+    form textarea,
+    form input[type="file"] {
+        padding: 15px;
+        font-size: 1rem;
+        border-radius: 8px;
+        border: 2px solid #d1d8e0;
+        transition: 0.3s;
+        box-sizing: border-box;
+        width: 100%;
     }
 
-    .about p {
-        font-size: 18px;
-        color: #7f8c8d;
-        line-height: 1.6;
-        max-width: 800px;
-        margin: 0 auto;
+        form input[type="text"]:focus,
+        form textarea:focus {
+            outline: none;
+            border-color: #5c6bc0;
+        }
+
+    /* Görsel Yükleme */
+    form input[type="file"] {
+        font-size: 0.9rem;
+    }
+
+/* Buton */
+button.add-about-btn {
+    background-color: #5c6bc0;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: 0.3s ease;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+    button.add-about-btn:hover {
+        background-color: #3f51b5;
+        transform: translateY(-2px);
+    }
+
+    button.add-about-btn:active {
+        transform: translateY(0);
+    }
+
+/* Tablo */
+table.abouts {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 30px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+    table.abouts th,
+    table.abouts td {
+        padding: 18px;
+        text-align: center;
+        font-size: 1rem;
+        border-bottom: 2px solid #f1f1f1;
+    }
+
+    table.abouts th {
+        background-color: #5c6bc0;
+        color: white;
+        text-transform: uppercase;
+    }
+
+    table.abouts tr:nth-child(even) {
+        background-color: #f7f7f7;
+    }
+
+    table.abouts tr:hover {
+        background-color: #f0f0f0;
+    }
+
+    table.abouts img {
+        border-radius: 8px;
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+    }
+
+/* Ýþlem Butonlarý */
+button.add-about-btn + button {
+    margin-left: 10px;
+    background-color: #ff5252;
+}
+
+    button.add-about-btn + button:hover {
+        background-color: #e91e63;
+    }
+
+    button.add-about-btn + button:active {
+        background-color: #d50032;
     }

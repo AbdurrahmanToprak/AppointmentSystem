@@ -4,7 +4,7 @@ const Appointments = () => {
     return (
         <div>
             <h2>Randevular</h2>
-            <p>Bu sayfada psikoloða ait tüm randevular listelenecek.</p>
+            <p>Bu sayfada psikologa ait tum randevular listelenecek.</p>
         </div>
     );
 };

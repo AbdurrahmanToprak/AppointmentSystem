@@ -1,0 +1,136 @@
+/* Genel Konteyner */
+.container {
+    width: 85%;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    font-family: 'Roboto', sans-serif;
+}
+
+/* Baþlýk */
+h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 20px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+/* Alert Mesaj */
+.alert {
+    padding: 12px;
+    background-color: #f0f8ff;
+    color: #007acc;
+    border: 1px solid #007acc;
+    border-radius: 6px;
+    font-size: 1rem;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: 500;
+}
+
+/* Tablo */
+table.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+    /* Tablo Baþlýklarý */
+    table.table th {
+        background-color: #007acc;
+        color: #fff;
+        padding: 15px;
+        font-size: 1rem;
+        text-transform: uppercase;
+        text-align: center;
+    }
+
+    /* Tablo Satýrlarý */
+    table.table td {
+        padding: 12px;
+        font-size: 1rem;
+        text-align: center;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    /* Tablo Satýr Hover */
+    table.table tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    /* Satýr Alternatif Renk */
+    table.table tr:nth-child(even) {
+        background-color: #fafafa;
+    }
+
+/* Durum Dropdown */
+.select-status {
+    width: 120px;
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #d1d1d1;
+    font-size: 0.9rem;
+    background-color: #f1f1f1;
+    color: #333;
+}
+
+    .select-status:focus {
+        outline: none;
+        border-color: #007acc;
+    }
+
+/* Sil Butonu */
+button.btn-danger {
+    padding: 8px 15px;
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+    button.btn-danger:hover {
+        background-color: #c0392b;
+    }
+
+    button.btn-danger:active {
+        background-color: #e74c3c;
+        transform: translateY(2px);
+    }
+
+    /* Silme Butonu Küçültme */
+    button.btn-danger.btn-sm {
+        padding: 5px 12px;
+        font-size: 0.85rem;
+    }
+
+/* Durum ve Sil Butonlarýnýn Konumu */
+td button,
+td select {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+/* Kötü Yorum Ýçin Renk */
+td.comment {
+    color: #e74c3c;
+    font-weight: 600;
+}
+
+    /* Yorum Yok Ýçin Stil */
+    td.comment::after {
+        content: "Yorum Yok";
+        font-style: italic;
+        color: #aaa;
+    }

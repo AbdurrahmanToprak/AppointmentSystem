@@ -59,15 +59,15 @@ const PsychologistProfilePage = () => {
         try {
             const response = await apiClient.put(API_URL, formData)
             if (response.status === 200) {
-                setMessage("Bilgiler baþarýyla güncellendi.");
+                setMessage("Bilgiler baþarýyla guncellendi.");
                 fetchUserProfile();
                 setIsEditing(false);
             } else {
-                setMessage("Bir hata oluþtu, lütfen tekrar deneyin.");
+                setMessage("Bir hata olustu, lutfen tekrar deneyin.");
             }
         } catch (error) {
-            console.error("Bilgiler güncellenirken hata oluþtu.", error);
-            setMessage("Bir hata oluþtu.");
+            console.error("Bilgiler güncellenirken hata olustu.", error);
+            setMessage("Bir hata olustu.");
         }
     };
 
@@ -91,7 +91,7 @@ const PsychologistProfilePage = () => {
                 setMessage(serverMessage);
             } else {
                 console.error("Hata oluþtu:", error);
-                setMessage("Bir hata oluþtu.");
+                setMessage("Bir hata olustu.");
             }
         }
     };
@@ -144,7 +144,7 @@ const PsychologistProfilePage = () => {
                                 value={user.email}
                                 onChange={handleChange}
                             />
-                            <label>Profil Fotoðrafý Yükle:</label>
+                            <label>Profil Fotografý Yukle:</label>
                             <input
                                 type="file"
                                 accept="image/*"
@@ -170,7 +170,7 @@ const PsychologistProfilePage = () => {
                     )}
                 </>
             ) : (
-                <p>Yükleniyor...</p>
+                <p>Yukleniyor...</p>
             )}
         </div>
     );

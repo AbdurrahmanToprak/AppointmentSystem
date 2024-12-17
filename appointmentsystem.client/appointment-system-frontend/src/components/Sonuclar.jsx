@@ -82,7 +82,7 @@ const Sonuclar = () => {
 
     // Yükleniyor durumu
     if (loading) {
-        return <div>Yükleniyor...</div>;
+        return <div>Yukleniyor...</div>;
     }
 
     // Hata durumu
@@ -92,14 +92,14 @@ const Sonuclar = () => {
 
     return (
         <div className="table-container">
-            <h2>Hastalarýn Sonuçlarý</h2>
+            <h2>Hastalarýn Sonuclarý</h2>
             <table className="data-table">
                 <thead>
                     <tr>
                         <th>ID</th>
                         <th>Randevu ID</th>
                         <th>Hasta</th>
-                        <th>Sonuç</th>
+                        <th>Sonuc</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -123,7 +123,7 @@ const Sonuclar = () => {
                         value={selectedAppointmentId}
                         onChange={(e) => setSelectedAppointmentId(e.target.value)}
                     >
-                        <option value="">Seçim Yapýn</option>
+                        <option value="">Secim Yapýn</option>
                         {appointments.map((appointment) => (
                             <option key={appointment.appointmentId} value={appointment.appointmentId}>
                                 {appointment.patientName} - Randevu ID: {appointment.appointmentId}
@@ -133,7 +133,7 @@ const Sonuclar = () => {
                 </label>
 
                 <label>
-                    Sonuç Mesajý:
+                    Sonuc Mesajý:
                     <textarea
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
@@ -141,7 +141,7 @@ const Sonuclar = () => {
                     ></textarea>
                 </label>
 
-                <button onClick={sendResult}>Sonuç Gönder</button>
+                <button onClick={sendResult}>Sonuc Gönder</button>
             </div>
         </div>
     );

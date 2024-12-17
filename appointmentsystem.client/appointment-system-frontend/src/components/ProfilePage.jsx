@@ -35,7 +35,7 @@ const ProfilePage = () => {
             const response = await apiClient.get(API_URL);
             setUser(response.data);
         } catch (error) {
-            console.error("Kullanýcý bilgileri yüklenemedi.", error);
+            console.error("Kullanýcý bilgileri yuklenemedi.", error);
         }
     };
 
@@ -44,7 +44,7 @@ const ProfilePage = () => {
             const response = await apiClient.get(`${API_URL}/appointments`);
             setAppointments(response.data);
         } catch (error) {
-            console.error("Randevular yüklenemedi.", error);
+            console.error("Randevular yuklenemedi.", error);
         }
     };
 
@@ -66,14 +66,14 @@ const ProfilePage = () => {
         try {
             const response = await apiClient.put(API_URL, formData)
             if (response.status === 200) {
-                setMessage("Bilgiler baþarýyla güncellendi.");
+                setMessage("Bilgiler basarýyla guncellendi.");
                 fetchUserProfile();
                 setIsEditing(false);
             } else {
-                setMessage("Bir hata oluþtu, lütfen tekrar deneyin.");
+                setMessage("Bir hata olustu, lutfen tekrar deneyin.");
             }
         } catch (error) {
-            console.error("Bilgiler güncellenirken hata oluþtu.", error);
+            console.error("Bilgiler guncellenirken hata olustu.", error);
             setMessage("Bir hata oluþtu.");
         }
     };
@@ -97,8 +97,8 @@ const ProfilePage = () => {
                 const serverMessage = error.response.data.message;
                 setMessage(serverMessage);
             } else {
-                console.error("Hata oluþtu:", error);
-                setMessage("Bir hata oluþtu.");
+                console.error("Hata olustu:", error);
+                setMessage("Bir hata olustu.");
             }
         }
     };
@@ -150,7 +150,7 @@ const ProfilePage = () => {
                                 value={user.email}
                                 onChange={handleChange}
                             />
-                            <label>Profil Fotoðrafý Yükle:</label>
+                            <label>Profil Fotografý Yukle:</label>
                             <input
                                 type="file"
                                 accept="image/*"
@@ -164,7 +164,7 @@ const ProfilePage = () => {
                             <p><strong>Soyad:</strong> {user.surname}</p>
                             <p><strong>Email:</strong> {user.email}</p>
                                 <button onClick={handleEditToggle}>Düzenle</button>
-                                <button onClick={() => deleteProfile("profilePhoto")}>Profil Fotoðrafýný Sil</button>
+                                <button onClick={() => deleteProfile("profilePhoto")}>Profil Fotografýný Sil</button>
                                 <button onClick={() => deleteProfile("account")}>Hesabý Sil</button>
                         </div>
                     )}

@@ -46,7 +46,7 @@ const UserLayout = () => {
                     <Link to="/" className="header-button">Ana Sayfa</Link>
                     <Link to="/user/profilim" className="header-button">Profilim</Link>
                     <button onClick={handleLogout} className="header-button logout-button">
-                        Çýkýþ Yap
+                        cýkýs Yap
                     </button>
                 </div>
             </header>
@@ -57,7 +57,7 @@ const UserLayout = () => {
                             <Link to="/user/randevularim">Randevularým</Link>
                         </li>
                         <li>
-                            <Link to="/user/sonuclarim">Sonuçlarým</Link>
+                            <Link to="/user/sonuclarim">Sonuclarým</Link>
                         </li>
                     </ul>
                 </aside>

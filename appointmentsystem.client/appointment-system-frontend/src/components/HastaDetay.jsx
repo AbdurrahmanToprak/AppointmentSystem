@@ -40,7 +40,7 @@ const HastaDetay = () => {
         }
     }, [id, token]);
 
-    if (loading) return <p>Yükleniyor...</p>;
+    if (loading) return <p>Yukleniyor...</p>;
     if (!hasta) return <p>Hasta bulunamadý.</p>;
 
     return (
