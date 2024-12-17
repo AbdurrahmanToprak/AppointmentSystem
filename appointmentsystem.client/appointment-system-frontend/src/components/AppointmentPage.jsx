@@ -3,11 +3,6 @@ import axios from "axios"; // Axios import ediliyor
 import { useNavigate } from "react-router-dom";
 import "./AppointmentPage.css";
 
-// Token'ý localStorage'dan alýp axios ile kullan
-//const isAuthenticated = Boolean(localStorage.getItem("token")); 
-
-
-
 
 const AppointmentPage = () => {
     const [appointments, setAppointments] = useState([]);
@@ -30,9 +25,14 @@ const AppointmentPage = () => {
 
     // Randevularý ve doktorlarý yükle
     useEffect(() => {
+        if (!token) {
+            setMessage("Oturumunuz sona erdi. Lütfen tekrar giriþ yapýnýz.");
+            navigate("/login");
+            return;
+        }
         fetchAppointments();
         fetchDoctors();
-    }, []);
+    }, [token, navigate]);
 
     const fetchAppointments = async () => {
         try {
