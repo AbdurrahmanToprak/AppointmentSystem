@@ -10,7 +10,25 @@ const AdminLayout = () => {
         const token = localStorage.getItem("token");
 
         if (!token) {
-            navigate("/login"); 
+            navigate("/login");
+        } else {
+            const apiClient = axios.create({
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            apiClient
+                .get("https://localhost:7200/api/admin/profile")
+                .then((response) => {
+                    const { roleId } = response.data;
+                    if (roleId !== 1) {
+                        navigate("/login");
+                    }
+                })
+                .catch(() => {
+                    navigate("/login");
+                });
         }
     }, [navigate]); 
 
@@ -20,12 +38,6 @@ const AdminLayout = () => {
         navigate("/"); 
     };
 
-    const token = localStorage.getItem("token");
-    const apiClient = axios.create({
-        headers: {
-            Authorization: `Bearer ${token}`, 
-        },
-    });
 
     return (
         <div className="admin-layout">

@@ -11,6 +11,24 @@ const PsychologistLayout = () => {
 
         if (!token) {
             navigate("/login");
+        } else {
+            const apiClient = axios.create({
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            apiClient
+                .get("https://localhost:7200/api/doctor/profiles") 
+                .then((response) => {
+                    const { roleId } = response.data;
+                    if (roleId !== 2) {
+                        navigate("/login"); 
+                    }
+                })
+                .catch(() => {
+                    navigate("/login"); 
+                });
         }
     }, [navigate]);
 
@@ -18,12 +36,6 @@ const PsychologistLayout = () => {
         localStorage.removeItem("token");
         navigate("/");
     };
-    const token = localStorage.getItem("token");
-    const apiClient = axios.create({
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    });
 
     return (
         <div className="psychologist-layout">
@@ -50,7 +62,6 @@ const PsychologistLayout = () => {
                         <li>
                             <Link to="/psychologist/Patients">Hastalar</Link>
                         </li>
-
                     </ul>
                 </aside>
                 <main className="psychologist-main">

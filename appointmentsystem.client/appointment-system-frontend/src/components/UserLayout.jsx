@@ -11,8 +11,26 @@ const UserLayout = () => {
 
         if (!token) {
             navigate("/login");
+        } else {
+            const apiClient = axios.create({
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            apiClient
+                .get("https://localhost:7200/api/patient/profile")
+                .then((response) => {
+                    const { roleId } = response.data;
+                    if (roleId !== 3) {
+                        navigate("/login");
+                    }
+                })
+                .catch(() => {
+                    navigate("/login");
+                });
         }
-    }, [navigate]);
+    }, [navigate]); 
 
     const handleLogout = () => {
         localStorage.removeItem("token");
