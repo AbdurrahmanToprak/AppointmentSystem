@@ -1,9 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Outlet, Link, useNavigate } from "react-router-dom";
 import axios from "axios"; 
 import "./AdminLayout.css";
+import { jwtDecode } from "jwt-decode"; 
 
 const AdminLayout = () => {
+    const [user, setUser] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -12,25 +14,23 @@ const AdminLayout = () => {
         if (!token) {
             navigate("/login");
         } else {
-            const apiClient = axios.create({
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-
-            apiClient
-                .get("https://localhost:7200/api/admin/profile")
-                .then((response) => {
-                    const { roleId } = response.data;
-                    if (roleId !== 1) {
-                        navigate("/login");
-                    }
-                })
-                .catch(() => {
-                    navigate("/login");
-                });
+            try {
+                const decodedToken = jwtDecode(token);
+                setUser(decodedToken);
+            } catch (err) {
+                console.error("Token decode error:", err);
+            }
         }
     }, [navigate]); 
+    useEffect(() => {
+        if (user) {
+            const role = Number(user.role);
+
+            if (role !== 1) {
+                navigate("/login");
+            }
+        }
+    }, [user, navigate]);  
 
     const handleLogout = () => {
         localStorage.removeItem("token");

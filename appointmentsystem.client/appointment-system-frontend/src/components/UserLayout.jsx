@@ -1,10 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Outlet, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./UserLayout.css";
+import { jwtDecode } from "jwt-decode"; 
 
 const UserLayout = () => {
-    const navigate = useNavigate();
+    const [user, setUser] = useState(null);  
+    const navigate = useNavigate(); 
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -12,37 +14,29 @@ const UserLayout = () => {
         if (!token) {
             navigate("/login");
         } else {
-            const apiClient = axios.create({
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-
-            apiClient
-                .get("https://localhost:7200/api/patient/profile")
-                .then((response) => {
-                    const { roleId } = response.data;
-                    if (roleId !== 3) {
-                        navigate("/login");
-                    }
-                })
-                .catch(() => {
-                    navigate("/login");
-                });
+            try {
+                const decodedToken = jwtDecode(token);
+                setUser(decodedToken);  
+            } catch (err) {
+                console.error("Token decode error:", err);
+            }
         }
     }, [navigate]); 
 
+    useEffect(() => {
+        if (user) {
+            const role = Number(user.role);
+
+            if (role !== 3) {
+                navigate("/login");
+            }
+        }
+    }, [user, navigate]);  
+
     const handleLogout = () => {
         localStorage.removeItem("token");
-        navigate("/");
+        navigate("/");  
     };
-
-    const token = localStorage.getItem("token");
-    const apiClient = axios.create({
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    });
 
     return (
         <div className="user-layout">
@@ -76,3 +70,4 @@ const UserLayout = () => {
 };
 
 export default UserLayout;
+
