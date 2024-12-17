@@ -3,7 +3,6 @@ import axios from "axios"; // Axios import ediliyor
 import { useNavigate } from "react-router-dom";
 import "./AppointmentPage.css";
 
-
 const AppointmentPage = () => {
     const [appointments, setAppointments] = useState([]);
     const [doctors, setDoctors] = useState([]);
@@ -20,12 +19,14 @@ const AppointmentPage = () => {
             Authorization: `Bearer ${token}` // JWT Token'ý baþlýða ekle
         }
     });
+
     const API_URL = "https://localhost:7200/api/patient/appointment";
     const DOCTOR_API_URL = `${API_URL}/doctors`;
 
-    // Randevularý ve doktorlarý yükle
+    // Eðer token yoksa, kullanýcý login sayfasýna yönlendirilir
     useEffect(() => {
         if (!token) {
+            localStorage.setItem("redirectTo", "/appointment"); 
             setMessage("Oturumunuz sona erdi. Lütfen tekrar giriþ yapýnýz.");
             navigate("/login");
             return;
@@ -33,6 +34,8 @@ const AppointmentPage = () => {
         fetchAppointments();
         fetchDoctors();
     }, [token, navigate]);
+
+
 
     const fetchAppointments = async () => {
         try {
@@ -45,7 +48,6 @@ const AppointmentPage = () => {
                 setMessage("Oturumunuz sona erdi. Lütfen tekrar giriþ yapýnýz.");
                 navigate("/login");
             } else {
-                // Diðer hatalar için genel bir mesaj göster
                 setMessage("Randevular yüklenemedi.");
             }
         }
@@ -58,11 +60,9 @@ const AppointmentPage = () => {
         } catch (error) {
             console.error("Doktorlar yüklenemedi.", error);
             if (error.response && error.response.status === 401) {
-                // Kullanýcý giriþ yapmamýþsa login sayfasýna yönlendir
                 setMessage("Oturumunuz sona erdi. Lütfen tekrar giriþ yapýnýz.");
                 navigate("/login");
             } else {
-                // Diðer hatalar için genel bir mesaj göster
                 setMessage("Doktorlar yüklenemedi.");
             }
         }
@@ -88,6 +88,9 @@ const AppointmentPage = () => {
 
             if (response.status >= 200 && response.status < 300) {
                 setMessage("Randevu baþarýyla alýndý!");
+                setTimeout(() => {
+                    navigate("/"); // Anasayfaya yönlendir
+                }, 2000); 
                 fetchAppointments();
             } else {
                 setMessage("Randevu alýnýrken bir hata oluþtu.");
@@ -150,16 +153,9 @@ const AppointmentPage = () => {
             <div className="appointments-list">
                 {appointments.map((appointment) => (
                     <div key={appointment.appointmentId} className="appointment-card">
-                        <p>
-
-                            Doktor: {appointment.doctorName}
-                        </p>
-                        <p>
-                            Tarih: {new Date(appointment.appointmentDate).toLocaleDateString()}
-                        </p>
-                        <p>
-                            Saat: {appointment.appointmentTime}
-                        </p>
+                        <p>Doktor: {appointment.doctorName}</p>
+                        <p>Tarih: {new Date(appointment.appointmentDate).toLocaleDateString()}</p>
+                        <p>Saat: {appointment.appointmentTime}</p>
                         <button
                             className="delete-button"
                             onClick={() => handleDeleteAppointment(appointment.appointmentId)}

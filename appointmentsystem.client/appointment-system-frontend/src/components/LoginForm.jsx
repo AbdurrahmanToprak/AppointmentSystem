@@ -38,13 +38,18 @@ const LoginForm = () => {
                 const decodedToken = JSON.parse(atob(data.token.split('.')[1])); // Base64 decode
                 const roleId = decodedToken.role;
 
-                // Kullanýcý rolüne göre yönlendirme yapýyoruz
-                if (roleId === "1") {
-                    navigate("/admin/dashboard");
-                } else if (roleId === "2") {
-                    navigate("/psychologist");
-                } else if (roleId === "3") {
-                    navigate("/user");
+                const redirectTo = localStorage.getItem("redirectTo") || "/user"; // Yönlendirme yapýlacak sayfa
+                if (redirectTo) {
+                    navigate(redirectTo); // Yönlendirme yapýlacak sayfaya git
+                } else {
+                    // Eðer yönlendirme yoksa, varsayýlan sayfaya git
+                    if (roleId === "1") {
+                        navigate("/admin/dashboard");
+                    } else if (roleId === "2") {
+                        navigate("/psychologist");
+                    } else if (roleId === "3") {
+                        navigate("/user");
+                    }
                 }
 
                 setMessage("Giriþ baþarýlý!");
