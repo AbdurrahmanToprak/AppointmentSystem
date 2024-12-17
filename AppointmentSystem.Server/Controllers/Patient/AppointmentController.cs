@@ -22,7 +22,8 @@ namespace AppointmentSystem.Server.Controllers.Patient
 		[HttpGet("myappointments")]
 		public async Task<IActionResult> GetMyAppointments()
 		{
-			var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+           
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
 
 			if (userIdClaim == null)
 			{
@@ -30,29 +31,40 @@ namespace AppointmentSystem.Server.Controllers.Patient
 			}
 
 			var userId = int.Parse(userIdClaim.Value);
-			var myAppointments = await _context.Appointments
-				.Where(a => a.PatientId == userId)
-				.Include(a => a.Doctor) 
-				.Include(a => a.Patient) 
-				.OrderBy(a => a.DateTime) 
-				.ToListAsync();
 
-			if (myAppointments == null || !myAppointments.Any())
+            var turkeyTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Turkey Standard Time");
+            var nowInTurkey = TimeZoneInfo.ConvertTime(DateTime.UtcNow, turkeyTimeZone);
+
+            var expiredAppointments = _context.Appointments
+                .Where(a => a.DateTime < nowInTurkey);
+
+            foreach (var appointment in expiredAppointments)
+            {
+                appointment.Status = false;
+            }
+            await _context.SaveChangesAsync();
+            var myAppointments = await _context.Appointments
+				.Where(a=>a.PatientId == userId)
+                 .Include(x => x.Doctor)
+                 .Include(x => x.Patient)
+                 .Select(a => new
+                 {
+                     a.AppointmentId,
+                     a.DateTime,
+                     a.Time,
+                     a.Status,
+                     a.PatientId,
+                     a.CreatedDate,
+                     PatientName = a.Patient.Name + " " + a.Patient.Surname,
+                     DoctorName = a.Doctor.Name + " " + a.Doctor.Surname
+                 })
+                 .ToListAsync();
+
+            if (myAppointments == null || !myAppointments.Any())
 			{
 				return NotFound(new { message = "Randevu bulunamadı." });
 			}
-
-			// Döndürülecek veriyi oluşturuyoruz
-			var appointmentData = myAppointments.Select(appointment => new
-			{
-				appointment.AppointmentId,
-				AppointmentDate = appointment.DateTime.ToString("yyyy-MM-dd"),
-				AppointmentTime = appointment.DateTime.ToString("HH:mm"),
-				DoctorName = $"{appointment.Doctor?.Name} {appointment.Doctor?.Surname}",
-				PatientName = appointment.Patient?.Name
-			}).ToList();
-
-			return Ok(appointmentData);
+			return Ok(myAppointments);
 		}
 
 

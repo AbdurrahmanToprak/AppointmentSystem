@@ -53,24 +53,32 @@ const AppointmentsUser = () => {
                     <tr>
                         <th>ID</th>
                         <th>Tarih</th>
-                        <th>Doktor Adý</th>
-                        <th>Randevu</th>
+                        <th>Saat</th>
+                        <th>Doktor</th>
                         <th>Durum</th>
                     </tr>
                 </thead>
                 <tbody>
                     {appointments && appointments.length > 0 ? (
-                        appointments.map((appointment) => (
-                            <tr key={appointment.appointmentId}>
-                                <td>{appointment.appointmentId}</td>
-                                <td>{appointment.appointmentDate}</td>
-                                <td>{appointment.doctorName}</td>
-                                <td>{appointment.appointmentTime}</td>
-                                <td>{appointment.status == true ? "Aktif" : "Randevu saati geçti"}</td>
-                            </tr>
-                        ))
+                        appointments.map((appointment) => {
+                            const dateTime = new Date(appointment.dateTime);
+                            const formattedDate = dateTime.toLocaleDateString();
+                            const formattedTime = dateTime.toLocaleTimeString();
+
+                            return (
+                                <tr key={appointment.appointmentId}>
+                                    <td>{appointment.appointmentId}</td>
+                                    <td>{formattedDate}</td>
+                                    <td>{formattedTime}</td>
+                                    <td>{appointment.doctorName || "Bilgi Yok"}</td>
+                                    <td>{appointment.status ? "Aktif" : "Randevu saati geçti"}</td>
+                                </tr>
+                            );
+                        })
                     ) : (
-                        <tr><td colSpan="4">No appointments found.</td></tr>
+                        <tr>
+                            <td colSpan="6" style={{ textAlign: "center" }}>Randevu bulunmadý</td>
+                        </tr>
                     )}
                 </tbody>
             </table>

@@ -237,17 +237,17 @@ const HomePage = () => {
                         {blogs.map((blog, index) => (
                             <div key={index} className="blog-post">
                                 <div className="post-content">
+                                    <img
+                                        src={blog.imageUrl ? `https://localhost:7200/${blog.imageUrl}` : `https://localhost:7200/default-image.jpg`}
+                                        alt={blog.title}
+                                        className="about-image"
+                                    />
                                     <h3 className="post-title">{blog.title}</h3>
                                     <p className="post-excerpt">{blog.shortContent}</p>
-                                    <a href={`/blog-details/${blog.id}`} className="cta-button">
+                                    <a href="#" className="cta-button">
                                         Devamını Oku
                                     </a>
                                 </div>
-                                <img
-                                    src={blog.imageUrl ? `https://localhost:7200/${blog.imageUrl}` : `https://localhost:7200/default-image.jpg`}
-                                    alt={blog.title}
-                                    className="post-image"
-                                />
                             </div>
                         ))}
                     </div>

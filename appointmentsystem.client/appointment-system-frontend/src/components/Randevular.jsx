@@ -50,22 +50,33 @@ const Randevular = () => {
                     <tr>
                         <th>ID</th>
                         <th>Tarih</th>
-                        <th>Hasta</th>
                         <th>Saat</th>
+                        <th>Hasta</th>
                         <th>Durum</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {appointments.map((appointment) => (
-                        <tr key={appointment.id}>
-                            <td>{appointment.appointmentId}</td>
-                            <td>{new Date(appointment.dateTime).toLocaleDateString()}</td>
-                            <td>{appointment.patientName}</td>
-                            <td>{appointment.time}</td>
-                            <td>{appointment.status == true ? "Aktif" : "Randevu saati geçti"}</td>
-                
+                    {appointments && appointments.length > 0 ? (
+                        appointments.map((appointment) => {
+                            const dateTime = new Date(appointment.dateTime);
+                            const formattedDate = dateTime.toLocaleDateString();
+                            const formattedTime = dateTime.toLocaleTimeString();
+
+                            return (
+                                <tr key={appointment.appointmentId}>
+                                    <td>{appointment.appointmentId}</td>
+                                    <td>{formattedDate}</td>
+                                    <td>{formattedTime}</td>
+                                    <td>{appointment.patientName || "Bilgi Yok"}</td>
+                                    <td>{appointment.status ? "Aktif" : "Randevu saati geçti"}</td>
+                                </tr>
+                            );
+                        })
+                    ) : (
+                        <tr>
+                            <td colSpan="6" style={{ textAlign: "center" }}>Randevu bulunmadý</td>
                         </tr>
-                    ))}
+                    )}
                 </tbody>
             </table>
         </div>
