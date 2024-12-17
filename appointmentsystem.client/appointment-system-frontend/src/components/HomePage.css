@@ -701,7 +701,7 @@
 
 /* Blog Section */
 .blogs-section {
-    background: #1e1e1e; /* Dark background for contrast */
+    background: linear-gradient(45deg, #1e3c72, #2a5298);
     padding: 80px 20px;
     text-align: center;
     position: relative;
