@@ -1,18 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios"; // Axios import ediliyor
+import { useNavigate } from "react-router-dom";
 import "./AppointmentPage.css";
 
 // Token'ý localStorage'dan alýp axios ile kullan
-const token = localStorage.getItem("token");
+//const isAuthenticated = Boolean(localStorage.getItem("token")); 
 
-const apiClient = axios.create({
-    headers: {
-        Authorization: `Bearer ${token}` // JWT Token'ý baþlýða ekle
-    }
-});
 
-const API_URL = "https://localhost:7200/api/patient/appointment"; // Randevu API URL
-const DOCTOR_API_URL = "https://localhost:7200/api/patient/appointment/doctors"; // Doktorlar API URL
+
 
 const AppointmentPage = () => {
     const [appointments, setAppointments] = useState([]);
@@ -21,6 +16,17 @@ const AppointmentPage = () => {
     const [selectedTime, setSelectedTime] = useState("");
     const [selectedDoctorId, setSelectedDoctorId] = useState("");
     const [message, setMessage] = useState("");
+    const navigate = useNavigate();
+
+    const token = localStorage.getItem("token");
+
+    const apiClient = axios.create({
+        headers: {
+            Authorization: `Bearer ${token}` // JWT Token'ý baþlýða ekle
+        }
+    });
+    const API_URL = "https://localhost:7200/api/patient/appointment";
+    const DOCTOR_API_URL = `${API_URL}/doctors`;
 
     // Randevularý ve doktorlarý yükle
     useEffect(() => {
@@ -35,7 +41,13 @@ const AppointmentPage = () => {
             setAppointments(response.data);
         } catch (error) {
             console.error("Randevular yüklenemedi.", error);
-            setMessage("Randevular yüklenemedi.");
+            if (error.response && error.response.status === 401) {
+                setMessage("Oturumunuz sona erdi. Lütfen tekrar giriþ yapýnýz.");
+                navigate("/login");
+            } else {
+                // Diðer hatalar için genel bir mesaj göster
+                setMessage("Randevular yüklenemedi.");
+            }
         }
     };
 
@@ -45,7 +57,14 @@ const AppointmentPage = () => {
             setDoctors(response.data);
         } catch (error) {
             console.error("Doktorlar yüklenemedi.", error);
-            setMessage("Doktorlar yüklenemedi.");
+            if (error.response && error.response.status === 401) {
+                // Kullanýcý giriþ yapmamýþsa login sayfasýna yönlendir
+                setMessage("Oturumunuz sona erdi. Lütfen tekrar giriþ yapýnýz.");
+                navigate("/login");
+            } else {
+                // Diðer hatalar için genel bir mesaj göster
+                setMessage("Doktorlar yüklenemedi.");
+            }
         }
     };
 
@@ -132,6 +151,7 @@ const AppointmentPage = () => {
                 {appointments.map((appointment) => (
                     <div key={appointment.appointmentId} className="appointment-card">
                         <p>
+
                             Doktor: {appointment.doctorName}
                         </p>
                         <p>

@@ -3,10 +3,8 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./Sonuclar.css";
 
-
-
 const Sonuclar = () => {
-    const [results, setResults] = useState([]);
+    const [results, setResults] = useState([]); // Baþlangýçta boþ bir dizi
     const [appointments, setAppointments] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedAppointmentId, setSelectedAppointmentId] = useState("");
@@ -36,6 +34,7 @@ const Sonuclar = () => {
     const fetchResults = async () => {
         try {
             const response = await apiClient.get("https://localhost:7200/api/Doctor/results");
+            console.log("Sonuçlar API Yanýtý:", response.data); // API yanýtýný kontrol et
             setResults(response.data);
         } catch (err) {
             console.error("Error fetching results:", err);
@@ -46,7 +45,6 @@ const Sonuclar = () => {
         }
     };
 
-
     useEffect(() => {
         if (!token) {
             navigate("/login");
@@ -56,7 +54,6 @@ const Sonuclar = () => {
         }
     }, [token, navigate]);
 
-
     const sendResult = async () => {
         if (!selectedAppointmentId || !message) {
             alert("Lütfen hasta seçin ve sonuç girin.");
@@ -65,12 +62,12 @@ const Sonuclar = () => {
 
         try {
             const response = await apiClient.post("https://localhost:7200/api/Doctor/appointments/result", {
-                AppointmentId: selectedAppointmentId.toString(), // AppointmentId'yi string formatýna çevirin
+                AppointmentId: selectedAppointmentId.toString(),
                 Message: message
             });
 
             alert("Sonuç baþarýyla gönderildi.");
-            setResults((prevResults) => [...prevResults, response.data.result]); // Yeni sonucu ekle
+            fetchResults(); // Sonuç gönderildikten sonra, güncel sonuçlarý çekmek için fetchResults fonksiyonunu çaðýrýyoruz
             setMessage(""); // Mesaj alanýný sýfýrla
             setSelectedAppointmentId(""); // Seçilen randevu ID'sini sýfýrla
         } catch (err) {
@@ -78,7 +75,6 @@ const Sonuclar = () => {
             alert("Sonuç gönderme sýrasýnda hata oluþtu.");
         }
     };
-
 
     // Yükleniyor durumu
     if (loading) {
@@ -103,14 +99,20 @@ const Sonuclar = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {results.map((result) => (
-                        <tr key={result.resultId}>
-                            <td>{result.resultId}</td>
-                            <td>{result.appointmentId}</td>
-                            <td>{result.patientName}</td>
-                            <td>{result.message}</td>
-                        </tr>
-                    ))}
+                    {results && results.length > 0 ? (
+                        results.map(result => (
+                            result && result.resultId ? ( // resultId varsa göster
+                                <tr key={result.resultId}>
+                                    <td>{result.resultId}</td>
+                                    <td>{result.appointmentId}</td>
+                                    <td>{result.patientName}</td>
+                                    <td>{result.message}</td>
+                                </tr>
+                            ) : null // resultId yoksa satýrý atla
+                        ))
+                    ) : (
+                        <tr><td colSpan="4">Sonuç bulunamadý.</td></tr> // Sonuç boþsa
+                    )}
                 </tbody>
             </table>
 
